@@ -12,13 +12,13 @@ LIB_INCLUDES = libft/libft.h libft/get_next_line.h
 SRC := $(SRC:%.c=$(D_SRC)/%.c)
 OBJ = $(SRC:$(D_SRC)/%.c=$(D_OBJ)/%.o)
 
-FLAGS = -Wall -Werror -Wextra
+FLAGS =  -Wall -Werror -Wextra
 
 all : $(NAME)
 
 $(NAME) : $(OBJ)
 	$(MAKE) -C $(D_LIB)
-	gcc $(OBJ) $(LIB) -I. -o $(NAME)
+	gcc $(OBJ) $(LIB) -I. -o $(NAME) -lreadline -L .brew/opt/readline/lib -I .brew/opt/readline/include
 	@echo "You compiled the mandatory part of the project."
 
 $(D_OBJ)/%.o : $(D_SRC)/%.c $(INCLUDES) $(LIB_INCLUDES)
