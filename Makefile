@@ -1,6 +1,13 @@
 NAME = minishell
 
-SRC = test.c
+SRC = main.c parser/parser_main.c \
+\
+parser/funcs_for_lists/first_pars_list/ft_new_list.c\
+\
+parser/first_pars_step/first_pars_step.c parser/first_pars_step/first_pars_step_modified_lib_funcs.c\
+parser/first_pars_step/ft_updated_split.c\
+\
+
 
 D_SRC = src
 D_OBJ = obj
@@ -23,6 +30,10 @@ $(NAME) : $(OBJ)
 
 $(D_OBJ)/%.o : $(D_SRC)/%.c $(INCLUDES) $(LIB_INCLUDES)
 	@mkdir -p $(D_OBJ)
+	@mkdir -p $(D_OBJ)/parser
+	@mkdir -p $(D_OBJ)/parser/first_pars_step
+	@mkdir -p $(D_OBJ)/parser/funcs_for_lists
+	@mkdir -p $(D_OBJ)/parser/funcs_for_lists/first_pars_list
 	gcc $(FLAGS) -I. -c $< -o $@
 
 clean :
