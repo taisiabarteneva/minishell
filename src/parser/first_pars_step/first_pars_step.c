@@ -27,7 +27,8 @@ static char *ft_remove_bracers(char *string)
 static int ft_search_commands(char *string, char **arr_of_commands)
 {
 	int		i;
-
+	string = NULL;
+	arr_of_commands = NULL;
 	i = 0;
 	
 	return(0);
