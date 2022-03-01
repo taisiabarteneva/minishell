@@ -27,10 +27,10 @@ FLAGS = -Wall -Wextra -Werror
 all : $(NAME)
 
 $(NAME) : $(OBJ)
-	ar rcs $(NAME) $?
+	@ar rcs $(NAME) $?
 
 %.o : %.c $(INCLUDES)
-	gcc $(FLAGS) -c $< -o $@
+	@gcc $(FLAGS) -c $< -o $@
 
 bonus :
 	@make OBJ="$(OBJ_BONUS)" all ${INCLUDES}
