@@ -24,31 +24,33 @@ int count_env_vars(char **ev)
     return (i);
 }
 
-void add_node_to_list(char *line, t_env_vars *head)
+void add_node_to_list(char *line, t_env_vars **head)
 {
     t_env_vars  *new_node;
     t_env_vars  *current;
     char        **key_value;
 
-    new_node = malloc(sizeof(t_env_vars));
+	key_value = NULL;
+    new_node = (t_env_vars *)malloc(sizeof(t_env_vars));
     if (!new_node)
         fatal_error("malloc");
-    if (!head)
+    if (!(*head))
     {
-        head = new_node;
+        *head = new_node;
         new_node->prev = NULL;
     }
     else
     {
-        current = head;
+        current = *head;
         while (current->next)
             current = current->next;
         current->next = new_node;
         new_node->prev = current;
     }
-    key_value = ft_split(line, '=');
+	if (line)
+    	key_value = ft_split(line, '=');
     if (!key_value && !(*key_value))
-        fatal_error("malloc");
+        fatal_error("malloc");  
     new_node->next = NULL;
     new_node->key = key_value[0];
     new_node->value = key_value[1];
@@ -56,21 +58,18 @@ void add_node_to_list(char *line, t_env_vars *head)
 
 t_env_vars  *parse_env(char **ev)
 {
-    t_env_vars  *head;;
+    t_env_vars  *head;
     int         vars_count;
-    int         counter;
+    int         i;
 
-    // head = NULL;
     vars_count = count_env_vars(ev);
-    head = malloc(sizeof(t_env_vars) * vars_count);
-    if (!head)
-        fatal_error("malloc");
-    counter = 0;
-    while (counter < vars_count)
+	head = NULL;
+    i = 0;
+    while (i < vars_count)
     {
-        add_node_to_list(*ev, head);
-        counter++;
-        ev++;
+        add_node_to_list(*ev, &head);
+        i++;
+		ev++;
     }
     return (head);
 }
@@ -80,10 +79,10 @@ void print_list(t_env_vars *head)
     t_env_vars *tmp;
 
     tmp = head;
-    while (tmp->next)
+    while (tmp)
     {
+        printf("CURRENT NODE: [%s] [%s]\n", tmp->key, tmp->value);
         tmp = tmp->next;
-        printf("PREV KEY IS [%s]\n", tmp->prev->key);
     }
 }
 
