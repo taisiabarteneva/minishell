@@ -2,21 +2,27 @@
 
 void execute_pwd(t_env_vars *list)
 {
-	if (list && list->next)
-	{
-		while (list)
-		{
-			if (ft_strlen((const char *)list->key) == 3 
-				&& ft_strncmp((const char *)list->key, "PWD", 3) == 0)
-				break ;
-			list = list->next;
-		}
-		if (list->value)
-		{
-			write(STDOUT_FILENO, list->value, ft_strlen(list->value));
-			write(STDOUT_FILENO, "\n", 1);
-		}
-	}
+	(void)list;
+	// if (list && list->next)
+	// {
+	// 	while (list)
+	// 	{
+	// 		if (ft_strlen((const char *)list->key) == 3 
+	// 			&& ft_strncmp((const char *)list->key, "PWD", 3) == 0)
+	// 			break ;
+	// 		list = list->next;
+	// 	}
+	// 	if (list->value)
+	// 	{
+	// 		write(STDOUT_FILENO, list->value, ft_strlen(list->value));
+	// 		write(STDOUT_FILENO, "\n", 1);
+	// 	}
+	// }
+	char dir[100];
+
+	getcwd(dir, 100);
+	write(STDOUT_FILENO, dir, ft_strlen(dir));
+	write(STDOUT_FILENO, "\n", 1);
 }
 
 void execute_env(t_env_vars *list)
@@ -109,5 +115,7 @@ void built_ins(char *cmd, t_env_vars **list)
 		execute_exit();
 	else if (ft_strncmp((const char *)cmd, "cd", 2) == 0 &&
 		ft_strlen(cmd) == ft_strlen("cd"))
-		execute_cd(list, path);		
+		execute_cd(list, path);
+	// else if (ft_strncmp((const char *)cmd, "cd", 2) == 0 &&
+	// 	ft_strlen(cmd) == ft_strlen("cd"))
 }

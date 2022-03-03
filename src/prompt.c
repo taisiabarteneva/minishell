@@ -26,13 +26,6 @@ void	set_prompt(char **av, t_env_vars **list)
 	// t_storage 	store;
 	(void)av;
 
-	// ======== tmp struct ========= 
-	// store.fd_in = av[1];
-	// store.cmd = av[1];
-	// store.cmd2 = av[3];
-	// store.fd_out = av[4];
-	// =============================
-
 	line = NULL;
 	while (1)
 	{

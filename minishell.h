@@ -7,6 +7,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <libft/libft.h>
+# include <dirent.h>
 
 typedef struct s_env_vars
 {
