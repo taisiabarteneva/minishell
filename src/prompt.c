@@ -20,9 +20,18 @@ void add_line_to_history(char *line)
 		add_history(line);
 }
 
-void	set_prompt(void)
+void	set_prompt(char **av, t_env_vars **list)
 {
 	char 		*line;
+	// t_storage 	store;
+	(void)av;
+
+	// ======== tmp struct ========= 
+	// store.fd_in = av[1];
+	// store.cmd = av[1];
+	// store.cmd2 = av[3];
+	// store.fd_out = av[4];
+	// =============================
 
 	line = NULL;
 	while (1)
@@ -30,6 +39,15 @@ void	set_prompt(void)
 		line = read_prompt_line();
 		if (!line)
 			break ;
+		/* 
+			PARSER:
+			returns a struct (list of linked lists or a tree) 
+		*/
+		/*
+			EXECUTE HERE
+		*/
+		// if something do built ins
+			built_ins(line, list);
 		add_line_to_history(line);
 		free(line);
 	}

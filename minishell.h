@@ -16,6 +16,14 @@ typedef struct s_env_vars
     struct  s_env_vars *prev;
 }              t_env_vars;
 
+typedef struct s_storage
+{
+	char 	*cmd;
+	int 	fd_in;
+	int 	fd_out;
+	char	*cmd2;
+}				t_storage;
+
 /* env */
 t_env_vars  *parse_env(char **ev);
 
@@ -24,6 +32,10 @@ void 		print_list(t_env_vars *head);
 void 		fatal_error(char *msg);
 
 /* prompt */
-void		set_prompt(void);
+void		set_prompt(char **av, t_env_vars **list);
+
+/* built_ins */
+void 		built_ins(char *cmd, t_env_vars **list);
+
 
 #endif

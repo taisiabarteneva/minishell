@@ -1,6 +1,6 @@
 NAME = minishell
 
-SRC = test.c env.c utils.c prompt.c
+SRC = test.c env.c utils.c prompt.c built_ins.c
 
 D_SRC = src
 D_OBJ = obj

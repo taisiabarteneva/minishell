@@ -1,8 +1,21 @@
 # include "minishell.h"
 
+// temporary struct 
+
+/* 
+echo (-n)
+cd
+pwd
+export
+unset
+env
+exit
+*/
+
+
 int main(int ac, char **av, char **ev)
 {
-    t_env_vars *head;
+    t_env_vars 	*head;
 
     (void)ac;
     (void)av;
@@ -14,5 +27,5 @@ int main(int ac, char **av, char **ev)
 	}
 	// ignore_signals();
     head = parse_env(ev);
-	set_prompt();
+	set_prompt(av, &head);
 }
