@@ -6,8 +6,8 @@ void execute_pwd(t_env_vars *list)
 	{
 		while (list)
 		{
-			if (ft_strlen((const char *)list->key) == 6 
-				&& ft_strncmp((const char *)list->key, "OLDPWD", 6) == 0)
+			if (ft_strlen((const char *)list->key) == 3 
+				&& ft_strncmp((const char *)list->key, "PWD", 3) == 0)
 				break ;
 			list = list->next;
 		}
@@ -81,7 +81,7 @@ void execute_cd(t_env_vars **list, char *path)
 	(void)list;
 	// if (!path)	
 	// 	path = ".";
-	
+
 	status = chdir(path);
 	if (status == -1)
 		write(STDERR_FILENO, "path is invalid\n", 17);
