@@ -17,13 +17,13 @@ typedef struct s_env_vars
     struct  s_env_vars *prev;
 }              t_env_vars;
 
-typedef struct s_storage
-{
-	char 	*cmd;
-	int 	fd_in;
-	int 	fd_out;
-	char	*cmd2;
-}				t_storage;
+// typedef struct s_storage
+// {
+// 	char 	*cmd;
+// 	int 	fd_in;
+// 	int 	fd_out;
+// 	char	*cmd2;
+// }				t_storage;
 
 /* env */
 t_env_vars  *parse_env(char **ev);

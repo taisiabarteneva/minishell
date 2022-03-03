@@ -3,7 +3,7 @@
 char *read_prompt_line(void)
 {
 	static char *line_read;
-	
+
 	line_read = (char *)NULL;
 	if (line_read)
 	{

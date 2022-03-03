@@ -1,42 +1,27 @@
 # include "minishell.h"
 
-void execute_pwd(t_env_vars *list)
-{
-	(void)list;
-	// if (list && list->next)
-	// {
-	// 	while (list)
-	// 	{
-	// 		if (ft_strlen((const char *)list->key) == 3 
-	// 			&& ft_strncmp((const char *)list->key, "PWD", 3) == 0)
-	// 			break ;
-	// 		list = list->next;
-	// 	}
-	// 	if (list->value)
-	// 	{
-	// 		write(STDOUT_FILENO, list->value, ft_strlen(list->value));
-	// 		write(STDOUT_FILENO, "\n", 1);
-	// 	}
-	// }
-	char dir[100];
+# define MAXDIR 1024
 
-	getcwd(dir, 100);
+void execute_pwd(void)
+{
+	char dir[MAXDIR];
+
+	getcwd(dir, MAXDIR);
 	write(STDOUT_FILENO, dir, ft_strlen(dir));
 	write(STDOUT_FILENO, "\n", 1);
 }
 
 void execute_env(t_env_vars *list)
 {
-	if (list && list->next)
+	if (list == NULL)
+		exit(EXIT_FAILURE); // what to do in case of null envp
+	while (list)
 	{
-		while (list)
-		{
-			write(STDOUT_FILENO, list->key, ft_strlen(list->key));
-			write(STDOUT_FILENO, "=", 1);
-			write(STDOUT_FILENO, list->value, ft_strlen(list->value));
-			write(STDOUT_FILENO, "\n", 1);
-			list = list->next;
-		}
+		write(STDOUT_FILENO, list->key, ft_strlen(list->key));
+		write(STDOUT_FILENO, "=", 1);
+		write(STDOUT_FILENO, list->value, ft_strlen(list->value));
+		write(STDOUT_FILENO, "\n", 1);
+		list = list->next;
 	}
 }
 
@@ -85,12 +70,23 @@ void execute_cd(t_env_vars **list, char *path)
 {
 	int status;
 	(void)list;
-	// if (!path)	
-	// 	path = ".";
 
 	status = chdir(path);
 	if (status == -1)
-		write(STDERR_FILENO, "path is invalid\n", 17);
+		write(STDERR_FILENO, "No such file or directory\n", 17);
+}
+
+void execute_echo(char *line)
+{
+	int flag;
+
+	// -n option
+	flag = 1;
+	write(STDOUT_FILENO, line, ft_strlen(line));
+	if (flag == 1)
+		write(STDOUT_FILENO, "$", 1);
+	else if (flag == 0)
+		write(STDOUT_FILENO, "\n", 1);
 }
 
 void built_ins(char *cmd, t_env_vars **list)
@@ -98,12 +94,14 @@ void built_ins(char *cmd, t_env_vars **list)
 	// tmp argument
 	char	*path;
 	char 	*key;
+	char	*line;
 
-	key = "_";
+	key = "LESS";
 	path = "/Users/wurrigon/Desktop";
+	line = "hey there";
 	if (ft_strncmp((const char *)cmd, "pwd", 3) == 0 &&
 		ft_strlen(cmd) == ft_strlen("pwd"))
-		execute_pwd(*list);
+		execute_pwd();
 	else if (ft_strncmp((const char *)cmd, "env", 3) == 0 &&
 		ft_strlen(cmd) == ft_strlen("env"))
 		execute_env(*list);
@@ -116,6 +114,7 @@ void built_ins(char *cmd, t_env_vars **list)
 	else if (ft_strncmp((const char *)cmd, "cd", 2) == 0 &&
 		ft_strlen(cmd) == ft_strlen("cd"))
 		execute_cd(list, path);
-	// else if (ft_strncmp((const char *)cmd, "cd", 2) == 0 &&
-	// 	ft_strlen(cmd) == ft_strlen("cd"))
+	else if (ft_strncmp((const char *)cmd, "echo", 4) == 0 &&
+		ft_strlen(cmd) == ft_strlen("echo"))
+		execute_echo(line);
 }
