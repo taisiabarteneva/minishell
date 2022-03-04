@@ -81,7 +81,7 @@ void execute_echo(char *line)
 	int flag;
 
 	// -n option
-	flag = 1;
+	flag = 0;
 	write(STDOUT_FILENO, line, ft_strlen(line));
 	if (flag == 1)
 		write(STDOUT_FILENO, "$", 1);

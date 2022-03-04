@@ -1,7 +1,5 @@
 # include "minishell.h"
 
-// temporary struct 
-
 /* 
 echo -n +
 cd		
@@ -11,8 +9,6 @@ unset 	+
 env   	+
 exit  	+
 */
-
-
 int main(int ac, char **av, char **ev)
 {
     t_env_vars 	*envs;
@@ -21,7 +17,7 @@ int main(int ac, char **av, char **ev)
     (void)av;
 	envs = NULL;
 
-	// ignore_signals();
+	catch_signals();
     envs = parse_env(ev);
 	set_prompt(av, &envs);
 }

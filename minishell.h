@@ -8,6 +8,7 @@
 # include <readline/history.h>
 # include <libft/libft.h>
 # include <dirent.h>
+# include <signal.h>
 
 typedef struct s_env_vars
 {
@@ -16,14 +17,6 @@ typedef struct s_env_vars
     struct  s_env_vars *next;
     struct  s_env_vars *prev;
 }              t_env_vars;
-
-// typedef struct s_storage
-// {
-// 	char 	*cmd;
-// 	int 	fd_in;
-// 	int 	fd_out;
-// 	char	*cmd2;
-// }				t_storage;
 
 /* env */
 t_env_vars  *parse_env(char **ev);
@@ -38,5 +31,5 @@ void		set_prompt(char **av, t_env_vars **list);
 /* built_ins */
 void 		built_ins(char *cmd, t_env_vars **list);
 
-
+void 		rl_replace_line(const char *text, int clear_undo);
 #endif

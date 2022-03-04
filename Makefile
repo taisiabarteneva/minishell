@@ -17,7 +17,7 @@ all : $(NAME)
 
 $(NAME) : $(OBJ)
 	$(MAKE) -C $(D_LIB)
-	@gcc $(OBJ) $(LIB) -I. -o $(NAME) -lreadline 
+	@gcc $(OBJ) $(LIB) -I. -lreadline -L/Users/${USER}/.brew/opt/readline/lib -lreadline -o $(NAME)
 	@echo "You compiled the mandatory part of the project."
 
 $(D_OBJ)/%.o : $(D_SRC)/%.c $(INCLUDES) $(LIB_INCLUDES)
