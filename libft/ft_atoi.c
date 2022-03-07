@@ -3,36 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/15 09:11:40 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/02/13 22:22:45 by wurrigon         ###   ########.fr       */
+/*   Created: 2021/10/13 18:34:22 by ncarob            #+#    #+#             */
+/*   Updated: 2021/11/14 22:31:54 by ncarob           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 
-
-int	ft_atoi(const char *str)
+long long	ft_atoi(const char *num)
 {
-	long	val;
-	int		sign;
+	long long	result;
+	int			sign;
+	int			i;
 
-	val = 0;
+	result = 0;
 	sign = 1;
-	while (*str == 32 || (*str >= 9 && *str <= 13))
-		str++;
-	if (*str == '-')
-		sign *= -1;
-	if (*str == '-' || *str == '+')
-		str++;
-	while (*str >= '0' && *str <= '9')
+	i = 0;
+	while ((num[i] > 8 && num[i] < 14) || num[i] == 32)
+		i++;
+	if (num[i] == 43 || num[i] == 45)
 	{
-		val = val * 10 + *str - '0';
-		if (val > 2147483648 && sign == -1)
-			return (0);
-		else if (val > 2147483648)
-			return (-1);
-		str++;
+		if (num[i] == 45)
+			sign = -1;
+		i++;
 	}
-	return (val * sign);
+	while (num[i] > 47 && num[i] < 58)
+	{
+		result = result * 10 + num[i] - 48;
+		i++;
+	}
+	return (result * sign);
 }

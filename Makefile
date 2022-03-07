@@ -1,38 +1,47 @@
-NAME = minishell
+SRCS	=	./sources/minishell_main.c \
+			./sources/readline_prompt.c \
+			./sources/command_parsing1.c \
+			./sources/command_parsing2.c \
+			./sources/environ_vars_utils1.c \
+			./sources/environ_vars_utils2.c \
+			./sources/catch_signals.c \
+			./sources/built_ins_main.c \
+			./sources/built_in_cd.c \
+			./sources/built_in_echo.c \
+			./sources/built_in_env.c \
+			./sources/built_in_exit.c \
+			./sources/built_in_pwd.c \
+			./sources/built_in_unset.c \
 
-SRC = test.c env.c utils.c prompt.c built_ins.c
+OBJS	=	$(SRCS:.c=.o)
 
-D_SRC = src
-D_OBJ = obj
-D_LIB = libft
-LIB = libft/libft.a
-INCLUDES = minishell.h
-LIB_INCLUDES = libft/libft.h libft/get_next_line.h
+HEADS	=	./includes
 
-SRC := $(SRC:%.c=$(D_SRC)/%.c)
-OBJ = $(SRC:$(D_SRC)/%.c=$(D_OBJ)/%.o)
-FLAGS = -Wall -Werror -Wextra
+NAME	=	minishell
 
-all : $(NAME)
+LNAME	=	libft/libft.a
 
-$(NAME) : $(OBJ)
-	$(MAKE) -C $(D_LIB)
-	@gcc $(OBJ) $(LIB) -I. -lreadline -L/Users/${USER}/.brew/opt/readline/lib -lreadline -o $(NAME)
-	@echo "You compiled the mandatory part of the project."
+GCC		=	gcc
 
-$(D_OBJ)/%.o : $(D_SRC)/%.c $(INCLUDES) $(LIB_INCLUDES)
-	@mkdir -p $(D_OBJ)
-	gcc $(FLAGS) -I. -c $< -o $@
+FLAGS	=	-Wall -Werror -Wextra
 
-clean :
-	@rm -rf $(D_OBJ)
-	@$(MAKE) clean -C $(D_LIB)
+RM		=	rm -f
 
-fclean : clean
-	@rm -f $(NAME)
-	@$(MAKE) fclean -C $(D_LIB)
+%.o: %.c ./inclues/minishell.h
+	$(GCC) $(FLAGS) -I$(HEADS) -c $< -o $@ 
 
-re : fclean all
+$(NAME): $(OBJS) ./libft/libft.h
+	$(MAKE) -C libft all
+	$(GCC) $(FLAGS) $(OBJS) $(LNAME) -L/Users/${USER}/.brew/opt/readline/lib -lreadline -o $(NAME)
 
-.PHONY :
-	all clean fclean re lib
+all:	$(NAME)
+
+clean:
+		@$(MAKE) fclean -C ./libft
+		@$(RM) $(OBJS)
+
+fclean: clean
+		$(RM) $(LNAME)
+		$(RM) $(NAME)
+
+re:		fclean all

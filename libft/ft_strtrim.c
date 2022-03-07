@@ -3,65 +3,76 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/15 10:13:19 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/02/10 14:25:19 by wurrigon         ###   ########.fr       */
+/*   Created: 2021/10/13 18:36:13 by ncarob            #+#    #+#             */
+/*   Updated: 2021/10/14 18:26:47 by ncarob           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	ft_trim_char_counter(char const *s1, char const *set)
+static size_t	get_first_occurance(char const *s, char const *set)
 {
+	short	c;
 	size_t	i;
-	size_t	len;
-	size_t	count;
+	size_t	j;
 
-	i = 0;
-	len = ft_strlen(s1);
-	count = len;
-	while (s1[i] && ft_strchr(set, s1[i]))
+	i = -1;
+	while (s[++i])
 	{
-		i++;
-		count--;
+		j = -1;
+		c = 0;
+		while (set[++j])
+			if (s[i] == set[j])
+				c = 1;
+		if (!c)
+			return (i);
 	}
-	if (count == 0)
-		return (count);
-	while (len >= 0 && ft_strchr(set, s1[len]))
+	return (0);
+}
+
+static size_t	get_last_occurance(char const *s, char const *set)
+{
+	short	c;
+	size_t	i;
+	size_t	j;
+	size_t	len;
+
+	i = ft_strlen(s);
+	len = i;
+	while (--i > 0)
 	{
-		len--;
-		count--;
+		j = -1;
+		c = 0;
+		while (set[++j])
+			if (s[i] == set[j])
+				c = 1;
+		if (!c)
+			return (i);
 	}
-	return (count);
+	return (0);
 }
 
 char	*ft_strtrim(char const *s1, char const *set)
 {
-	size_t	len;
-	size_t	tmp;
+	char	*str;
 	size_t	i;
-	size_t	j;
-	char	*res;
+	size_t	first;
+	size_t	last;
 
-	if (s1 == NULL)
+	i = -1;
+	if (!s1)
 		return (NULL);
-	if (ft_strncmp(s1, "", 1) == 0)
-		return (ft_strdup(""));
-	len = ft_trim_char_counter(s1, set);
-	if (len == 0)
-		return (ft_strdup(""));
-	res = (char *)malloc(len + 2);
-	if (res == NULL)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (s1[i] && ft_strchr(set, s1[i]))
-		i++;
-	tmp = i;
-	while (i < tmp + len + 1)
-		res[j++] = s1[i++];
-	res[j] = '\0';
-	return (res);
+	if (!set)
+		return ((char *)s1);
+	first = get_first_occurance(s1, set);
+	last = get_last_occurance(s1, set);
+	str = (char *)malloc((last - first + 2) * sizeof(char));
+	if (str == NULL)
+		return (0);
+	while (++i < last - first + 1 && last)
+		str[i] = s1[first + i];
+	str[i] = 0;
+	return (str);
 }
-

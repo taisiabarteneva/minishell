@@ -3,102 +3,57 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wurrigon <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/15 11:41:18 by wurrigon          #+#    #+#             */
-/*   Updated: 2021/10/15 11:52:17 by wurrigon         ###   ########.fr       */
+/*   Created: 2021/10/13 18:34:47 by ncarob            #+#    #+#             */
+/*   Updated: 2021/10/13 18:34:47 by ncarob           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "libft.h"
 
-static char	*reverse(char *buffer, int i, int j)
+static void	ft_putnbr_str(int n, char *str, size_t i)
 {
-	char	t;
+	int	sign;
 
-	while (i < j)
+	sign = 1;
+	if (n < 0)
 	{
-		t = buffer[i];
-		buffer[i] = buffer[j];
-		buffer[j] = t;
-		i++;
-		j--;
+		str[0] = '-';
+		sign = -1;
 	}
-	return (buffer);
+	if (n / 10)
+		ft_putnbr_str(sign * (n / 10), str, i - 1);
+	str[i] = sign * (n % 10) + 48;
 }
 
-static int	ft_itoa_count_len(long val)
+static	size_t	ft_len(int n)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
-	if (val < 0)
-		val = val * (-1);
-	while (val >= 1)
+	if (!n)
+		return (1);
+	if (n < 0)
+		i++;
+	while (n)
 	{
 		i++;
-		val = val / 10;
-		if (val >= 0 && val <= 9)
-		{
-			i++;
-			break ;
-		}
+		n = n / 10;
 	}
 	return (i);
 }
 
-char	*ft_itoa_null_case(void)
-{
-	char	*str;
-
-	str = (char *)malloc(2);
-	str[0] = '0';
-	str[1] = '\0';
-	return (str);
-}
-
-char	*ft_itoa_convert(long size, char *str)
-{
-	int	rmd;
-	int	j;
-
-	j = 0;
-	if (size < 0)
-	{
-		size = size * (-1);
-		str[j] = '-';
-		j++;
-	}
-	while (size >= 1)
-	{
-		rmd = size % 10;
-		if (rmd >= 10)
-			str[j++] = 65 + (rmd + 10);
-		str[j++] = 48 + rmd;
-		size = size / 10;
-	}
-	str[j] = '\0';
-	return (str);
-}
-
 char	*ft_itoa(int n)
 {
-	int		len;
-	int		i;
-	long	size;
+	size_t	size;
 	char	*str;
 
-	size = n;
-	if (size == 0 || size == -0)
-		return (ft_itoa_null_case());
-	len = ft_itoa_count_len(size);
-	str = (char *)malloc(len + 2);
-	if (str == NULL)
+	size = ft_len(n);
+	str = (char *)malloc((size + 1) * sizeof(char));
+	if (!str)
 		return (NULL);
-	ft_itoa_convert(size, str);
-	i = ft_strlen(str);
-	if (str[0] == '-')
-		str = reverse(str, 1, i - 1);
-	else
-		str = reverse(str, 0, i - 1);
+	ft_putnbr_str(n, str, size - 1);
+	str[size] = 0;
 	return (str);
 }

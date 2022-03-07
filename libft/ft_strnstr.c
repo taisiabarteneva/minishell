@@ -3,35 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/15 10:06:41 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/02/10 14:24:08 by wurrigon         ###   ########.fr       */
+/*   Created: 2021/10/13 18:36:07 by ncarob            #+#    #+#             */
+/*   Updated: 2021/10/14 17:14:49 by ncarob           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
+char	*ft_strnstr(const char *big, const char *small, size_t n)
 {
 	size_t	i;
 	size_t	j;
 
-	i = 0;
-	if (*needle == '\0')
-		return ((char *)haystack);
-	while (haystack[i] != '\0')
+	if (!big)
+		return (NULL);
+	if (!small || small[0] == 0)
+		return ((char *)big);
+	i = -1;
+	while (++i < n && big[i])
 	{
 		j = 0;
-		if (haystack[i] == needle[j])
+		if (big[i] == small[j])
 		{
-			while (haystack[i + j] == needle[j]
-				&& needle[j] && (i + j < len))
+			while (big[i + j] == small[j] && i + j < n && big[i + j])
 				j++;
-			if (needle[j] == '\0')
-				return ((char *)&haystack[i]);
 		}
-		i++;
+		if (ft_strlen(small) == j)
+			return ((char *)(&big[i]));
 	}
-	return (NULL);
+	return (0);
 }
