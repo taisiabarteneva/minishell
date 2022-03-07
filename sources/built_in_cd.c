@@ -1,11 +1,49 @@
 #include "../includes/minishell.h"
 
-void execute_cd(t_envars **list, char *path)
+void handle_empty_input()
 {
-	int status;
+	char	*root_path;
+}
 
-	(void)list;
-	status = chdir(path);
+void handle_non_existing_path(t_cmnds *commands)
+{
+	// exit status
+	write(STDERR_FILENO, "minishell: cd: ", 15);
+	write(STDERR_FILENO, tmp->arg, ft_strlen(tmp->arg));
+	write(STDERR_FILENO, ": No such file or directory\n", 29);
+}
+
+void change_pwd_environ()
+{
+	
+}
+
+void execute_cd(t_envars **list, t_cmnds **commands)
+{
+	int		status;
+	char	*old_path;
+	char	*new_path;
+
+	// tmp 
+	t_cmnds *tmp;
+	tmp = *commands;
+	
+	// save current path
+	if (getcwd(old_path, MAX_PATH) == NULL)
+		fatal_error(MLC_ERROR);
+	// change path
+	status = chdir(tmp->arg);
+	if (tmp->args[0] == NULL)
+	{
+		handle_empty_input();
+	}
 	if (status == -1)
-		write(STDERR_FILENO, "No such file or directory\n", 17);
+	{
+		handle_non_existing_path(*commands);
+	}
+	// save new current path
+	if (getcwd(new_path, MAX_PATH) == NULL)
+		fatal_error(MLC_ERROR);
+	// update paths in environment
+	change_pwd_environ();
 }

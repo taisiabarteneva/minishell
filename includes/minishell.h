@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 12:18:03 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/07 20:15:02 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/07 21:08:45 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # define MLC_ERROR "minishell: memory allocation error\n"
 # define CMD_ERROR "minishell: parsing error\n"
 
-# define MAXDIR 1024
+# define MAX_PATH 1024
 
 // Environment variables list structure.
 
@@ -50,6 +50,8 @@ typedef struct s_comnds
 	char			*flag;
 	t_envars		*envs;
 	struct s_comnds	*next;
+
+	char 			*arg;
 }	t_cmnds;
 
 // Command Parser.
@@ -82,12 +84,12 @@ void		fatal_error(char *msg);
 void		catch_signals(void);
 
 // Built-ins.
-void 		built_ins(char *cmd, t_envars **list, t_cmnds **commands);
+void 		built_ins(t_envars **list, t_cmnds *store, char *line);
 void 		execute_pwd(void);
 void		execute_env(t_envars *list);
 void 		execute_unset(t_envars **list, char *key);
 void		execute_exit(void);
-void 		execute_cd(t_envars **list, char *path);
+void 		execute_cd(t_envars **list, t_cmnds **commands);
 void 		execute_echo(t_cmnds *commands);
 
 

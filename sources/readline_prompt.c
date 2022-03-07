@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 18:23:49 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/07 20:00:58 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/07 21:01:33 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ void	add_line_to_history(char *line)
 void	set_prompt(t_envars **envs)
 {
 	char	*line;
+	char 	**tmp;
+	t_cmnds *commands;
 
 	line = NULL;
 	while (1)
@@ -44,7 +46,8 @@ void	set_prompt(t_envars **envs)
 			break ;
 		else
 		{
-			ft_parse_input(line, *envs);
+			// ft_parse_input(line, *envs);
+			built_ins(envs, commands, line);
 			// do_something();
 			// ft_cmds_clear(&comnds);
 		}
