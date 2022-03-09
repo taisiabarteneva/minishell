@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 12:18:03 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/07 21:08:45 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/09 16:23:54 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,12 @@
 # define MAX_PATH 1024
 
 // Environment variables list structure.
+
+typedef struct s_shell
+{
+	int				exit_status;
+	int				shell_level;
+}				t_shell;
 
 typedef struct s_envars
 {
