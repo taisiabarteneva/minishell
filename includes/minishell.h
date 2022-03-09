@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 12:18:03 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/09 16:23:54 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/09 16:42:35 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ void 		rl_replace_line(const char *text, int clear_undo);
 // Utilities.
 
 void		fatal_error(char *msg);
+char 		*find_env_value(t_envars *list, char *key);
 
 // Signals.
 void		catch_signals(void);

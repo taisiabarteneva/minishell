@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   environ_vars_utils2.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/05 19:33:11 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/07 17:35:18 by ncarob           ###   ########.fr       */
+/*   Updated: 2022/03/09 18:21:43 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	ft_envar_add_back(t_envars **vars, t_envars *new_var)
 	{
 		while (copy->next)
 			copy = copy->next;
-		copy->next = new_var;
+		copy->next = new_var;		
 		new_var->next = NULL;
 	}
 }
@@ -58,8 +58,8 @@ void	ft_envar_del_one(t_envars **vars, char *key)
 		prev = curr;
 		curr = curr->next;
 	}
-	free(curr->key);
-	free(curr->value);
+	// free(curr->key);
+	// free(curr->value);
 	if (prev)
 		prev->next = curr->next;
 	else
