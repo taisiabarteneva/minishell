@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/05 19:33:11 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/09 18:21:43 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/12 23:11:06 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	ft_envar_add_back(t_envars **vars, t_envars *new_var)
 	{
 		while (copy->next)
 			copy = copy->next;
-		copy->next = new_var;		
+		copy->next = new_var;
 		new_var->next = NULL;
 	}
 }
@@ -48,23 +48,30 @@ void	ft_envar_del_one(t_envars **vars, char *key)
 {
 	t_envars	*curr;
 	t_envars	*prev;
+	int			found;
 
+	found = 0;
 	if (!(*vars) || !key)
 		return ;
 	prev = NULL;
 	curr = *vars;
-	while (curr && ft_strncmp(curr->key, key, ft_strlen(key) + 1))
+	while (curr)
 	{
+		if (!ft_strncmp(curr->key, key, ft_strlen(curr->key) + 1) && !found++)
+			break ;
 		prev = curr;
 		curr = curr->next;
 	}
-	// free(curr->key);
-	// free(curr->value);
-	if (prev)
-		prev->next = curr->next;
-	else
-		*vars = curr->next;
-	free(curr);
+	if (found)
+	{
+		free(curr->key);
+		free(curr->value);
+		if (prev)
+			prev->next = curr->next;
+		else
+			*vars = curr->next;
+		free(curr);
+	}
 }
 
 void	ft_envars_clear(t_envars **vars)

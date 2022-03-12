@@ -1,32 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   catch_signals.c                                    :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/07 19:44:17 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/07 20:09:04 by wurrigon         ###   ########.fr       */
+/*   Created: 2022/03/10 21:42:05 by wurrigon          #+#    #+#             */
+/*   Updated: 2022/03/12 19:28:35 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void *sigint_handler(int sig_num)
+void execute_echo(t_cmnds *commands, t_shell *shell)
 {
-	(void)sig_num;
-	
-	write(STDOUT_FILENO, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-	// clear_input();
-	return (NULL);
-}
+	// int		newline;
 
-void catch_signals(void)
-{
-	signal(SIGINT, (void *)sigint_handler); // ctrl-c
-	signal(SIGQUIT, SIG_IGN); 				// ctrl-/
-	signal(SIGTSTP, SIG_IGN); 				// ctrl-z
-}
+	(void)commands;
+	(void)shell;
+}	
