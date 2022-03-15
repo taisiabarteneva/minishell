@@ -6,11 +6,11 @@
 /*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/05 22:49:33 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/12 21:06:34 by ncarob           ###   ########.fr       */
+/*   Updated: 2022/03/13 13:36:47 by ncarob           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 void	fatal_error(char *msg)
 {

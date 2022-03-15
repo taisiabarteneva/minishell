@@ -6,11 +6,11 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/05 19:33:11 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/12 23:11:06 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/15 14:30:49 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 t_envars	*ft_envar_new(char *key, char *value)
 {
@@ -48,29 +48,21 @@ void	ft_envar_del_one(t_envars **vars, char *key)
 {
 	t_envars	*curr;
 	t_envars	*prev;
-	int			found;
+	t_envars	*next;
 
-	found = 0;
-	if (!(*vars) || !key)
+	if (!vars || !key)
 		return ;
-	prev = NULL;
 	curr = *vars;
 	while (curr)
 	{
-		if (!ft_strncmp(curr->key, key, ft_strlen(curr->key) + 1) && !found++)
-			break ;
+		if (ft_strncmp(curr->key, key, ft_strlen(curr->key)) == 0)
+		{
+			next = curr->next;
+			prev->next = next;
+			free(curr);
+		}
 		prev = curr;
 		curr = curr->next;
-	}
-	if (found)
-	{
-		free(curr->key);
-		free(curr->value);
-		if (prev)
-			prev->next = curr->next;
-		else
-			*vars = curr->next;
-		free(curr);
 	}
 }
 

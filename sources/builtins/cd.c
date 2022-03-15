@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 21:42:12 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/12 23:13:21 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/13 13:36:22 by ncarob           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 void handle_unset_home(t_shell *shell)
 {

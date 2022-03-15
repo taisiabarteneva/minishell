@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 21:41:52 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/12 23:16:49 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/13 13:36:34 by ncarob           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int	get_args_quantity(char **args)
 {

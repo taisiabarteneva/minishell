@@ -6,11 +6,11 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 21:41:59 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/12 20:40:43 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/15 14:31:56 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int get_list_size(t_envars *list)
 {
@@ -65,8 +65,8 @@ char **handle_export_without_args(t_envars *list)
 		fatal_error(MLC_ERROR);
 	while (list)
 	{
-		tmp[i] = ft_strjoin(list->key, "=", 0, 0);
-		tmp[i] = ft_strjoin(tmp[i], list->value, 0, 0);
+		tmp[i] = ft_strjoin(list->key, "=", 0, 0);			// check leaks
+		tmp[i] = ft_strjoin(tmp[i], list->value, 0, 0); 	// check leaks
 		if (tmp[i] == NULL)
 			fatal_error(MLC_ERROR);
 		list = list->next;
@@ -122,18 +122,42 @@ void display_sorted_list(char **sorted_keys)
 	}
 }
 
+void add_env_key_value_pair(t_envars **list, char *arg)
+{
+	char		**key_value;
+	t_envars	*new_node;
+	
+	key_value = ft_split(arg, '=');
+	if (!key_value)
+		fatal_error(MLC_ERROR);
+	new_node = ft_envar_new(key_value[0], key_value[1]);
+	if (!new_node)
+		fatal_error(MLC_ERROR);
+	ft_envar_add_back(list, new_node);
+	free(key_value);		
+}
+
+void check_if_key_exists(t_envars **list, char *arg)
+{
+	char	**key_value;
+	char	*exists;
+
+	key_value = ft_split(arg, '=');
+	exists = find_env_node(*list, key_value[0]);
+	if (exists)
+		ft_envar_del_one(list, arg);
+	free(key_value);
+}
+
 void execute_export(t_envars **list, t_cmnds *commands, t_shell *shell)
 {
 	int		i;
 	char 	**sorted_keys;
-	i = 0;
 
-	// No options
-	// It will simply print all names marked for an export to a child process
+	i = 1;
 	sorted_keys = NULL;
-	if (!commands->args)
+	if (!commands->args[i])
 	{
-		// sort list "declare -x" and display it
 		shell->exit_status = 0;		
 		sorted_keys = handle_export_without_args(*list);
 		display_sorted_list(sorted_keys);
@@ -151,10 +175,12 @@ void execute_export(t_envars **list, t_cmnds *commands, t_shell *shell)
 			}
 			else if (!is_equal_sign(commands->args[i]))
 				shell->exit_status = 0;
-			// else
-			// {
-			// 	// It will export key-values pairs	
-			// }
+			else
+			{	
+				shell->exit_status = 0;
+				check_if_key_exists(list, commands->args[i]);
+				add_env_key_value_pair(list, commands->args[i]);
+			}
 			i++;
 		}
 	}

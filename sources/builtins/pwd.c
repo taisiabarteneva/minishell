@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 21:42:20 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/12 22:49:30 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/13 13:36:40 by ncarob           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 void execute_pwd(t_shell *shell, t_cmnds *commands)
 {

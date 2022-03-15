@@ -6,11 +6,11 @@
 /*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 15:21:34 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/12 21:04:13 by ncarob           ###   ########.fr       */
+/*   Updated: 2022/03/13 15:20:57 by ncarob           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int	main(int argc, char **argv, char **envp)
 {
