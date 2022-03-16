@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_main.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 15:21:34 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/13 15:20:57 by ncarob           ###   ########.fr       */
+/*   Updated: 2022/03/16 18:28:26 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	main(int argc, char **argv, char **envp)
 	t_shell		shell;
 
 	(void)argv;
+	(void)envs;
+	(void)envp;
 	if (argc != 1)
 		return (printf("Type commands after minishell is launched stupidass\n"));
 	envs = ft_init_envars(envp);
@@ -25,7 +27,7 @@ int	main(int argc, char **argv, char **envp)
 	shell.exit_status = 0;
 	tty_hide_input();
 	catch_signals();
-	set_shell(&envs, &shell);
+	set_shell(&envs, &shell, envp);
 	ft_envars_clear(&envs);
 	return (shell.exit_status);
 }

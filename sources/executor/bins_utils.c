@@ -1,33 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   bins_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/10 21:42:20 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/16 13:58:20 by wurrigon         ###   ########.fr       */
+/*   Created: 2022/03/15 20:09:53 by wurrigon          #+#    #+#             */
+/*   Updated: 2022/03/16 20:09:09 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../includes/minishell.h"
 
-#include "../../includes/minishell.h"
-
-void execute_pwd(t_shell *shell, t_list *args)
+char **get_command_arguments(t_list *args)
 {
-	char dir[MAX_PATH];
+	t_list	*curr;
+	char 	**cmd_args;
+	int		quan;
+	int		i;
 	
-	if (args->next)
+	i = 0;
+	curr = args;
+	quan = get_args_quantity(args);
+	cmd_args = (char **)malloc(sizeof(char *) * (quan + 1));
+	if (!cmd_args)
+		fatal_error(MLC_ERROR);
+	while (i < quan)
 	{
-		shell->exit_status = 1;
-		write(STDERR_FILENO, "pwd: too many arguments\n", 25);
-	}
-	else
-	{
-		shell->exit_status = 0;
-		if (getcwd(dir, MAX_PATH) == NULL)
+		cmd_args[i] = ft_strdup(curr->content);
+		if (!cmd_args[i])
 			fatal_error(MLC_ERROR);
-		write(STDOUT_FILENO, dir, ft_strlen(dir));
-		write(STDOUT_FILENO, "\n", 1);
+		curr = curr->next; 
+		i++;
 	}
+	cmd_args[i] = NULL;
+	return (cmd_args);
 }

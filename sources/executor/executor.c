@@ -1,24 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memchr.c                                        :+:      :+:    :+:   */
+/*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/13 18:35:13 by ncarob            #+#    #+#             */
-/*   Updated: 2021/10/13 18:35:13 by ncarob           ###   ########.fr       */
+/*   Created: 2022/03/15 20:09:53 by wurrigon          #+#    #+#             */
+/*   Updated: 2022/03/16 22:30:54 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../includes/minishell.h"
 
-void	*ft_memchr(const void *s, int c, size_t n)
+void execute_command(t_cmnds *command, t_shell *shell, char **envp)
 {
-	size_t	i;
-
-	i = -1;
-	while (++i < n)
-		if (*(unsigned char *)(s + i) == (unsigned char)c)
-			return ((void *)(&s[i]));
-	return (0);
+	if (is_built_in(command->args->content))
+		built_ins(&(command->envs), command, shell, envp);
+	else
+		execute_bin(command, shell, envp);
 }

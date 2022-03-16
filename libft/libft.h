@@ -6,7 +6,7 @@
 /*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 18:36:56 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/04 16:46:30 by ncarob           ###   ########.fr       */
+/*   Updated: 2022/03/15 18:04:18 by ncarob           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int				ft_lstsize(t_list *lst);
 long long		ft_atoi(const char *num);
 size_t			ft_strlen(const char *s);
 t_list			*ft_lstlast(t_list *lst);
+void			ft_lstclear(t_list **lst);
 t_list			*ft_lstnew(void *content);
 char			*ft_strdup(const char *s);
 void			ft_bzero(void *s, size_t n);
@@ -52,7 +53,6 @@ void			ft_lstiter(t_list *lst, void (*f)(void *));
 void			*ft_memchr(const void *s, int c, size_t n);
 char			*ft_strtrim(char const *s1, char const *set);
 void			ft_lstdelone(t_list *lst, void (*del)(void*));
-void			ft_lstclear(t_list **lst, void (*del)(void*));
 void			*ft_memmove(void *dest, const void *src, size_t n);
 int				ft_memcmp(const void *s1, const void *s2, size_t n);
 size_t			ft_strlcat(char *dst, const char *src, size_t size);

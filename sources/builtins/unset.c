@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 21:42:26 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/15 13:33:51 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/16 14:10:23 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,22 +26,22 @@ bool is_valid_env_name(const char *str)
 	return (true);
 }
 
-void execute_unset(t_envars **list, char **args, t_shell *shell)
+void execute_unset(t_envars **list, t_list *args, t_shell *shell)
 {
-	while (args && *args)
+	while (args)
 	{
-		if (is_valid_env_name(*args) == false)
+		if (is_valid_env_name(args->content) == false)
 		{
 			shell->exit_status = EXIT_ERR;
 			write(STDERR_FILENO, "minishell: unset: `", 19);
-			write(STDERR_FILENO, *args, ft_strlen(*args));
+			write(STDERR_FILENO, args->content, ft_strlen(args->content));
 			write(STDERR_FILENO, "': not a valid identifier\n", 27);
 		}
 		else
 		{
-			ft_envar_del_one(list, *args);
+			ft_envar_del_one(list, args->content);
 			shell->exit_status = 0;
 		}
-		args++;
+		args = args->next;
 	}
 }

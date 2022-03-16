@@ -3,20 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 21:41:52 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/13 13:36:34 by ncarob           ###   ########.fr       */
+/*   Updated: 2022/03/16 14:48:57 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	get_args_quantity(char **args)
+int	get_args_quantity(t_list *args)
 {
-	int i = 0;
-	while (args[i++])
-		;
+	int 		i;
+	t_list		*tmp;
+
+	i = 0;
+	tmp = args;
+	while (tmp)
+	{
+		i++;
+		tmp = tmp->next;	
+	}
 	return (i);
 }
 
@@ -31,28 +38,28 @@ bool is_numeric(const char *str)
     return (true);
 }
 
-void execute_exit(t_shell *shell, t_cmnds *commands)
+void execute_exit(t_shell *shell, t_list *args)
 {
 	write(STDERR_FILENO, "exit\n", 5);
-	if (commands->args[1])
+	if (args->next)
 	{
-		if (commands->args[1] && get_args_quantity(commands->args) != 1)
+		if (get_args_quantity(args) != 2)
 		{
 			write(STDERR_FILENO, "minishell: exit: ", 17);
-			write(STDERR_FILENO, commands->args[0], ft_strlen(commands->args[0]));
-			write(STDERR_FILENO, "too many arguments\n", 20);
+			write(STDERR_FILENO, args->content, ft_strlen(args->content));
+			write(STDERR_FILENO, " too many arguments\n", 20);
 			shell->exit_status = EXIT_ERR;
 		}
-		else if (commands->args[1] && is_numeric(commands->args[1]) == false)
+		else if (is_numeric(args->next->content) == false)
 		{
 			write(STDERR_FILENO, "minishell: exit: ", 17);
-			write(STDERR_FILENO, commands->args[0], ft_strlen(commands->args[0]));
-			write(STDERR_FILENO, "numeric argument required\n", 26);
+			write(STDERR_FILENO, args->next->content, ft_strlen(args->next->content));
+			write(STDERR_FILENO, " numeric argument required\n", 26);
 			shell->exit_status = 255;
 			exit(shell->exit_status);
 		}
-		else if (ft_atoi(commands->args[1]) > 255)
-			exit(ft_atoi(commands->args[1]) % 256);
+		else if (is_numeric(args->next->content) == true)
+			exit(ft_atoi(args->next->content) % 256); // check
 	}
 	else
 	{

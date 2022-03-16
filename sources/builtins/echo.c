@@ -6,31 +6,36 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 21:42:05 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/15 13:34:22 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/16 15:00:09 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void execute_echo(char **args, t_shell *shell)
+void execute_echo(t_list *args, t_shell *shell)
 {
 	int 	flag;
-	int		i;
+	t_list	*curr;
 
-	i = 1;
 	flag = 0;
-	if (!args[1])
+	curr = args->next;
+	if (!curr)
 	{
 		write(1, "\n", 1);
 		return ;		
 	}	
-	if (ft_strncmp(args[1], "-n", ft_strlen("-n")) == 0 
-		&& ft_strlen("-n") == ft_strlen(args[1]))
-		flag = 1;
-	while (args[i])
+	while (ft_strncmp(curr->content, "-n", ft_strlen("-n")) == 0 
+		&& ft_strlen("-n") == ft_strlen(curr->content))
 	{
-		write(STDOUT_FILENO, args[i], ft_strlen(args[i]));
-		i++;	
+		curr = curr->next;
+		flag = 1;
+	}
+	while (curr)
+	{
+		write(STDOUT_FILENO, curr->content, ft_strlen(curr->content));
+		if (curr->next)
+			write(STDOUT_FILENO, " ", 1);
+		curr = curr->next;
 	}
 	if (!flag)
 		write(STDOUT_FILENO, "\n", 1);

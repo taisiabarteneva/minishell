@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 12:18:03 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/15 13:36:43 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/16 22:38:49 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,11 @@
 
 # define MAX_PATH 1024
 
-# define CMD_ERROR "minishell: parsing error\n"
-# define MLC_ERROR "minishell: memory allocation error\n"
+# define CMD_ERROR 		"minishell: parsing error\n"
+# define MLC_ERROR 		"minishell: memory allocation error\n"
+# define EXEC_ERROR 	"minishell: execve error\n"
+# define FORK_ERR		"minishell: fork error\n"
+# define WAITPID_ERR	"minishell: waitpid error\n"
 
 // Exit status
 
@@ -71,7 +74,7 @@ typedef struct s_redirs
 typedef struct s_comnds
 {
 	t_redirs		**redirs;
-	char			**args;
+	t_list			*args;
 	t_envars		*envs;
 }	t_cmnds;
 
@@ -97,11 +100,13 @@ t_envars	*ft_envar_new(char *key, char *value);
 void		ft_envars_clear(t_envars **vars);
 void		ft_print_envars(t_envars *vars);
 t_envars	*ft_init_envars(char **envp);
+int			get_args_quantity(t_list *args);
+
 
 // Readline and prompt.
 
 void		rl_replace_line(const char *text, int clear_undo);
-void		set_shell(t_envars **envs, t_shell *shell);
+void		set_shell(t_envars **envs, t_shell *shell, char **envp);
 void		add_line_to_history(char *line);
 char		*read_prompt_line(void);
 
@@ -114,16 +119,30 @@ void		fatal_error(char *msg);
 
 void		tty_hide_input(void);
 void		catch_signals(void);
+void		set_signals(void);
+void		*sigint_handler(int sig_num);
+
 
 // Built-ins.
 
-void		execute_export(t_envars **list, t_cmnds *commands, t_shell *shell);
-void		execute_unset(t_envars **list, char **commands, t_shell *shell);
-void		execute_cd(t_envars **list, t_cmnds *commands, t_shell *shell);
-void		built_ins(t_envars **list, t_cmnds *store, t_shell *shell);
-void		execute_exit(t_shell *t_shell, t_cmnds *commands);
-void		execute_echo(char **args, t_shell *shell);
-void		execute_pwd(t_shell *shell, t_cmnds *commands);
-void		execute_env(t_envars *list, t_shell *shell, char **args);
+int			is_built_in(char *command);
+void		built_ins(t_envars **list, t_cmnds *commands, t_shell *shell, char **envp);
+void		execute_export(t_envars **list, t_list *args, t_shell *shell);
+void		execute_unset(t_envars **list, t_list *args, t_shell *shell);
+void		execute_cd(t_envars **list, t_list *args, t_shell *shell);
+void		execute_exit(t_shell *shell, t_list *args);
+void		execute_echo(t_list *args, t_shell *shell);
+void		execute_pwd(t_shell *shell, t_list *args);
+void		execute_env(t_envars *list, t_shell *shell, t_list *args);
+
+// Executor.
+
+void		execute_command(t_cmnds *command, t_shell *shell, char **envp);
+
+// Binary.
+
+void		execute_bin(t_cmnds *command, t_shell *shell, char **envp);
+char		**get_command_arguments(t_list *args);
+
 
 #endif

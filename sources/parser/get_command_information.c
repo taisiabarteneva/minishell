@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_command_redirects_array.c                      :+:      :+:    :+:   */
+/*   get_command_information.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 13:35:25 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/14 19:32:11 by ncarob           ###   ########.fr       */
+/*   Updated: 2022/03/15 17:57:00 by ncarob           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,4 +100,33 @@ void	ft_get_command_redirects(char *line, t_cmnds *command)
 			i[0] += i[1] - 1;
 		}
 	}
+}
+
+void	ft_get_command_arguments(char *line, t_cmnds *command)
+{
+	t_list	*arg;
+	int		i[5];
+
+	ft_memset(i, 0, sizeof(int) * 5);
+	i[0] = -1;
+	while (line[++i[0]])
+	{
+		ft_check_quotes(line[i[0]], &i[3], &i[4]);
+		if (!i[0] && line[i[0]] == ' ' && !i[1]++)
+			;
+		if (i[0] && !i[3] && !i[4] && line[i[0]] == ' ')
+		{
+			if (!line[i[0] + 1])
+				break ;
+			arg = ft_lstnew(ft_substr(line, i[1], i[0] - i[1]));
+			if (!arg)
+				fatal_error(MLC_ERROR);
+			ft_lstadd_back(&command->args, arg);
+			i[1] = i[0] + 1;
+		}
+	}
+	arg = ft_lstnew(ft_substr(line, i[1], i[0] - i[1]));
+	if (!arg)
+		fatal_error(MLC_ERROR);
+	ft_lstadd_back(&command->args, arg);
 }
