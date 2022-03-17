@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 12:18:03 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/16 22:38:49 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/17 15:03:52 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int			get_args_quantity(t_list *args);
 // Readline and prompt.
 
 void		rl_replace_line(const char *text, int clear_undo);
-void		set_shell(t_envars **envs, t_shell *shell, char **envp);
+void		set_shell(t_envars **envs, t_shell **shell, char **envp);
 void		add_line_to_history(char *line);
 char		*read_prompt_line(void);
 
@@ -137,11 +137,11 @@ void		execute_env(t_envars *list, t_shell *shell, t_list *args);
 
 // Executor.
 
-void		execute_command(t_cmnds *command, t_shell *shell, char **envp);
+void		execute_command(t_cmnds *command, t_shell **shell, char **envp);
 
 // Binary.
 
-void		execute_bin(t_cmnds *command, t_shell *shell, char **envp);
+void		execute_bin(t_cmnds *command, t_shell **shell, char **envp);
 char		**get_command_arguments(t_list *args);
 
 
