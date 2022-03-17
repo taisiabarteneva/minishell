@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 18:32:06 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/17 23:08:01 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/18 01:37:15 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,14 @@ void exec_system_bin(t_cmnds *command, char **path, char ***cmd_args)
 		free(*path);
 		*path = NULL;
 		i++;
+	}
+	if (!*path)
+	{
+		*path = ft_strjoin("/", (*cmd_args)[0], 0, 0);
+		if (!*path)
+			fatal_error("malloc");
+		if (access(*path, F_OK))
+			*path = NULL;
 	}
 	free(paths);
 }
