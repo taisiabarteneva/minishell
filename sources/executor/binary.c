@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 18:32:06 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/17 22:48:19 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/17 23:08:01 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,6 @@ void exec_system_bin(t_cmnds *command, char **path, char ***cmd_args)
 		*path = NULL;
 		i++;
 	}
-	if (*path == NULL)
-	{
-		*path = ft_strjoin("/", (*cmd_args)[0], 0, 0);
-		// dprintf(2, "PATH HERE IS : [%s]\n", *path);
-		if (*path == NULL)
-			fatal_error(MLC_ERROR);
-	}
 	free(paths);
 }
 
@@ -91,13 +84,25 @@ int launch_command(t_cmnds *command, char **envp, t_shell **shell)
 	if (!cmdargs)
 		fatal_error(MLC_ERROR);
 	exec_system_bin(command, &path, &cmdargs);
-	if (execve(path, cmdargs, envp) == -1)
+	(*shell)->exit_status = 127;
+	if (path == NULL && !find_env_node(command->envs, "PATH"))
 	{
-		(*shell)->exit_status = 127;
+		write(STDERR_FILENO, "minishell: ", 11);		
+		write(STDERR_FILENO, cmdargs[0], ft_strlen(cmdargs[0]));
+		write(STDERR_FILENO, ": No such file or directory\n", 28);
+		exit(127);
+	}
+	else if (path == NULL)
+	{
 		write(STDERR_FILENO, "minishell: ", 11);		
 		write(STDERR_FILENO, cmdargs[0], ft_strlen(cmdargs[0]));
 		write(STDERR_FILENO, ": command not found\n", 20);
 		exit((*shell)->exit_status);
+	}
+	else 
+	{	(*shell)->exit_status = 0;
+		if (execve(path, cmdargs, envp) == -1)
+			fatal_error(EXEC_ERROR);
 	}
 	(*shell)->exit_status = EXIT_ERR;
 	exit((*shell)->exit_status);
@@ -114,7 +119,9 @@ void execute_bin(t_cmnds *command, t_shell	**shell, char **envp)
 	
 	pid = fork();
 	if (pid == 0)
-		launch_command(command, envp, shell);          	// child process
+	{	
+		launch_command(command, envp, shell);          	// child process 
+	}
 	else if (pid == -1)
 		fatal_error(FORK_ERR);     						// handle error
 	else if (pid > 0)
