@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 18:32:06 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/18 21:11:44 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/18 22:18:58 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,8 @@ void open_files(t_redirs *elem, t_shell *shell)
 	dup2(shell->fd_out, STDOUT_FILENO);
 	dup2(shell->fd_in, STDIN_FILENO);
 	close(fd);
+	// close(shell->fd_in);
+	close(shell->fd_out);
 }
 
 void handle_pipes_redirects(t_cmnds *command, t_shell *shell)
@@ -185,8 +187,8 @@ void handle_pipes_redirects(t_cmnds *command, t_shell *shell)
 		open_files(command->redirs[i], shell);
 		i++;
 	}	
-	dprintf(2, "FD IN : [%d]\n", shell->fd_in);
-	dprintf(2, "FD OUT :[%d]\n", shell->fd_out);
+	// dprintf(2, "FD IN : [%d]\n", shell->fd_in);
+	// dprintf(2, "FD OUT :[%d]\n", shell->fd_out);
 }
 
 

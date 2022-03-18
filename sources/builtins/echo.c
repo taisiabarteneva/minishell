@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 21:42:05 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/18 21:14:36 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/18 22:19:56 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void execute_echo(t_list *args, t_shell *shell)
 	if (!curr)
 	{
 		write(1, "\n", 1);
-		return ;		
+		return ;
 	}	
 	while (ft_strncmp(curr->content, "-n", ft_strlen("-n")) == 0 
 		&& ft_strlen("-n") == ft_strlen(curr->content))
@@ -41,5 +41,4 @@ void execute_echo(t_list *args, t_shell *shell)
 	if (!flag)
 		write(STDOUT_FILENO, "\n", 1);
 	shell->exit_status = 0;
-	// exit(0);
 }
