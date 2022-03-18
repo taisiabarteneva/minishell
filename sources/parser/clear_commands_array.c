@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   clear_commands_array.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 14:53:20 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/15 18:03:48 by ncarob           ###   ########.fr       */
+/*   Updated: 2022/03/18 18:40:55 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void	ft_free_command_redirects(t_cmnds *command)
+void	ft_free_command_redirects(t_cmnds *command)
 {
 	int	i;
 
@@ -26,19 +26,32 @@ static void	ft_free_command_redirects(t_cmnds *command)
 		free(command->redirs);
 }
 
-void	ft_commands_clear(t_cmnds **commands)
+void	ft_array_clear(char ***array)
 {
 	int	i;
 
 	i = -1;
-	if (!commands)
+	if (!*array)
 		return ;
-	while (commands[++i])
+	while ((*array)[++i])
+		free((*array)[i]);
+	free(*array);
+	*array = NULL;
+}
+
+void	ft_commands_clear(t_cmnds ***commands)
+{
+	int	i;
+
+	i = -1;
+	if (!commands || !(*commands))
+		return ;
+	while (((*commands)[++i]))
 	{
-		ft_free_command_redirects(commands[i]);
-		ft_lstclear(&commands[i]->args);
-		free(commands[i]);
+		ft_free_command_redirects((*commands)[i]);
+		ft_lstclear(&(*commands)[i]->args);
+		free((*commands)[i]);
 	}
-	free(commands);
-	commands = NULL;
+	free((*commands));
+	(*commands) = NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 13:35:25 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/15 17:57:00 by ncarob           ###   ########.fr       */
+/*   Updated: 2022/03/18 16:56:05 by ncarob           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ void	ft_get_command_redirects(char *line, t_cmnds *command)
 			i[0] += i[1] - 1;
 		}
 	}
+	command->redirs[i[2]] = NULL;
 }
 
 void	ft_get_command_arguments(char *line, t_cmnds *command)

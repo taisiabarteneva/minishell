@@ -18,8 +18,11 @@ SRCS	=	./sources/builtins/cd.c \
 			./sources/parser/parse_and_add_commands.c \
 			./sources/parser/remove_redirects_spaces.c \
 			./sources/parser/get_command_information.c \
+			./sources/parser/wildcard_find_all_utils.c \
 			./sources/parser/remove_quotes_change_path.c \
+			./sources/parser/wildcard_find_all_arguments.c \
 			./sources/parser/get_total_commands_validate_line.c \
+
 
 OBJS	=	$(SRCS:.c=.o)
 

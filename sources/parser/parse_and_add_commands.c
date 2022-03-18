@@ -6,7 +6,7 @@
 /*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 21:53:08 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/15 18:12:05 by ncarob           ###   ########.fr       */
+/*   Updated: 2022/03/18 17:10:37 by ncarob           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 // 	int		i;
 
 // 	i = -1;
+// 	if (!command)
+// 		return ;
 // 	args = command->args;
 // 	printf("COMMAND REDIRECTS:\n");
 // 	while (command->redirs && command->redirs[++i])
@@ -32,27 +34,29 @@
 // 	}
 // }
 
-static void	ft_remove_quotes_from_command(t_cmnds *command)
+static t_cmnds	*ft_command_new_part_two(t_cmnds *command)
 {
-	t_list	*args;
-	int		i;
+	int	i;
 
 	i = -1;
-	args = command->args;
 	while (command->redirs && command->redirs[++i])
 		command->redirs[i]->filename
 			= ft_remove_quotes(command->redirs[i]->filename, command->envs);
-	while (args)
+	if (ft_replace_wildcards(command, command->args))
 	{
-		args->content = ft_remove_quotes(args->content, command->envs);
-		args = args->next;
+		ft_free_command_redirects(command);
+		ft_lstclear(&command->args);
+		free(command);
+		command = NULL;
 	}
+	return (command);
 }
 
 static t_cmnds	*ft_command_new(char *str, t_envars *envs)
 {
 	t_cmnds	*command;
 	int		i;
+	int		j;
 
 	if (!str)
 		return (NULL);
@@ -60,20 +64,19 @@ static t_cmnds	*ft_command_new(char *str, t_envars *envs)
 	if (!command)
 		return (NULL);
 	i = -1;
+	j = -1;
 	ft_memset(command, 0, sizeof(t_cmnds));
 	command->envs = envs;
 	ft_get_command_redirects(str, command);
 	str = ft_remove_redirects(str);
 	str = ft_remove_spaces(str);
 	ft_get_command_arguments(str, command);
-	ft_remove_quotes_from_command(command);
+	command = ft_command_new_part_two(command);
 	free(str);
 	return (command);
 }
 
-// ft_print_command_info(command);
-
-static void	ft_init_commands(char *str, t_cmnds **commands, t_envars *envs)
+static int	ft_init_commands(char *str, t_cmnds **commands, t_envars *envs)
 {
 	int	i[5];
 
@@ -87,14 +90,15 @@ static void	ft_init_commands(char *str, t_cmnds **commands, t_envars *envs)
 			commands[i[2]++] = ft_command_new(ft_substr(str,
 						i[1], i[0] - i[1]), envs);
 			if (!commands[i[2] - 1])
-				fatal_error(MLC_ERROR);
+				return (1);
 			i[1] = i[0] + 1;
 		}
 	}
 	commands[i[2]++] = ft_command_new(ft_substr(str, i[1], i[0] - i[1]), envs);
 	if (!commands[i[2] - 1])
-		fatal_error(MLC_ERROR);
+		return (1);
 	commands[i[2]] = NULL;
+	return (0);
 }
 
 t_cmnds	**ft_parse_input(char *s, t_envars *envs)
@@ -111,6 +115,7 @@ t_cmnds	**ft_parse_input(char *s, t_envars *envs)
 	commands = (t_cmnds **)malloc(sizeof(t_cmnds *) * (num_of_commands + 1));
 	if (!commands)
 		fatal_error(MLC_ERROR);
-	ft_init_commands(s, commands, envs);
+	if (ft_init_commands(s, commands, envs))
+		ft_commands_clear(&commands);
 	return (commands);
 }

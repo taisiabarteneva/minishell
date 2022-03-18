@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 18:32:06 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/18 01:41:45 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/18 21:11:44 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,14 @@ void exec_system_bin(t_cmnds *command, char **path, char ***cmd_args)
 	free(paths);
 }
 
+void	exec_non_system_bin(t_cmnds *command, char **path, char ***cmdargs)
+{
+	*cmdargs = ft_split(command->args->content, ' ');
+	if (!*cmdargs)
+		fatal_error(MLC_ERROR);
+	*path = (*cmdargs)[0];
+}
+
 int launch_command(t_cmnds *command, char **envp, t_shell **shell)
 {
 	char	*path;
@@ -91,8 +99,12 @@ int launch_command(t_cmnds *command, char **envp, t_shell **shell)
 	cmdargs = get_command_arguments(command->args);
 	if (!cmdargs)
 		fatal_error(MLC_ERROR);
-	exec_system_bin(command, &path, &cmdargs);
+	if (ft_strchr(command->args->content, '/') != NULL)
+		exec_non_system_bin(command, &path, &cmdargs);
+	else
+		exec_system_bin(command, &path, &cmdargs);
 	(*shell)->exit_status = 127;
+	dprintf(2, "[%s]\n", path);
 	if (path == NULL && !find_env_node(command->envs, "PATH"))
 	{
 		write(STDERR_FILENO, "minishell: ", 11);		
@@ -108,12 +120,73 @@ int launch_command(t_cmnds *command, char **envp, t_shell **shell)
 		exit((*shell)->exit_status);
 	}
 	else 
-	{	(*shell)->exit_status = 0;
-		execve(path, cmdargs, envp);
-			// fatal_error(EXEC_ERROR);
+	{	
+		(*shell)->exit_status = 0;
+		if (execve(path, cmdargs, envp) == -1)
+		{
+			write(STDERR_FILENO, "minishell: ", 11);		
+			write(STDERR_FILENO, cmdargs[0], ft_strlen(cmdargs[0]));
+			write(STDERR_FILENO, ": No such file or directory\n", 28);
+			exit(1);
+		}
 	}
 	(*shell)->exit_status = EXIT_ERR;
+	free(cmdargs);
 	exit((*shell)->exit_status);
+}
+
+void open_files(t_redirs *elem, t_shell *shell)
+{
+	int		fd;
+	
+	shell->fd_in = 0;
+	shell->fd_out = 1;
+	if (elem->mode == 0)
+	{
+		fd = open(elem->filename, O_CREAT | O_RDWR | O_TRUNC, 0777);
+		if (fd == -1)
+			fatal_error("open");
+		shell->fd_out = fd;
+	}
+	if (elem->mode == 1)
+	{
+		fd = open(elem->filename, O_RDONLY, 0777);
+		if (fd == -1)
+			fatal_error("open");
+		shell->fd_in = fd;
+	}
+	if (elem->mode == 2)
+	{
+		fd = open(elem->filename, O_CREAT | O_RDWR | O_APPEND, 0777);
+		if (fd == -1)
+			fatal_error("open");
+		shell->fd_out = fd;
+	}
+	if (elem->mode == 3)
+	{
+		fd = open(elem->filename, O_CREAT | O_RDWR | O_APPEND, 0777);
+		if (fd == -1)
+			fatal_error("open");
+		shell->fd_in = fd;
+	}
+	dup2(shell->fd_out, STDOUT_FILENO);
+	dup2(shell->fd_in, STDIN_FILENO);
+	close(fd);
+}
+
+void handle_pipes_redirects(t_cmnds *command, t_shell *shell)
+{
+	int i;
+
+	i = 0;
+	while (command->redirs && command->redirs[i])
+	{
+		dprintf(2, "[%s] [%d]\n", command->redirs[i]->filename, command->redirs[i]->mode);
+		open_files(command->redirs[i], shell);
+		i++;
+	}	
+	dprintf(2, "FD IN : [%d]\n", shell->fd_in);
+	dprintf(2, "FD OUT :[%d]\n", shell->fd_out);
 }
 
 
@@ -124,11 +197,12 @@ void execute_bin(t_cmnds *command, t_shell	**shell, char **envp)
 
 	(void)command;
 	(void)envp;
-	
+	(*shell)->fd_in = 0;
+	(*shell)->fd_out = 1;
 	pid = fork();
 	if (pid == 0)
 	{	
-		// handle_pipes_redirects();
+		handle_pipes_redirects(command, *shell);
 		launch_command(command, envp, shell);          	// child process 
 	}
 	else if (pid == -1)
