@@ -23,7 +23,6 @@ SRCS	=	./sources/builtins/cd.c \
 			./sources/parser/wildcard_find_all_arguments.c \
 			./sources/parser/get_total_commands_validate_line.c \
 
-
 OBJS	=	$(SRCS:.c=.o)
 
 HEADS	=	./includes
@@ -38,7 +37,7 @@ HS_LIB	=	readline/libhistory.a
 
 GCC		=	gcc
 
-FLAGS	=	-Wall -Werror -Wextra 
+FLAGS	=	-Wall -Werror -Wextra -g
 
 RM		=	rm -f
 
