@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 21:42:05 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/18 22:19:56 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/19 18:51:33 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void execute_echo(t_list *args, t_shell *shell)
 
 	flag = 0;
 	curr = args->next;
-	dprintf(2, "HERE\n");
 	if (!curr)
 	{
 		write(1, "\n", 1);

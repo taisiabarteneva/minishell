@@ -31,21 +31,21 @@ void	tty_hide_input(void)
 	term.c_lflag &= ~ECHOCTL; // terminal special characters other than TAB, NL, START, and STOP are echoed as ^X
 	tcsetattr(STDIN_FILENO, 0, &term);
 }
-
-void	*sigint_handler(int sig_num)
-{
-	(void)sig_num;
-
-	write(STDOUT_FILENO, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-	return (NULL);
-}
-
-void	catch_signals(void)
-{
-	signal(SIGINT, (void *)sigint_handler); // ctrl-c
-	signal(SIGQUIT, SIG_IGN); 				// ctrl-/
-	signal(SIGTSTP, SIG_IGN); 				// ctrl-z
-}
+//
+//void	*sigint_handler(int sig_num)
+//{
+//	(void)sig_num;
+//
+//	write(STDOUT_FILENO, "\n", 1);
+//	rl_on_new_line();
+//	rl_replace_line("", 0);
+//	rl_redisplay();
+//	return (NULL);
+//}
+//
+//void	catch_signals(void)
+//{
+//	signal(SIGINT, (void *)sigint_handler); // ctrl-c
+//	signal(SIGQUIT, SIG_IGN); 				// ctrl-/
+//	signal(SIGTSTP, SIG_IGN); 				// ctrl-z
+//}

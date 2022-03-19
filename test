@@ -1,0 +1,9 @@
+CMakeLists.txt
+cmake-build-debug
+ffile
+includes
+libft
+minishell
+readline
+sources
+test

@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 18:32:06 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/18 22:18:58 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/19 18:50:47 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int launch_command(t_cmnds *command, char **envp, t_shell **shell)
 	else
 		exec_system_bin(command, &path, &cmdargs);
 	(*shell)->exit_status = 127;
-	dprintf(2, "[%s]\n", path);
+	// dprintf(2, "[%s]\n", path);
 	if (path == NULL && !find_env_node(command->envs, "PATH"))
 	{
 		write(STDERR_FILENO, "minishell: ", 11);		
@@ -132,13 +132,15 @@ int launch_command(t_cmnds *command, char **envp, t_shell **shell)
 	}
 	(*shell)->exit_status = EXIT_ERR;
 	free(cmdargs);
+	free(path);
 	exit((*shell)->exit_status);
 }
 
-void open_files(t_redirs *elem, t_shell *shell)
+int open_files(t_redirs *elem, t_shell *shell)
 {
 	int		fd;
 	
+	int lol = dup(1);
 	shell->fd_in = 0;
 	shell->fd_out = 1;
 	if (elem->mode == 0)
@@ -173,22 +175,24 @@ void open_files(t_redirs *elem, t_shell *shell)
 	dup2(shell->fd_in, STDIN_FILENO);
 	close(fd);
 	// close(shell->fd_in);
-	close(shell->fd_out);
+	// close(shell->fd_out);
+	return (lol);
 }
 
-void handle_pipes_redirects(t_cmnds *command, t_shell *shell)
+int  handle_pipes_redirects(t_cmnds *command, t_shell *shell)
 {
 	int i;
-
+	int lol;
 	i = 0;
-	while (command->redirs && command->redirs[i])
+	while (command->redirs[i])
 	{
-		dprintf(2, "[%s] [%d]\n", command->redirs[i]->filename, command->redirs[i]->mode);
-		open_files(command->redirs[i], shell);
+		// dprintf(2, "[%s] [%d]\n", command->redirs[i]->filename, command->redirs[i]->mode);
+		lol = open_files(command->redirs[i], shell);
 		i++;
 	}	
 	// dprintf(2, "FD IN : [%d]\n", shell->fd_in);
 	// dprintf(2, "FD OUT :[%d]\n", shell->fd_out);
+	return (lol);
 }
 
 
@@ -205,15 +209,15 @@ void execute_bin(t_cmnds *command, t_shell	**shell, char **envp)
 	if (pid == 0)
 	{	
 		handle_pipes_redirects(command, *shell);
-		launch_command(command, envp, shell);          	// child process 
+		launch_command(command, envp, shell);
 	}
 	else if (pid == -1)
-		fatal_error(FORK_ERR);     						// handle error
+		fatal_error(FORK_ERR);     				// handle error
 	else if (pid > 0)
 	{
 		if (waitpid(-1, &status, 0) == -1)
 			fatal_error(WAITPID_ERR);
 		signal(SIGQUIT, SIG_IGN);
-		signal(SIGINT, (void *)sigint_handler);
+//		signal(SIGINT, (void *)sigint_handler);
 	}
 }

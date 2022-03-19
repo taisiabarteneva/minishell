@@ -70,6 +70,8 @@ int	ft_check_line_part_two(char *str)
 			while (str[++i] && str[i] == ' ')
 				;
 			j = i;
+			//todo если строка дойдет до конца, что будет в условии цикла?
+			// => "kek\0" i = 4 => обращение к плохой памяти
 			while (str[i] && !ft_strchr(" <>|", str[i]))
 				i++;
 			if (!(i - j))
