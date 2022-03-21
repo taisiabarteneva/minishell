@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 15:21:34 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/19 21:40:59 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/19 21:57:11 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ int	main(int argc, char **argv, char **envp)
 	envs = ft_init_envars(envp);
 	set_shell_level(envs, shell);
 	shell->exit_status = 0;
-	tty_hide_input();
-	catch_signals();
 	set_shell(&envs, &shell, envp);
 	ft_envars_clear(&envs);
 	return (shell->exit_status);

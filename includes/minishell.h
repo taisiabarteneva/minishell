@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 12:18:03 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/19 19:37:49 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/21 18:55:57 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ void		execute_unset(t_envars **list, t_list *args, t_shell *shell);
 void		execute_cd(t_envars **list, t_list *args, t_shell *shell);
 void		execute_exit(t_shell *shell, t_list *args);
 void		execute_echo(t_list *args, t_shell *shell);
-void		execute_pwd(t_shell *shell, t_list *args);
+void		execute_pwd(t_shell *shell, t_list *args, t_envars *list);
 void		execute_env(t_envars *list, t_shell *shell, t_list *args);
 
 // Executor.

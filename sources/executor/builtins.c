@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 19:44:28 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/18 22:12:25 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/21 18:54:02 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	built_ins(t_envars **list, t_cmnds *commands, t_shell *shell, char **envp)
 	if (!commands->args)
 		return ;
 	if (ft_strncmp(commands->args->content, "pwd", 4) == 0)
-		execute_pwd(shell, commands->args);
+		execute_pwd(shell, commands->args, *list);
 	else if (ft_strncmp(commands->args->content, "env", 4) == 0)
 		execute_env(*list, shell, commands->args);
 	else if (ft_strncmp(commands->args->content, "unset", 6) == 0)

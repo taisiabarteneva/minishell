@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 21:41:52 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/18 01:44:47 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/19 21:58:38 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void execute_exit(t_shell *shell, t_list *args)
 		{
 			write(STDERR_FILENO, "minishell: exit: ", 17);
 			write(STDERR_FILENO, args->next->content, ft_strlen(args->next->content));
-			write(STDERR_FILENO, " numeric argument required\n", 28);
+			write(STDERR_FILENO, ": numeric argument required\n", 28);
 			shell->exit_status = 255;
 			exit(shell->exit_status);
 		}

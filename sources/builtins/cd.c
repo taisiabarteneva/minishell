@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 21:42:12 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/16 14:54:12 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/21 18:59:26 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,20 +68,44 @@ void execute_cd(t_envars **list, t_list *args, t_shell *shell)
 	int		status;
 	char	old_path[MAX_PATH];
 	char	new_path[MAX_PATH];
+	char 	tmp_path[MAX_PATH];
 
 	shell->exit_status = 0;
-	if (getcwd(old_path, MAX_PATH) == NULL)
-		fatal_error(MLC_ERROR);
+	status = 0;
+	getcwd(old_path, MAX_PATH);
 	if (args->next == NULL)
 		handle_empty_input(*list, shell);
 	else 
 	{
-		status = chdir(args->next->content);
+		if (args->next && ft_strncmp(args->next->content, "-", 1) == 0)
+		{
+			if (find_env_node(*list, "OLD_PWD") == NULL)
+			{
+				write(STDERR_FILENO, "bash: cd: OLDPWD not set\n", 25);
+				shell->exit_status = EXIT_ERR;
+				return ;
+			}
+			else
+			{
+				status = chdir(find_env_node(*list, "OLD_PWD"));
+				getcwd(tmp_path, MAX_PATH);
+				write(STDOUT_FILENO, tmp_path, ft_strlen(tmp_path) + 1);
+				write(1, "\n", 1);
+			}
+		}
+		else
+			status = chdir(args->next->content);
 		if (status == -1)
 			handle_non_existing_path(args, shell);
 	}
 	if (getcwd(new_path, MAX_PATH) == NULL)
+	{
+		write(2, "cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory\n", 108);
+		return ;
 		fatal_error(MLC_ERROR);
+	}
 	change_new_pwd_environ(list, new_path);
 	change_old_pwd_environ(list, old_path);
 }
+
+// "mkdir test_dir ; cd test_dir ; rm -rf ../test_dir ; cd . ; cd .. ; pwd" 
