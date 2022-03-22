@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 18:23:49 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/22 16:24:45 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/22 17:48:37 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int get_num_of_commands(t_cmnds **commands)
 	int i;
 
 	i = 0;
-	while (commands[i])
+	while (commands && commands[i])
 		i++;
 	return (i);
 }

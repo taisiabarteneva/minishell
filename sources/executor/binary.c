@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 18:32:06 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/22 17:17:06 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/22 17:50:31 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,6 @@ int  handle_pipes_redirects(t_cmnds *command, t_shell *shell)
 	i = 0;
 	while (command->redirs && command->redirs[i])
 	{
-		dprintf(2, "[%s]\n", command->redirs[i]->filename);
 		fd = open_files(command->redirs[i], shell, fd);
 		i++;
 	}
@@ -232,17 +231,14 @@ void handle_last_command(t_cmnds *command, t_shell **shell)
 {
 	int fd_out;
 
-	fd_out = handle_pipes_redirects(command, *shell);
-	dprintf(2, "yo");
-	
-	dup2((*shell)->pipes[(*shell)->process_count - 1][0], STDIN_FILENO);
-	close((*shell)->pipes[(*shell)->process_count - 1][1]);
+	fd_out = handle_pipes_redirects(command, *shell);	
+	dup2((*shell)->pipes[(*shell)->process_count - 2][0], STDIN_FILENO);
+	close((*shell)->pipes[(*shell)->process_count - 2][1]);
 }
 
 void	handle_standard_command(t_cmnds *command, t_shell **shell, int cmd_pos)
 {
 	(void)command;
-	dprintf(2, "[%d]\n", cmd_pos);
 	dup2((*shell)->pipes[cmd_pos - 1][0], STDIN_FILENO);
 	dup2((*shell)->pipes[cmd_pos][1], STDOUT_FILENO);
 }
@@ -251,12 +247,10 @@ void get_command_position(t_cmnds *command, t_shell **shell, int cmd_pos)
 {
 	if (cmd_pos == 0)
 	{
-		dprintf(2, "[%s]\n", command->args->content);						
 		handle_first_command(command, shell);
 	}
 	else if (cmd_pos == (*shell)->process_count - 1)
 	{
-		dprintf(2, "[%s]\n", command->args->content);					
 		handle_last_command(command, shell);
 	}
 	else
@@ -271,13 +265,14 @@ void execute_bin(t_cmnds **commands, t_shell **shell, char **envp)
 	counter = 0;
 	while (commands[counter])
 	{
-		// dprintf(2, "[%s]\n", commands[counter]->args->content);
-		// dprintf(2, "[%d]\n", counter);
 		pid = fork();
 		if (pid == 0)
 		{
-			get_command_position(commands[counter], shell, counter);
-			close_all_pipes((*shell)->pipes);
+			if ((*shell)->process_count > 1)
+			{
+				get_command_position(commands[counter], shell, counter);
+				close_all_pipes((*shell)->pipes);
+			}
 			launch_command(commands[counter], envp, shell);
 		}
 		else if (pid == -1)
