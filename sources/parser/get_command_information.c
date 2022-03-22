@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_command_information.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 13:35:25 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/18 16:56:05 by ncarob           ###   ########.fr       */
+/*   Updated: 2022/03/21 21:42:09 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static t_redirs	**ft_init_redirects(char *line)
 	redirs_arr = (t_redirs **)malloc(sizeof(t_redirs *) * redirs);
 	if (!redirs_arr)
 		fatal_error(MLC_ERROR);
-	ft_memset(redirs_arr, 0, sizeof(t_redirs) * redirs);
+	ft_memset(redirs_arr, 0, sizeof(t_redirs *) * redirs);
 	return (redirs_arr);
 }
 

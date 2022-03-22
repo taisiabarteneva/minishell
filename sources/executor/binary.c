@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 18:32:06 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/21 20:12:16 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/22 13:52:12 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,12 @@ void	exec_non_system_bin(t_cmnds *command, char **path, char ***cmdargs)
 	*path = (*cmdargs)[0];
 }
 
+void c_fork(int signum)
+{
+	(void)signum;
+	write(1, "\n", 1);
+}
+
 void launch_command(t_cmnds *command, char **envp, t_shell **shell)
 {
 	char	*path;
@@ -99,9 +105,9 @@ void launch_command(t_cmnds *command, char **envp, t_shell **shell)
 	cmdargs = get_command_arguments(command->args);
 	if (!cmdargs)
 		fatal_error(MLC_ERROR);
+	signal(SIGINT, (void *)c_fork);
 	if (is_built_in(command->args->content))
 	{
-		// dprintf(2, "HERE\n");
 		built_ins(&(command->envs), command, *shell, envp);
 		exit(0);		
 	}
@@ -141,80 +147,83 @@ void launch_command(t_cmnds *command, char **envp, t_shell **shell)
 	exit((*shell)->exit_status);
 }
 
-int open_files(t_redirs *elem, t_shell *shell)
-{
-	int		fd;
-	
-	int lol = dup(1);
+int open_files(t_redirs *elem, t_shell *shell, int fd)
+{	
 	(void)shell;
-	// shell->fd_in = 0;
-	// shell->fd_out = 1;
 	if (elem->mode == 0)
 	{
-		fd = open(elem->filename, O_CREAT | O_RDWR | O_TRUNC, 0777);
+		// close(fd);
+		fd = open(elem->filename, O_CREAT | O_WRONLY | O_TRUNC, 0777);
 		if (fd == -1)
-			fatal_error("open");
+			fatal_error("open\n");
+		dprintf(2, "[%d]\n", fd);
 		dup2(fd, STDOUT_FILENO);
 	}
 	if (elem->mode == 1)
 	{
 		fd = open(elem->filename, O_RDONLY, 0777);
 		if (fd == -1)
-			fatal_error("open");
+		{
+			shell->exit_status = 1;
+			write(2, "minishell: ", 11);
+			write(2, elem->filename, ft_strlen(elem->filename) + 1);
+			write(2, ": No such file or directory", 28);
+		}
 		dup2(fd, STDIN_FILENO);
 	}
 	if (elem->mode == 2)
 	{
-		fd = open(elem->filename, O_CREAT | O_RDWR | O_APPEND, 0777);
+		// close(fd);
+		fd = open(elem->filename, O_CREAT | O_WRONLY | O_APPEND, 0777);
 		if (fd == -1)
-			fatal_error("open");
+			fatal_error("open\n");
+		dprintf(2, "[%d]\n", fd);
 		dup2(fd, STDOUT_FILENO);
 	}
 	if (elem->mode == 3)
 	{
 		fd = open(elem->filename, O_CREAT | O_RDWR | O_APPEND, 0777);
 		if (fd == -1)
-			fatal_error("open");
+			fatal_error("open\n");
 		dup2(fd, STDIN_FILENO);
 	}
-	close(fd);
-	return (lol);
+	return (fd);
 }
 
 int  handle_pipes_redirects(t_cmnds *command, t_shell *shell)
 {
 	int i;
 	int lol;
+	int fd = 0;
+	
 	i = 0;
 	while (command->redirs[i])
 	{
-		// dprintf(2, "[%s] [%d]\n", command->redirs[i]->filename, command->redirs[i]->mode);
-		lol = open_files(command->redirs[i], shell);
+		dprintf(2, "[%s]\n", command->redirs[i]->filename);
+		lol = open_files(command->redirs[i], shell, fd);
 		i++;
 	}
 	return (lol);
 }
 
-
 void execute_bin(t_cmnds *command, t_shell	**shell, char **envp)
 {
 	pid_t	pid;
-	// int		status;
-	int		out;
+	int		status;
+	int		out = 0;
 
 	pid = fork();
 	if (pid == 0)
 	{	
 		out = handle_pipes_redirects(command, *shell);
 		launch_command(command, envp, shell);
-		// dup2(out, STDOUT_FILENO);
 	}
 	else if (pid == -1)
 		fatal_error(FORK_ERR);
 	else if (pid > 0)
 	{
-		// if (waitpid(-1, &status, 0) == -1)
-		// 	fatal_error(WAITPID_ERR);
+		if (waitpid(-1, &status, 0) == -1)
+			fatal_error(WAITPID_ERR);
 		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, (void *)sigint_handler);
 	}
