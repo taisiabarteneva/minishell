@@ -9,6 +9,7 @@ SRCS	=	./sources/builtins/cd.c \
 			./sources/executor/builtins.c \
 			./sources/executor/binary.c \
 			./sources/executor/bins_utils.c \
+			./sources/executor/pipes.c \
 			./sources/main/minishell_main.c \
 			./sources/main/readline_prompt.c \
 			./sources/signals/catch_signals.c \

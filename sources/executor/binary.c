@@ -6,23 +6,23 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 18:32:06 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/22 13:57:14 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/22 17:17:06 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-// void	get_child_exit_status(int *status)
-// {
-// 	if (WIFEXITED(status))						// не равен нулю, если процесс завершился успешно
-// 		*status = WEXITSTATUS(status);
-// 	else if (WIFSIGNALED(status))				// возвращает истинное значение, если дочерний процесс завершился из-за необработанного сигнала
-// 		*status = WTERMSIG(status);
-// 	else if (WIFSTOPPED(status))
-// 		*status = WSTOPSIG(status);				// возвращает истинное значение, если дочерний процесс был остановлен
-// 	else
-// 		*status = EXIT_ERR;
-// }
+void	get_child_exit_status(int *status)
+{
+	if (WIFEXITED(status))						// не равен нулю, если процесс завершился успешно
+		*status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))				// возвращает истинное значение, если дочерний процесс завершился из-за необработанного сигнала
+		*status = WTERMSIG(status);
+	else if (WIFSTOPPED(status))
+		*status = WSTOPSIG(status);				// возвращает истинное значение, если дочерний процесс был остановлен
+	else
+		*status = EXIT_ERR;
+}
 
 char **parse_paths(t_envars *list)
 {
@@ -100,7 +100,6 @@ void launch_command(t_cmnds *command, char **envp, t_shell **shell)
 	char	**cmdargs;
 
 	(void)shell;
-
 	path = NULL;
 	cmdargs = get_command_arguments(command->args);
 	if (!cmdargs)
@@ -152,7 +151,6 @@ int open_files(t_redirs *elem, t_shell *shell, int fd)
 	(void)shell;
 	if (elem->mode == 0)
 	{
-		// close(fd);
 		fd = open(elem->filename, O_CREAT | O_WRONLY | O_TRUNC, 0777);
 		if (fd == -1)
 			fatal_error("open\n");
@@ -164,6 +162,7 @@ int open_files(t_redirs *elem, t_shell *shell, int fd)
 		fd = open(elem->filename, O_RDONLY, 0777);
 		if (fd == -1)
 		{
+			dprintf(2, "HELLO\n");
 			shell->exit_status = 1;
 			write(2, "minishell: ", 11);
 			write(2, elem->filename, ft_strlen(elem->filename) + 1);
@@ -173,7 +172,6 @@ int open_files(t_redirs *elem, t_shell *shell, int fd)
 	}
 	if (elem->mode == 2)
 	{
-		// close(fd);
 		fd = open(elem->filename, O_CREAT | O_WRONLY | O_APPEND, 0777);
 		if (fd == -1)
 			fatal_error("open\n");
@@ -190,41 +188,105 @@ int open_files(t_redirs *elem, t_shell *shell, int fd)
 	return (fd);
 }
 
-void  handle_pipes_redirects(t_cmnds *command, t_shell *shell)
+int  handle_pipes_redirects(t_cmnds *command, t_shell *shell)
 {
 	int i;
-	int lol;
 	int fd = 0;
 	
 	i = 0;
-	while (command->redirs[i])
+	while (command->redirs && command->redirs[i])
 	{
 		dprintf(2, "[%s]\n", command->redirs[i]->filename);
-		lol = open_files(command->redirs[i], shell, fd);
+		fd = open_files(command->redirs[i], shell, fd);
+		i++;
+	}
+	return (fd);
+}
+
+void wait_child_processes(int process_count)
+{
+	int	status;
+	int	i;
+
+	status = 0;
+	i = 0;
+	while (i < process_count)
+	{
+		wait(&status);
+		if (status != 0)
+			get_child_exit_status(&status);
 		i++;
 	}
 }
 
-void execute_bin(t_cmnds *command, t_shell	**shell, char **envp)
+void handle_first_command(t_cmnds *command, t_shell **shell)
+{
+	int fd_in;
+	
+	fd_in = handle_pipes_redirects(command, *shell);
+	dup2((*shell)->pipes[0][1], STDOUT_FILENO);
+	close((*shell)->pipes[0][0]);
+}
+
+void handle_last_command(t_cmnds *command, t_shell **shell)
+{
+	int fd_out;
+
+	fd_out = handle_pipes_redirects(command, *shell);
+	dprintf(2, "yo");
+	
+	dup2((*shell)->pipes[(*shell)->process_count - 1][0], STDIN_FILENO);
+	close((*shell)->pipes[(*shell)->process_count - 1][1]);
+}
+
+void	handle_standard_command(t_cmnds *command, t_shell **shell, int cmd_pos)
+{
+	(void)command;
+	dprintf(2, "[%d]\n", cmd_pos);
+	dup2((*shell)->pipes[cmd_pos - 1][0], STDIN_FILENO);
+	dup2((*shell)->pipes[cmd_pos][1], STDOUT_FILENO);
+}
+
+void get_command_position(t_cmnds *command, t_shell **shell, int cmd_pos)
+{
+	if (cmd_pos == 0)
+	{
+		dprintf(2, "[%s]\n", command->args->content);						
+		handle_first_command(command, shell);
+	}
+	else if (cmd_pos == (*shell)->process_count - 1)
+	{
+		dprintf(2, "[%s]\n", command->args->content);					
+		handle_last_command(command, shell);
+	}
+	else
+		handle_standard_command(command, shell, cmd_pos);
+}
+
+void execute_bin(t_cmnds **commands, t_shell **shell, char **envp)
 {
 	pid_t	pid;
-	int		status;
-	int		out = 0;
+	int		counter;
 
-	pid = fork();
-	if (pid == 0)
-	{	
-		handle_pipes_redirects(command, *shell);
-		launch_command(command, envp, shell);
-	}
-	else if (pid == -1)
-		fatal_error(FORK_ERR);
-	else if (pid > 0)
+	counter = 0;
+	while (commands[counter])
 	{
-		if (waitpid(-1, &status, 0) == -1)
-			fatal_error(WAITPID_ERR);
-		signal(SIGQUIT, SIG_IGN);
-		signal(SIGINT, (void *)sigint_handler);
+		// dprintf(2, "[%s]\n", commands[counter]->args->content);
+		// dprintf(2, "[%d]\n", counter);
+		pid = fork();
+		if (pid == 0)
+		{
+			get_command_position(commands[counter], shell, counter);
+			close_all_pipes((*shell)->pipes);
+			launch_command(commands[counter], envp, shell);
+		}
+		else if (pid == -1)
+			fatal_error(FORK_ERR);
+		counter++;
 	}
+	close_all_pipes(((*shell)->pipes));
+	wait_child_processes((*shell)->process_count);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, (void *)sigint_handler);
 }
 // ✗  "echo test > ls >> ls >> ls ; echo test >> ls ; cat ls" 

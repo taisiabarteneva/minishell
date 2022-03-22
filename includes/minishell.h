@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 12:18:03 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/22 13:57:27 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/22 14:40:17 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,11 @@
 # define FORK_ERR		"minishell: fork error\n"
 # define WAITPID_ERR	"minishell: waitpid error\n"
 # define WLC_ERROR		"minishell: no matches found: %s\n"
+# define PIPES_ERR		"minishell: pipes error\n" 
 
 // Exit status
 
-# define EXIT_ERR 1
+# define EXIT_ERR	1
 
 // General shell structure.
 
@@ -54,6 +55,8 @@ typedef struct s_shell
 	int				shell_level;
 	int				fd_in;
 	int				fd_out;
+	int				process_count;
+	int				**pipes;
 }				t_shell;
 
 // Environment variables list structure.
@@ -140,14 +143,20 @@ void		execute_env(t_envars *list, t_shell *shell, t_list *args);
 // Executor.
 
 void		execute_command(t_cmnds *command, t_shell **shell, char **envp);
-void		handle_pipes_redirects(t_cmnds *command, t_shell *shell);
+int			handle_pipes_redirects(t_cmnds *command, t_shell *shell);
 void 		launch_command(t_cmnds *command, char **envp, t_shell **shell);
 
+// Pipes
+int			**pipes_loop(int cmnds);
+void 		open_pipes(int **pipes, int cmnds);
+void		close_all_pipes(int **pipes);
 
 // Binary.
 
-void		execute_bin(t_cmnds *command, t_shell **shell, char **envp);
+void		execute_bin(t_cmnds **commands, t_shell **shell, char **envp);
 char		**get_command_arguments(t_list *args);
+void		get_command_position(t_cmnds *command, t_shell **shell, int cmd_pos);
+
 
 // Wildcards replacement
 

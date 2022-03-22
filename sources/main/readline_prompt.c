@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 18:23:49 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/22 13:56:38 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/22 16:24:45 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,20 @@ void	add_line_to_history(char *line)
 		add_history(line);
 }
 
+int get_num_of_commands(t_cmnds **commands)
+{
+	int i;
+
+	i = 0;
+	while (commands[i])
+		i++;
+	return (i);
+}
+
 void	set_shell(t_envars **envs, t_shell **shell, char **envp)
 {
 	char	*line;
 	t_cmnds	**commands;
-	int		i;
 	int		in, out;
 
 	line = NULL;
@@ -40,28 +49,27 @@ void	set_shell(t_envars **envs, t_shell **shell, char **envp)
 		}
 		else
 			add_line_to_history(line);
-		i = -1;
 		commands = ft_parse_input(line, *envs);
+		(*shell)->process_count = get_num_of_commands(commands);
+		if ((*shell)->process_count > 1)
+		{
+			(*shell)->pipes = pipes_loop((*shell)->process_count);
+		}
 		if (*line != '\0')
 		{
-			while (commands && commands[++i])
+			in = dup(0);
+			out = dup(1);
+			if (is_built_in(commands[0]->args->content) && !commands[1])
 			{
-				in = dup(0);
-				out = dup(1);
-				if (is_built_in(commands[0]->args->content) && !commands[1])
-				{
-					handle_pipes_redirects(commands[i], *shell);		
-					built_ins(&(commands[i]->envs), commands[i], *shell, envp);
-				}
-				else
-				{
-					execute_bin(commands[i], shell, envp);
-				}
-				dup2(in, 0);
-				dup2(out, 1);
+				handle_pipes_redirects(commands[0], *shell);		
+				built_ins(&(commands[0]->envs), commands[0], *shell, envp);
 			}
+			else
+				execute_bin(commands, shell, envp);
+			dup2(in, 0);
+			dup2(out, 1);
 		}
 		ft_commands_clear(&commands);
 		free(line);
-}
+	}
 }
