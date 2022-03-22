@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 18:32:06 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/22 13:52:12 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/22 13:57:14 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,7 @@ int open_files(t_redirs *elem, t_shell *shell, int fd)
 	return (fd);
 }
 
-int  handle_pipes_redirects(t_cmnds *command, t_shell *shell)
+void  handle_pipes_redirects(t_cmnds *command, t_shell *shell)
 {
 	int i;
 	int lol;
@@ -203,7 +203,6 @@ int  handle_pipes_redirects(t_cmnds *command, t_shell *shell)
 		lol = open_files(command->redirs[i], shell, fd);
 		i++;
 	}
-	return (lol);
 }
 
 void execute_bin(t_cmnds *command, t_shell	**shell, char **envp)
@@ -215,7 +214,7 @@ void execute_bin(t_cmnds *command, t_shell	**shell, char **envp)
 	pid = fork();
 	if (pid == 0)
 	{	
-		out = handle_pipes_redirects(command, *shell);
+		handle_pipes_redirects(command, *shell);
 		launch_command(command, envp, shell);
 	}
 	else if (pid == -1)
