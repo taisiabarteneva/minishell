@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 19:44:28 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/21 18:54:02 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/22 21:58:50 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int is_built_in(char *command)
 	return (0);
 }
 
-void	built_ins(t_envars **list, t_cmnds *commands, t_shell *shell, char **envp)
+void	built_ins(t_envars **list, t_cmnds *commands, t_shell **shell, char **envp)
 {
 	(void)envp;
 	if (!commands->args)

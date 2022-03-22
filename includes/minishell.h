@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 12:18:03 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/22 18:05:03 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/22 21:57:03 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,14 +131,14 @@ void		*sigint_handler(int sig_num);
 // Built-ins.
 
 int			is_built_in(char *command);
-void		built_ins(t_envars **list, t_cmnds *commands, t_shell *shell, char **envp);
-void		execute_export(t_envars **list, t_list *args, t_shell *shell);
-void		execute_unset(t_envars **list, t_list *args, t_shell *shell);
-void		execute_cd(t_envars **list, t_list *args, t_shell *shell);
-void		execute_exit(t_shell *shell, t_list *args);
-void		execute_echo(t_list *args, t_shell *shell);
-void		execute_pwd(t_shell *shell, t_list *args, t_envars *list);
-void		execute_env(t_envars *list, t_shell *shell, t_list *args);
+void		built_ins(t_envars **list, t_cmnds *commands, t_shell **shell, char **envp);
+void		execute_export(t_envars **list, t_list *args, t_shell **shell);
+void		execute_unset(t_envars **list, t_list *args, t_shell **shell);
+void		execute_cd(t_envars **list, t_list *args, t_shell **shell);
+void		execute_exit(t_shell **shell, t_list *args);
+void		execute_echo(t_list *args, t_shell **shell);
+void		execute_pwd(t_shell **shell, t_list *args, t_envars *list);
+void		execute_env(t_envars *list, t_shell **shell, t_list *args);
 
 // Executor.
 

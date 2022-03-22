@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 18:23:49 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/22 19:10:49 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/22 21:51:48 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	set_shell(t_envars **envs, t_shell **shell, char **envp)
 	catch_signals();
 	while (true)
 	{
+		(*shell)->exit_status = 0;
 		tty_hide_input();
 		line = readline("minishell> ");
 		if (!line)
@@ -64,7 +65,7 @@ void	set_shell(t_envars **envs, t_shell **shell, char **envp)
 				if (is_built_in(commands[0]->args->content) && !commands[1])
 				{
 					handle_pipes_redirects(commands[0], *shell);		
-					built_ins(&(commands[0]->envs), commands[0], *shell, envp);
+					built_ins(&(commands[0]->envs), commands[0], shell, envp);
 				}
 				else
 					execute_bin(commands, shell, envp);

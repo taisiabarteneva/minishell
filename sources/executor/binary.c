@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 18:32:06 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/22 20:16:44 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/22 21:50:51 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,14 +107,14 @@ void launch_command(t_cmnds *command, char **envp, t_shell **shell)
 	signal(SIGINT, (void *)c_fork);
 	if (is_built_in(command->args->content))
 	{
-		built_ins(&(command->envs), command, *shell, envp);
+		built_ins(&(command->envs), command, shell, envp);
 		exit(0);		
 	}
 	else if (ft_strchr(command->args->content, '/') != NULL)
 		exec_non_system_bin(command, &path, &cmdargs);
 	else
 		exec_system_bin(command, &path, &cmdargs);
-	(*shell)->exit_status = 127;
+	(*shell)->exit_status = 1;
 	if (path == NULL && !find_env_node(command->envs, "PATH"))
 	{
 		write(STDERR_FILENO, "minishell: ", 11);		
