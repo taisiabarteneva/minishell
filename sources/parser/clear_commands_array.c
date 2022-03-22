@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clear_commands_array.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 14:53:20 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/18 17:08:22 by ncarob           ###   ########.fr       */
+/*   Updated: 2022/03/22 18:06:52 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,18 @@ void	ft_free_command_redirects(t_cmnds *command)
 		free(command->redirs);
 }
 
-void	ft_array_clear(char ***array)
+int	ft_array_clear(char ***array)
 {
 	int	i;
 
 	i = -1;
 	if (!*array)
-		return ;
+		return (1);
 	while ((*array)[++i])
 		free((*array)[i]);
 	free(*array);
 	*array = NULL;
+	return (1);
 }
 
 void	ft_commands_clear(t_cmnds ***commands)

@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 12:18:03 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/22 14:40:17 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/22 18:05:03 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,6 +166,6 @@ int			ft_replace_wildcards(t_cmnds *command, t_list *args_copy);
 void		ft_get_wildcard_pieces(char *str, char **pieces);
 void		ft_lst_del_value(t_list **lst, char *value);
 char		**ft_init_wildcard_pieces(char *str);
-void		ft_array_clear(char ***array);
+int			ft_array_clear(char ***array);
 
 #endif

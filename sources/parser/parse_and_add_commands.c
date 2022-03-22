@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_and_add_commands.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 21:53:08 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/18 17:10:37 by ncarob           ###   ########.fr       */
+/*   Updated: 2022/03/22 18:34:16 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 // 	i = 0;
 // 	while (args)
 // 	{
-// 		printf("%d: %s\n", i++, (char *)args->content);
+// 		printf("%d: %s-\n", i++, (char *)args->content);
 // 		args = args->next;
 // 	}
 // }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard_find_all_arguments.c                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 18:37:00 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/18 17:13:10 by ncarob           ###   ########.fr       */
+/*   Updated: 2022/03/22 18:07:03 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,10 +113,9 @@ int	ft_replace_wildcards(t_cmnds *command, t_list *args_copy)
 		if (pieces[1] && !new_args)
 		{
 			printf(WLC_ERROR, (char *)args_copy->content);
-			ft_array_clear(&pieces);
-			return (1);
+			return (ft_array_clear(&pieces));
 		}
-		if (new_args)
+		if (pieces[1] && new_args)
 		{
 			ft_lst_insert_lst(&command->args, args_copy, new_args);
 			new_args = args_copy;
@@ -124,7 +123,10 @@ int	ft_replace_wildcards(t_cmnds *command, t_list *args_copy)
 			ft_lst_del_value(&command->args, new_args->content);
 		}
 		else
+		{
+			args_copy->content = ft_remove_quotes(args_copy->content, command->envs);
 			args_copy = args_copy->next;
+		}
 		ft_array_clear(&pieces);
 	}
 	return (0);

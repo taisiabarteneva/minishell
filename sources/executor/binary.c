@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 18:32:06 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/22 17:50:31 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/22 17:59:07 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,7 +276,11 @@ void execute_bin(t_cmnds **commands, t_shell **shell, char **envp)
 			launch_command(commands[counter], envp, shell);
 		}
 		else if (pid == -1)
-			fatal_error(FORK_ERR);
+		{
+			write(2, "minishell: fork: Resource temporarily unavailable\n", 50);
+			(*shell)->exit_status = 128;
+			exit(128);			
+		}
 		counter++;
 	}
 	close_all_pipes(((*shell)->pipes));

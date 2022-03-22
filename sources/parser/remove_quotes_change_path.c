@@ -3,14 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   remove_quotes_change_path.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 15:01:55 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/14 19:53:17 by ncarob           ###   ########.fr       */
+/*   Updated: 2022/03/22 18:50:19 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+static int	ft_get_delta_of_indexes(char *str, int i)
+{
+	int	j;
+
+	j = 1;
+	if (str[i + 1] && ft_isdigit(str[i + 1]))
+		j = 2;
+	else
+		while (str[++i] && !ft_strchr("\'\"$ =", str[i]))
+			j++;
+	return (j);
+}
 
 static char	*ft_replace_path(char *str, int *index, t_envars *envs)
 {
@@ -19,8 +32,7 @@ static char	*ft_replace_path(char *str, int *index, t_envars *envs)
 
 	i = *index;
 	value = NULL;
-	while (str[++i] && !ft_strchr("\'\"$ ", str[i]))
-		;
+	i += ft_get_delta_of_indexes(str, i);
 	while (!value && envs)
 	{
 		if (!ft_strncmp(&str[*index + 1], envs->key, i - *index - 1)
