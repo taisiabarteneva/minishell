@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 18:32:06 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/22 19:04:23 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/22 20:16:44 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,9 +146,22 @@ void launch_command(t_cmnds *command, char **envp, t_shell **shell)
 	exit((*shell)->exit_status);
 }
 
-void here_doc()
+void here_doc(char *del)
 {
-	
+	char	*line;
+
+	while (true)
+	{
+		line = get_next_line(STDIN_FILENO);
+		if (!line)
+			break ;
+		if (ft_strnstr(line, del, ft_strlen(del)) != NULL
+			&& ft_strlen(line) == ft_strlen(del) + 1)
+			break ;
+		write(STDOUT_FILENO, line, ft_strlen(line) + 1);
+		free(line);
+	}
+	exit(EXIT_SUCCESS);
 }
 
 int open_files(t_redirs *elem, t_shell *shell, int fd)
@@ -166,11 +179,10 @@ int open_files(t_redirs *elem, t_shell *shell, int fd)
 		fd = open(elem->filename, O_RDONLY, 0777);
 		if (fd == -1)
 		{
-			dprintf(2, "HELLO\n");
 			shell->exit_status = 1;
 			write(2, "minishell: ", 11);
 			write(2, elem->filename, ft_strlen(elem->filename) + 1);
-			write(2, ": No such file or directory", 28);
+			write(2, ": No such file or directory\n", 28);
 		}
 		dup2(fd, STDIN_FILENO);
 	}
@@ -182,12 +194,9 @@ int open_files(t_redirs *elem, t_shell *shell, int fd)
 		dup2(fd, STDOUT_FILENO);
 	}
 	if (elem->mode == 3)
-	{
-		here_doc();
-		// fd = open(elem->filename, O_CREAT | O_RDWR | O_APPEND, 0777);
-		// if (fd == -1)
-		// 	fatal_error("open\n");
-		// dup2(fd, STDIN_FILENO);
+	{	
+		
+		here_doc(elem->filename);
 	}
 	return (fd);
 }
