@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/13 15:01:55 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/22 18:50:19 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/22 19:12:51 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	ft_get_delta_of_indexes(char *str, int i)
 	if (str[i + 1] && ft_isdigit(str[i + 1]))
 		j = 2;
 	else
-		while (str[++i] && !ft_strchr("\'\"$ =", str[i]))
+		while (str[++i] && !ft_strchr("\'\"$ =*", str[i]))
 			j++;
 	return (j);
 }

@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 18:32:06 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/22 17:59:07 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/22 19:04:23 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,11 @@ void launch_command(t_cmnds *command, char **envp, t_shell **shell)
 	exit((*shell)->exit_status);
 }
 
+void here_doc()
+{
+	
+}
+
 int open_files(t_redirs *elem, t_shell *shell, int fd)
 {	
 	(void)shell;
@@ -154,7 +159,6 @@ int open_files(t_redirs *elem, t_shell *shell, int fd)
 		fd = open(elem->filename, O_CREAT | O_WRONLY | O_TRUNC, 0777);
 		if (fd == -1)
 			fatal_error("open\n");
-		dprintf(2, "[%d]\n", fd);
 		dup2(fd, STDOUT_FILENO);
 	}
 	if (elem->mode == 1)
@@ -175,15 +179,15 @@ int open_files(t_redirs *elem, t_shell *shell, int fd)
 		fd = open(elem->filename, O_CREAT | O_WRONLY | O_APPEND, 0777);
 		if (fd == -1)
 			fatal_error("open\n");
-		dprintf(2, "[%d]\n", fd);
 		dup2(fd, STDOUT_FILENO);
 	}
 	if (elem->mode == 3)
 	{
-		fd = open(elem->filename, O_CREAT | O_RDWR | O_APPEND, 0777);
-		if (fd == -1)
-			fatal_error("open\n");
-		dup2(fd, STDIN_FILENO);
+		here_doc();
+		// fd = open(elem->filename, O_CREAT | O_RDWR | O_APPEND, 0777);
+		// if (fd == -1)
+		// 	fatal_error("open\n");
+		// dup2(fd, STDIN_FILENO);
 	}
 	return (fd);
 }
@@ -246,13 +250,9 @@ void	handle_standard_command(t_cmnds *command, t_shell **shell, int cmd_pos)
 void get_command_position(t_cmnds *command, t_shell **shell, int cmd_pos)
 {
 	if (cmd_pos == 0)
-	{
 		handle_first_command(command, shell);
-	}
 	else if (cmd_pos == (*shell)->process_count - 1)
-	{
 		handle_last_command(command, shell);
-	}
 	else
 		handle_standard_command(command, shell, cmd_pos);
 }
@@ -273,6 +273,7 @@ void execute_bin(t_cmnds **commands, t_shell **shell, char **envp)
 				get_command_position(commands[counter], shell, counter);
 				close_all_pipes((*shell)->pipes);
 			}
+			handle_pipes_redirects(commands[counter], *shell);
 			launch_command(commands[counter], envp, shell);
 		}
 		else if (pid == -1)
@@ -288,4 +289,3 @@ void execute_bin(t_cmnds **commands, t_shell **shell, char **envp)
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, (void *)sigint_handler);
 }
-// ✗  "echo test > ls >> ls >> ls ; echo test >> ls ; cat ls" 

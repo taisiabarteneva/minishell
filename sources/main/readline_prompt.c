@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 18:23:49 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/22 18:19:33 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/22 19:10:49 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,30 +50,33 @@ void	set_shell(t_envars **envs, t_shell **shell, char **envp)
 		else
 			add_line_to_history(line);
 		commands = ft_parse_input(line, *envs);
-		(*shell)->process_count = get_num_of_commands(commands);
-		if ((*shell)->process_count > 1)
+		if (commands)
 		{
-			(*shell)->pipes = pipes_loop((*shell)->process_count);
-		}
-		if (*line != '\0')
-		{
-			in = dup(0);
-			out = dup(1);
-			if (is_built_in(commands[0]->args->content) && !commands[1])
+			(*shell)->process_count = get_num_of_commands(commands);
+			if ((*shell)->process_count > 1)
 			{
-				handle_pipes_redirects(commands[0], *shell);		
-				built_ins(&(commands[0]->envs), commands[0], *shell, envp);
+				(*shell)->pipes = pipes_loop((*shell)->process_count);
 			}
-			else
-				execute_bin(commands, shell, envp);
-			dup2(in, 0);
-			dup2(out, 1);
+			if (*line != '\0')
+			{
+				in = dup(0);
+				out = dup(1);
+				if (is_built_in(commands[0]->args->content) && !commands[1])
+				{
+					handle_pipes_redirects(commands[0], *shell);		
+					built_ins(&(commands[0]->envs), commands[0], *shell, envp);
+				}
+				else
+					execute_bin(commands, shell, envp);
+				dup2(in, 0);
+				dup2(out, 1);
+			}
+			ft_commands_clear(&commands);
 		}
 		// (void)in;
 		// (void)out;
 		// (void)envp;
 		// (void)shell;
-		ft_commands_clear(&commands);
 		free(line);
 	}
 }
