@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 21:41:59 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/22 21:56:12 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/16 15:03:12 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ void check_if_key_exists(t_envars **list, char *arg)
 	free(key_value);
 }
 
-void execute_export(t_envars **list, t_list *args, t_shell **shell)
+void execute_export(t_envars **list, t_list *args, t_shell *shell)
 {
 	int		i;
 	char 	**sorted_keys;
@@ -160,7 +160,7 @@ void execute_export(t_envars **list, t_list *args, t_shell **shell)
 	curr = args->next;
 	if (!curr)
 	{
-		(*shell)->exit_status = 0;		
+		shell->exit_status = 0;		
 		sorted_keys = handle_export_without_args(*list);
 		display_sorted_list(sorted_keys);
 	}
@@ -170,16 +170,16 @@ void execute_export(t_envars **list, t_list *args, t_shell **shell)
 		{
 			if (!is_valid_env_key(curr->content))
 			{
-				(*shell)->exit_status = EXIT_ERR;
+				shell->exit_status = EXIT_ERR;
 				write(STDERR_FILENO, "minishell: export: `", 20);
 				write(STDERR_FILENO, curr->content, ft_strlen(curr->content));
 				write(STDERR_FILENO, "': not a valid identifier\n", 27);
 			}
 			else if (!is_equal_sign(curr->content))
-				(*shell)->exit_status = 0;
+				shell->exit_status = 0;
 			else
 			{	
-				(*shell)->exit_status = 0;
+				shell->exit_status = 0;
 				check_if_key_exists(list, curr->content);
 				add_env_key_value_pair(list, curr->content);
 			}

@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 18:32:06 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/22 21:50:51 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/23 18:42:26 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 void	get_child_exit_status(int *status)
 {
-	if (WIFEXITED(status))						// не равен нулю, если процесс завершился успешно
-		*status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))				// возвращает истинное значение, если дочерний процесс завершился из-за необработанного сигнала
-		*status = WTERMSIG(status);
-	else if (WIFSTOPPED(status))
-		*status = WSTOPSIG(status);				// возвращает истинное значение, если дочерний процесс был остановлен
+	if (WIFEXITED(*status))						// не равен нулю, если процесс завершился успешно
+		*status = WEXITSTATUS(*status);
+	else if (WIFSIGNALED(*status))				// возвращает истинное значение, если дочерний процесс завершился из-за необработанного сигнала
+		*status = WTERMSIG(*status);
+	else if (WIFSTOPPED(*status))
+		*status = WSTOPSIG(*status);				// возвращает истинное значение, если дочерний процесс был остановлен
 	else
 		*status = EXIT_ERR;
 }
@@ -107,14 +107,14 @@ void launch_command(t_cmnds *command, char **envp, t_shell **shell)
 	signal(SIGINT, (void *)c_fork);
 	if (is_built_in(command->args->content))
 	{
-		built_ins(&(command->envs), command, shell, envp);
+		built_ins(&(command->envs), command, *shell, envp);
 		exit(0);		
 	}
 	else if (ft_strchr(command->args->content, '/') != NULL)
 		exec_non_system_bin(command, &path, &cmdargs);
 	else
 		exec_system_bin(command, &path, &cmdargs);
-	(*shell)->exit_status = 1;
+	(*shell)->exit_status = 127;
 	if (path == NULL && !find_env_node(command->envs, "PATH"))
 	{
 		write(STDERR_FILENO, "minishell: ", 11);		
@@ -127,6 +127,7 @@ void launch_command(t_cmnds *command, char **envp, t_shell **shell)
 		write(STDERR_FILENO, "minishell: ", 11);		
 		write(STDERR_FILENO, cmdargs[0], ft_strlen(cmdargs[0]));
 		write(STDERR_FILENO, ": command not found\n", 20);
+		dprintf(2, "%d\n", (*shell)->exit_status);
 		exit((*shell)->exit_status);
 	}
 	else 
@@ -148,11 +149,11 @@ void launch_command(t_cmnds *command, char **envp, t_shell **shell)
 
 void here_doc(char *del)
 {
-	char	*line;
-
+	char *line;
+	
 	while (true)
 	{
-		line = get_next_line(STDIN_FILENO);
+		line = get_next_line(0);
 		if (!line)
 			break ;
 		if (ft_strnstr(line, del, ft_strlen(del)) != NULL
@@ -161,7 +162,6 @@ void here_doc(char *del)
 		write(STDOUT_FILENO, line, ft_strlen(line) + 1);
 		free(line);
 	}
-	exit(EXIT_SUCCESS);
 }
 
 int open_files(t_redirs *elem, t_shell *shell, int fd)
@@ -182,7 +182,7 @@ int open_files(t_redirs *elem, t_shell *shell, int fd)
 			shell->exit_status = 1;
 			write(2, "minishell: ", 11);
 			write(2, elem->filename, ft_strlen(elem->filename) + 1);
-			write(2, ": No such file or directory\n", 28);
+			write(2, ": No such file or directory", 28);
 		}
 		dup2(fd, STDIN_FILENO);
 	}
@@ -193,11 +193,10 @@ int open_files(t_redirs *elem, t_shell *shell, int fd)
 			fatal_error("open\n");
 		dup2(fd, STDOUT_FILENO);
 	}
-	if (elem->mode == 3)
-	{	
-		
-		here_doc(elem->filename);
-	}
+	// if (elem->mode == 3)
+	// {
+	// 	here_doc(elem->filename);
+	// }
 	return (fd);
 }
 
@@ -215,18 +214,22 @@ int  handle_pipes_redirects(t_cmnds *command, t_shell *shell)
 	return (fd);
 }
 
-void wait_child_processes(int process_count)
+void wait_child_processes(t_shell **shell, pid_t id)
 {
-	int	status;
-	int	i;
+	int		status;
+	pid_t 	process;
+	int		i;
 
 	status = 0;
 	i = 0;
-	while (i < process_count)
+	while (i < (*shell)->process_count)
 	{
-		wait(&status);
-		if (status != 0)
+		process = waitpid(-1, &status, 0);
+		if (id == process)
+		{
 			get_child_exit_status(&status);
+			(*shell)->exit_status = status;			
+		}
 		i++;
 	}
 }
@@ -272,6 +275,7 @@ void execute_bin(t_cmnds **commands, t_shell **shell, char **envp)
 	int		counter;
 
 	counter = 0;
+	(*shell)->exit_status = 0;
 	while (commands[counter])
 	{
 		pid = fork();
@@ -289,12 +293,12 @@ void execute_bin(t_cmnds **commands, t_shell **shell, char **envp)
 		{
 			write(2, "minishell: fork: Resource temporarily unavailable\n", 50);
 			(*shell)->exit_status = 128;
-			exit(128);			
+			exit(128);
 		}
 		counter++;
 	}
 	close_all_pipes(((*shell)->pipes));
-	wait_child_processes((*shell)->process_count);
+	wait_child_processes(shell, pid);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, (void *)sigint_handler);
 }

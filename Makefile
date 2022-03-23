@@ -47,7 +47,7 @@ RM		=	rm -f
 
 $(NAME): $(OBJS) ./libft/libft.h
 	$(MAKE) -C libft bonus
-	$(GCC) $(FLAGS) $(OBJS) $(LNAME) $(RL_LIB) $(HS_LIB) -ltermcap -L/Users/${USER}/.brew/opt/readline/lib -lreadline -o $(NAME)
+	$(GCC) $(FLAGS) $(OBJS) $(LNAME) $(RL_LIB) $(HS_LIB) -ltermcap -lreadline -o $(NAME)
 
 all:	$(NAME)
 

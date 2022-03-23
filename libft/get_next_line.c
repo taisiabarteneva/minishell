@@ -6,11 +6,13 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 14:11:31 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/22 20:06:42 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/23 18:36:52 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+#define BUFFER_SIZE 100
 
 void	ft_fill_line(char **rmd, char **line, int size)
 {
@@ -103,6 +105,7 @@ char	*get_next_line(int fd)
 	{
 		free(buf);
 		free(rmd);
+		buf = NULL;
 		rmd = NULL;
 		return (NULL);
 	}

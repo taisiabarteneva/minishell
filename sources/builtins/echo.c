@@ -6,13 +6,13 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 21:42:05 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/22 21:52:42 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/22 18:32:55 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void execute_echo(t_list *args, t_shell **shell)
+void execute_echo(t_list *args, t_shell *shell)
 {
 	int		i;
 	int 	flag;
@@ -41,5 +41,5 @@ void execute_echo(t_list *args, t_shell **shell)
 	}
 	if (!flag)
 		write(STDOUT_FILENO, "\n", 1);
-	(*shell)->exit_status = 0;
+	shell->exit_status = 0;
 }

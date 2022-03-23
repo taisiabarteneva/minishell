@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 21:42:12 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/22 22:06:05 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/21 18:59:26 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,12 @@ void handle_empty_input(t_envars *list, t_shell *shell)
 		handle_unset_home(shell);
 }
 
-void handle_non_existing_path(t_list *args, t_shell **shell)
+void handle_non_existing_path(t_list *args, t_shell *shell)
 {
 	write(STDERR_FILENO, "minishell: cd: ", 15);
 	write(STDERR_FILENO, args->next->content, ft_strlen(args->next->content));
 	write(STDERR_FILENO, ": No such file or directory\n", 29);
-	(*shell)->exit_status = EXIT_ERR;
-	// exit(EXIT_ERR);
+	shell->exit_status = EXIT_ERR;
 }
 
 void change_old_pwd_environ(t_envars **list, char *old_path)
@@ -64,18 +63,18 @@ void change_new_pwd_environ(t_envars **list, char *new_path)
 	ft_envar_add_back(list, new_pwd_node);
 }
 
-void execute_cd(t_envars **list, t_list *args, t_shell **shell)
+void execute_cd(t_envars **list, t_list *args, t_shell *shell)
 {
 	int		status;
 	char	old_path[MAX_PATH];
 	char	new_path[MAX_PATH];
 	char 	tmp_path[MAX_PATH];
 
-	(*shell)->exit_status = 0;
+	shell->exit_status = 0;
 	status = 0;
 	getcwd(old_path, MAX_PATH);
 	if (args->next == NULL)
-		handle_empty_input(*list, *shell);
+		handle_empty_input(*list, shell);
 	else 
 	{
 		if (args->next && ft_strncmp(args->next->content, "-", 1) == 0)
@@ -83,7 +82,7 @@ void execute_cd(t_envars **list, t_list *args, t_shell **shell)
 			if (find_env_node(*list, "OLD_PWD") == NULL)
 			{
 				write(STDERR_FILENO, "bash: cd: OLDPWD not set\n", 25);
-				(*shell)->exit_status = EXIT_ERR;
+				shell->exit_status = EXIT_ERR;
 				return ;
 			}
 			else
@@ -97,16 +96,13 @@ void execute_cd(t_envars **list, t_list *args, t_shell **shell)
 		else
 			status = chdir(args->next->content);
 		if (status == -1)
-		{
-			dprintf(2, "HERE\n");			
 			handle_non_existing_path(args, shell);
-		}
 	}
 	if (getcwd(new_path, MAX_PATH) == NULL)
 	{
 		write(2, "cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory\n", 108);
 		return ;
-		// fatal_error(MLC_ERROR);
+		fatal_error(MLC_ERROR);
 	}
 	change_new_pwd_environ(list, new_path);
 	change_old_pwd_environ(list, old_path);

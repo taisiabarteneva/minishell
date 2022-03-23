@@ -32,7 +32,7 @@ SRCS	= 	ft_itoa.c \
 			ft_isascii.c \
 			ft_isdigit.c \
 			ft_isprint.c \
-			get_next_line.c \
+			get_next_line.c\
 
 B_SRCS	=	ft_lstmap_bonus.c \
 			ft_lstclear_bonus.c \
