@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 18:23:49 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/24 20:46:07 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 21:00:43 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,7 @@ void execute_command(t_cmnds **commands, t_shell **shell, char **envp, char *lin
 	{
 		(*shell)->process_count = get_num_of_commands(commands);
 		if ((*shell)->process_count > 1)
-		{
 			(*shell)->pipes = pipes_loop((*shell)->process_count);
-		}
 		if (*line != '\0')
 		{
 			in = dup(STDIN_FILENO);
@@ -61,7 +59,7 @@ void execute_command(t_cmnds **commands, t_shell **shell, char **envp, char *lin
 			if (is_built_in(commands[0]->args->content) && !commands[1])
 			{
 				handle_pipes_redirects(commands[0], shell, in);
-				built_ins(&(commands[0]->envs), commands[0], *shell, envp);
+				built_ins(&(commands[0]->envs), commands[0], shell, envp);
 			}
 			else
 				execute_bin(commands, shell, envp, in);
@@ -89,8 +87,7 @@ void	set_shell(t_envars **envs, t_shell **shell, char **envp)
 			write(STDERR_FILENO, "exit\n", 5);
 			exit(EXIT_ERR);
 		}
-		else
-			add_line_to_history(line);
+		add_line_to_history(line);
 		commands = ft_parse_input(line, *envs, *shell);
 		execute_command(commands, shell, envp, line);
 		ft_commands_clear(&commands);

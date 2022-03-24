@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 18:32:06 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/24 20:11:51 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 21:00:35 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ void launch_command(t_cmnds *command, char **envp, t_shell **shell)
 	// signal(SIGINT, (void *)c_fork);
 	if (is_built_in(command->args->content))
 	{
-		built_ins(&(command->envs), command, *shell, envp);
+		built_ins(&(command->envs), command, shell, envp);
 		exit(0);		
 	}
 	else if (ft_strchr(command->args->content, '/') != NULL)
