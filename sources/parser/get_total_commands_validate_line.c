@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_total_commans_validate_line.c                  :+:      :+:    :+:   */
+/*   get_total_commands_validate_line.c                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 14:27:27 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/13 15:15:47 by ncarob           ###   ########.fr       */
+/*   Updated: 2022/03/24 13:22:37 by ncarob           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,21 @@ void	ft_check_quotes(char c, int *inside_s_quote, int *inside_d_quote)
 		*inside_d_quote = 0;
 }
 
+int	ft_check_first_command(char *str, int index)
+{
+	int	i;
+	int	j;
+
+	j = 0;
+	i = -1;
+	while (str[++i] && i < index)
+		if (str[i] != ' ')
+			j++;
+	if (j)
+		return (0);
+	return (1);
+}
+
 int	ft_check_line_part_one(char *str)
 {
 	int		num_of_commands;
@@ -37,14 +52,16 @@ int	ft_check_line_part_one(char *str)
 	num_of_commands = 1;
 	while (str && str[++i])
 	{
-		if (str[i] == '\\')
-			return (0);
-		else if (str[i] == ';')
+		ft_check_quotes(str[i], &inside_s_quote, &inside_d_quote);
+		if (!inside_s_quote && !inside_d_quote
+			&& (str[i] == '\\' || str[i] == ';'))
 			return (0);
 		else if (!inside_s_quote && !inside_d_quote && str[i] == '|')
 			num_of_commands++;
-		else
-			ft_check_quotes(str[i], &inside_s_quote, &inside_d_quote);
+		if (!inside_s_quote && !inside_d_quote
+			&& str[i] == '|' && num_of_commands == 2)
+			if (ft_check_first_command(str, i))
+				return (0);
 	}
 	if (!str || inside_s_quote || inside_d_quote)
 		return (0);
