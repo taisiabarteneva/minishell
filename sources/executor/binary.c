@@ -6,23 +6,11 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 18:32:06 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/24 21:00:35 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 22:24:07 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	get_child_exit_status(int *status)
-{
-	if (WIFEXITED(*status))						// не равен нулю, если процесс завершился успешно
-		*status = WEXITSTATUS(*status);
-	else if (WIFSIGNALED(*status))				// возвращает истинное значение, если дочерний процесс завершился из-за необработанного сигнала
-		*status = WTERMSIG(*status);
-	else if (WIFSTOPPED(*status))
-		*status = WSTOPSIG(*status);				// возвращает истинное значение, если дочерний процесс был остановлен
-	// else
-	// 	*status = EXIT_ERR;
-}
 
 void	ft_sig_heredoc(int sig)
 {
@@ -30,77 +18,13 @@ void	ft_sig_heredoc(int sig)
 	exit(EXIT_ERR);
 }
 
-char **parse_paths(t_envars *list)
-{
-	char	**my_paths;	
-	char	*path_env;
-	int		i;
-	
-	i = 0;
-	path_env = find_env_node(list, "PATH");
-	if (!path_env)
-		return (NULL);
-	my_paths = ft_split(path_env, ':');
-	if (!my_paths)
-		fatal_error(MLC_ERROR);
-	while (my_paths[i])
-	{
-		my_paths[i] = ft_strjoin(my_paths[i], "/", 0, 0);
-		if (!my_paths[i])
-			fatal_error(MLC_ERROR);
-		i++;
-	}
-	return (my_paths);
-}
-
-void exec_system_bin(t_cmnds *command, char **path, char ***cmd_args)
-{
-	char	**paths;
-	int		i;
-
-	i = 0;
-	paths = parse_paths(command->envs);
-	*cmd_args = get_command_arguments(command->args);
-	if (!(*cmd_args))
-		fatal_error(MLC_ERROR);
-	while (paths && paths[i])
-	{
-		*path = ft_strjoin(paths[i], (*cmd_args)[0], 0, 0);
-		if (!*path)
-			fatal_error(MLC_ERROR);
-		if (access(*path, F_OK) == 0)
-			break ;
-		free(paths[i]);
-		free(*path);
-		*path = NULL;
-		i++;
-	}
-	if (!*path)
-	{
-		*path = ft_strjoin("/", (*cmd_args)[0], 0, 0);
-		if (!*path)
-			fatal_error(MLC_ERROR);
-		if (access(*path, F_OK))
-			*path = NULL;
-	}
-	free(paths);
-}
-
-void	exec_non_system_bin(t_cmnds *command, char **path, char ***cmdargs)
-{
-	*cmdargs = ft_split(command->args->content, ' ');
-	if (!*cmdargs)
-		fatal_error(MLC_ERROR);
-	*path = (*cmdargs)[0];
-}
-
-void c_fork(int signum)
+void	c_fork(int signum)
 {
 	(void)signum;
 	write(1, "\n", 1);
 }
 
-void launch_command(t_cmnds *command, char **envp, t_shell **shell)
+void	launch_command(t_cmnds *command, char **envp, t_shell **shell)
 {
 	char	*path;
 	char	**cmdargs;
@@ -159,8 +83,6 @@ void launch_command(t_cmnds *command, char **envp, t_shell **shell)
 		}
 	}
 	(*shell)->exit_status = EXIT_ERR;
-	// free(cmdargs);
-	// free(path);
 	exit((*shell)->exit_status);
 }
 
@@ -193,7 +115,6 @@ void here_doc(char *del, t_shell **shell, int in)
 	if (fd == -1)
 		fatal_error("open\n");
 	dup2(fd, STDIN_FILENO);
-	// unlink("tmp");
 }
 
 int open_files(t_redirs *elem, t_shell **shell, int fd, int in, t_redirs *next)
@@ -247,66 +168,9 @@ int  handle_pipes_redirects(t_cmnds *command, t_shell **shell, int in)
 	while (command->redirs && command->redirs[i])
 	{
 		open_files(command->redirs[i], shell, fd, in, command->redirs[i + 1]);
-		// if (fd == -1)
-			// break ;
 		i++;
 	}
 	return (fd);
-}
-
-void wait_child_processes(t_shell **shell, pid_t id)
-{
-	int		status;
-	pid_t 	process;
-	int		i;
-
-	status = 0;
-	i = 0;
-	while (i < (*shell)->process_count)
-	{
-		process = waitpid(-1, &status, 0);
-		if (id == process)
-		{
-			get_child_exit_status(&status);
-			(*shell)->exit_status = status;			
-		}
-		i++;
-	}
-}
-
-void handle_first_command(t_cmnds *command, t_shell **shell, int in)
-{
-	int fd_in;
-	
-	dup2((*shell)->pipes[0][1], STDOUT_FILENO);
-	fd_in = handle_pipes_redirects(command, shell, in);
-	close((*shell)->pipes[0][0]);
-}
-
-void handle_last_command(t_cmnds *command, t_shell **shell, int in)
-{
-	int fd_out;
-
-	fd_out = handle_pipes_redirects(command, shell, in);
-	dup2((*shell)->pipes[(*shell)->process_count - 2][0], STDIN_FILENO);
-	close((*shell)->pipes[(*shell)->process_count - 2][1]);
-}
-
-void	handle_standard_command(t_cmnds *command, t_shell **shell, int cmd_pos)
-{
-	(void)command;
-	dup2((*shell)->pipes[cmd_pos - 1][0], STDIN_FILENO);
-	dup2((*shell)->pipes[cmd_pos][1], STDOUT_FILENO);
-}
-
-void get_command_position(t_cmnds *command, t_shell **shell, int cmd_pos, int in)
-{
-	if (cmd_pos == 0)
-		handle_first_command(command, shell, in);
-	else if (cmd_pos == (*shell)->process_count - 1)
-		handle_last_command(command, shell, in);
-	else
-		handle_standard_command(command, shell, cmd_pos);
 }
 
 void	ft_fork(int sig)
@@ -338,11 +202,7 @@ void execute_bin(t_cmnds **commands, t_shell **shell, char **envp, int in)
 			launch_command(commands[counter], envp, shell);
 		}
 		else if (pid == -1)
-		{
-			(*shell)->exit_status = 128;
-			write(2, "minishell: fork: Resource temporarily unavailable\n", 50);
-			exit(128);
-		}
+			fork_error(shell);
 		counter++;
 	}
 	// unlink("tmp");
@@ -351,25 +211,3 @@ void execute_bin(t_cmnds **commands, t_shell **shell, char **envp, int in)
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, (void *)sigint_handler);
 }
-
-// ✗  "cat << stop;1;stop;" 
-// Your exit status : 1
-// Expected exit status : 0
-
-
-// ✗  "cat << stop;1F;stopa;stop" 
-// Your exit status : 1
-// Expected exit status : 0
-
-
-// ✗  "cat <test.sh <<stop;1;stop" 
-// Your exit status : 1
-// Expected exit status : 0
-
-
-// ✗  "cat <<stop<ls;1;stop" 
-// Your exit status : 1
-// Expected exit status : 0
-
-// echo testing multi >lol ; echo <lol <lola ; echo "test 1  | and 2" >>lol ; cat <lol ; cat ../Makefile <lol | grep minishell
-// "export | sort | grep -v SHLVL | grep -v _= | grep -v OLDPWD"

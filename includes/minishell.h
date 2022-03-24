@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 12:18:03 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/24 22:08:53 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 22:25:41 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,12 @@
 # define PIPES_ERR		"minishell: pipes error\n"
 # define PARENT_DIR		"cd: error retrieving current directory: getcwd: \
 			cannot access parent directories: No such file or directory\n"
+# define FORK_ERROR		"minishell: fork: Resource temporarily unavailable\n"
 
 // Exit status
 
-# define EXIT_ERR	1
+# define EXIT_ERR		1
+# define EXIT_FORK_ERR 	128
 
 // General shell structure.
 
@@ -161,9 +163,14 @@ void		execute_pwd(t_shell **shell, t_list *args, t_envars *list);
 
 // Executor.
 
-// void		execute_command(t_cmnds *command, t_shell **shell, char **envp);
 int			handle_pipes_redirects(t_cmnds *command, t_shell **shell, int in);
 void		launch_command(t_cmnds *command, char **envp, t_shell **shell);
+void		wait_child_processes(t_shell **shell, pid_t id);
+void		fork_error(t_shell **shell);
+void		exec_system_bin(t_cmnds *command, char **path, char ***cmd_args);
+void		exec_non_system_bin(t_cmnds *command, char **path, char ***cmdargs);
+void		get_command_position(t_cmnds *command, t_shell **shell, int cmd_pos,
+				int in);
 
 // Pipes
 void		open_pipes(int **pipes, int cmnds);

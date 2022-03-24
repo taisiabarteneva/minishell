@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 20:09:53 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/24 22:10:04 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 22:20:22 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,11 @@ char	**get_command_arguments(t_list *args)
 	}
 	cmd_args[i] = NULL;
 	return (cmd_args);
+}
+
+void	fork_error(t_shell **shell)
+{
+	(*shell)->exit_status = EXIT_FORK_ERR;
+	write(2, FORK_ERROR, ft_strlen(FORK_ERROR) + 1);
+	exit((*shell)->exit_status);
 }

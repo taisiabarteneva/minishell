@@ -9,8 +9,11 @@ SRCS	=	./sources/builtins/cd/cd.c \
 			./sources/builtins/unset/unset.c \
 			./sources/executor/builtins.c \
 			./sources/executor/binary.c \
+			./sources/executor/wait_child_process.c \
 			./sources/executor/bins_utils.c \
 			./sources/executor/pipes.c \
+			./sources/executor/get_command_position.c \
+			./sources/executor/parse_command.c \
 			./sources/main/minishell_main.c \
 			./sources/main/readline_prompt.c \
 			./sources/signals/catch_signals.c \
