@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 18:23:49 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/24 17:26:12 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 19:59:56 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void	set_shell(t_envars **envs, t_shell **shell, char **envp)
 	line = NULL;
 	commands = NULL;
 	rl_outstream = stderr;
+	(*shell)->pipes = NULL;
 	catch_signals();
 	while (true)
 	{

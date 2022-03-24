@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 14:12:14 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/24 17:43:35 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 19:57:04 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	close_all_pipes(int **pipes)
 	int	i;
 
 	i = 0;
-	while (pipes && pipes[i] != NULL)
+	while (pipes && pipes[i])
 	{
 		close(pipes[i][0]);
 		close(pipes[i][1]);

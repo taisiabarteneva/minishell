@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 21:42:12 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/21 18:59:26 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 19:55:56 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void handle_empty_input(t_envars *list, t_shell *shell)
 	status = chdir(root_path);
 	if (status == -1)
 		handle_unset_home(shell);
+	// free(root_path);
 }
 
 void handle_non_existing_path(t_list *args, t_shell *shell)
@@ -107,5 +108,3 @@ void execute_cd(t_envars **list, t_list *args, t_shell *shell)
 	change_new_pwd_environ(list, new_path);
 	change_old_pwd_environ(list, old_path);
 }
-
-// "mkdir test_dir ; cd test_dir ; rm -rf ../test_dir ; cd . ; cd .. ; pwd" 

@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 18:32:06 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/24 18:02:07 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 19:38:33 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ void launch_command(t_cmnds *command, char **envp, t_shell **shell)
 	cmdargs = get_command_arguments(command->args);
 	if (!cmdargs)
 		fatal_error(MLC_ERROR);
-	signal(SIGINT, (void *)c_fork);
+	// signal(SIGINT, (void *)c_fork);
 	if (is_built_in(command->args->content))
 	{
 		built_ins(&(command->envs), command, *shell, envp);
@@ -158,9 +158,9 @@ void launch_command(t_cmnds *command, char **envp, t_shell **shell)
 			exit((*shell)->exit_status);
 		}
 	}
-	// (*shell)->exit_status = EXIT_ERR;
-	free(cmdargs);
-	free(path);
+	(*shell)->exit_status = EXIT_ERR;
+	// free(cmdargs);
+	// free(path);
 	exit((*shell)->exit_status);
 }
 
@@ -170,7 +170,7 @@ void here_doc(char *del, t_shell **shell, int in)
 	int 	fd;
 
 	(void)shell;
-	// (*shell)->exit_status = 0;
+	(*shell)->exit_status = 0;
 	fd = open("/tmp/file",  O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (fd == -1)
 		fatal_error("open\n");
@@ -193,7 +193,7 @@ void here_doc(char *del, t_shell **shell, int in)
 	// unlink("tmp");
 }
 
-int open_files(t_redirs *elem, t_shell **shell, int fd, int in)
+int open_files(t_redirs *elem, t_shell **shell, int fd, int in, t_redirs *next)
 {	
 	if (elem->mode == 0)
 	{
@@ -211,7 +211,8 @@ int open_files(t_redirs *elem, t_shell **shell, int fd, int in)
 			write(2, "minishell: ", 11);
 			write(2, elem->filename, ft_strlen(elem->filename) + 1);
 			write(2, ": No such file or directory\n", 28);
-			exit(1);
+			if (next)
+				exit(1);
 		}
 		dup2(fd, STDIN_FILENO);
 	}
@@ -226,7 +227,6 @@ int open_files(t_redirs *elem, t_shell **shell, int fd, int in)
 	{
 		signal(SIGINT, (void *)ft_sig_heredoc);
 		here_doc(elem->filename, shell, in);
-		// (*shell)->exit_status = 0;
 	}
 	return (fd);
 }
@@ -239,7 +239,9 @@ int  handle_pipes_redirects(t_cmnds *command, t_shell **shell, int in)
 	i = 0;
 	while (command->redirs && command->redirs[i])
 	{
-		fd = open_files(command->redirs[i], shell, fd, in);
+		open_files(command->redirs[i], shell, fd, in, command->redirs[i + 1]);
+		// if (fd == -1)
+			// break ;
 		i++;
 	}
 	return (fd);
@@ -259,7 +261,6 @@ void wait_child_processes(t_shell **shell, pid_t id)
 		if (id == process)
 		{
 			get_child_exit_status(&status);
-			dprintf(2, "[%d]\n", status);
 			(*shell)->exit_status = status;			
 		}
 		i++;
@@ -362,3 +363,6 @@ void execute_bin(t_cmnds **commands, t_shell **shell, char **envp, int in)
 // ✗  "cat <<stop<ls;1;stop" 
 // Your exit status : 1
 // Expected exit status : 0
+
+// echo testing multi >lol ; echo <lol <lola ; echo "test 1  | and 2" >>lol ; cat <lol ; cat ../Makefile <lol | grep minishell
+// "export | sort | grep -v SHLVL | grep -v _= | grep -v OLDPWD"
