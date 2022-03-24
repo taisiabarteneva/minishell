@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 22:15:34 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/24 22:15:46 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 22:49:54 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,15 @@ char	**parse_paths(t_envars *list)
 	return (my_paths);
 }
 
+void	handle_no_path(char **path, char ***cmd_args)
+{
+	*path = ft_strjoin("/", (*cmd_args)[0], 0, 0);
+	if (!*path)
+		fatal_error(MLC_ERROR);
+	if (access(*path, F_OK))
+		*path = NULL;
+}
+
 void	exec_system_bin(t_cmnds *command, char **path, char ***cmd_args)
 {
 	char	**paths;
@@ -58,13 +67,7 @@ void	exec_system_bin(t_cmnds *command, char **path, char ***cmd_args)
 		i++;
 	}
 	if (!*path)
-	{
-		*path = ft_strjoin("/", (*cmd_args)[0], 0, 0);
-		if (!*path)
-			fatal_error(MLC_ERROR);
-		if (access(*path, F_OK))
-			*path = NULL;
-	}
+		handle_no_path(path, cmd_args);
 	free(paths);
 }
 

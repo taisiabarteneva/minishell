@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 12:18:03 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/24 22:25:41 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 22:47:29 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,8 @@ void		tty_hide_input(void);
 void		catch_signals(void);
 void		set_signals(void);
 void		*sigint_handler(int sig_num);
+void		sig_heredoc(int sig);
+void		c_fork(int signum);
 
 // Built-ins.
 
@@ -163,7 +165,7 @@ void		execute_pwd(t_shell **shell, t_list *args, t_envars *list);
 
 // Executor.
 
-int			handle_pipes_redirects(t_cmnds *command, t_shell **shell, int in);
+int			handle_redirects(t_cmnds *command, t_shell **shell, int in);
 void		launch_command(t_cmnds *command, char **envp, t_shell **shell);
 void		wait_child_processes(t_shell **shell, pid_t id);
 void		fork_error(t_shell **shell);
@@ -171,6 +173,9 @@ void		exec_system_bin(t_cmnds *command, char **path, char ***cmd_args);
 void		exec_non_system_bin(t_cmnds *command, char **path, char ***cmdargs);
 void		get_command_position(t_cmnds *command, t_shell **shell, int cmd_pos,
 				int in);
+
+// Here-doc
+void		here_doc(char *del, t_shell **shell, int in);
 
 // Pipes
 void		open_pipes(int **pipes, int cmnds);

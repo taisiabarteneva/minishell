@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 22:24:22 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/24 22:25:20 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 22:35:50 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 void	handle_first_command(t_cmnds *command, t_shell **shell, int in)
 {
 	dup2((*shell)->pipes[0][1], STDOUT_FILENO);
-	handle_pipes_redirects(command, shell, in);
+	handle_redirects(command, shell, in);
 	close((*shell)->pipes[0][0]);
 }
 
 void	handle_last_command(t_cmnds *command, t_shell **shell, int in)
 {
-	handle_pipes_redirects(command, shell, in);
+	handle_redirects(command, shell, in);
 	dup2((*shell)->pipes[(*shell)->process_count - 2][0], STDIN_FILENO);
 	close((*shell)->pipes[(*shell)->process_count - 2][1]);
 }

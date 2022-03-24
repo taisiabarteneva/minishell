@@ -8,6 +8,8 @@ SRCS	=	./sources/builtins/cd/cd.c \
 			./sources/builtins/exit/exit.c \
 			./sources/builtins/unset/unset.c \
 			./sources/executor/builtins.c \
+			./sources/executor/here_doc.c \
+			./sources/executor/redirects.c \
 			./sources/executor/binary.c \
 			./sources/executor/wait_child_process.c \
 			./sources/executor/bins_utils.c \

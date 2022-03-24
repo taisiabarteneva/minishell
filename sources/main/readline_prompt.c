@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 18:23:49 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/24 21:00:43 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 22:48:35 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ void	add_line_to_history(char *line)
 		add_history(line);
 }
 
-int get_num_of_commands(t_cmnds **commands)
+int	get_num_of_commands(t_cmnds **commands)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (commands && commands[i])
@@ -31,22 +31,23 @@ int get_num_of_commands(t_cmnds **commands)
 bool	check_tabs_spaces(char *content)
 {
 	int		i;
-	
+
 	i = 0;
 	while (content[i])
 	{
 		if (content[i] != SPACE && content[i] != TAB)
-			return false;
+			return (false);
 		i++;
 	}
 	return (true);
 }
 
-void execute_command(t_cmnds **commands, t_shell **shell, char **envp, char *line)
+void	execute_command(t_cmnds **commands, t_shell **shell, char **envp,
+			char *line)
 {
-	int in;
-	int out;
-	
+	int	in;
+	int	out;
+
 	if (commands && check_tabs_spaces((*commands)->args->content) == false)
 	{
 		(*shell)->process_count = get_num_of_commands(commands);
@@ -58,7 +59,7 @@ void execute_command(t_cmnds **commands, t_shell **shell, char **envp, char *lin
 			out = dup(STDOUT_FILENO);
 			if (is_built_in(commands[0]->args->content) && !commands[1])
 			{
-				handle_pipes_redirects(commands[0], shell, in);
+				handle_redirects(commands[0], shell, in);
 				built_ins(&(commands[0]->envs), commands[0], shell, envp);
 			}
 			else
@@ -73,7 +74,7 @@ void	set_shell(t_envars **envs, t_shell **shell, char **envp)
 {
 	char	*line;
 	t_cmnds	**commands;
-	
+
 	commands = NULL;
 	(*shell)->pipes = NULL;
 	rl_outstream = stderr;
