@@ -1,0 +1,30 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/wurrigon/Desktop/finale'
+gcc -Wall -Werror -Wextra -g -I./includes -c sources/builtins/cd.c -o sources/builtins/cd.o 
+gcc -Wall -Werror -Wextra -g -I./includes -c sources/builtins/pwd.c -o sources/builtins/pwd.o 
+gcc -Wall -Werror -Wextra -g -I./includes -c sources/builtins/echo.c -o sources/builtins/echo.o 
+gcc -Wall -Werror -Wextra -g -I./includes -c sources/builtins/env.c -o sources/builtins/env.o 
+gcc -Wall -Werror -Wextra -g -I./includes -c sources/builtins/exit.c -o sources/builtins/exit.o 
+gcc -Wall -Werror -Wextra -g -I./includes -c sources/builtins/unset.c -o sources/builtins/unset.o 
+gcc -Wall -Werror -Wextra -g -I./includes -c sources/builtins/export.c -o sources/builtins/export.o 
+gcc -Wall -Werror -Wextra -g -I./includes -c sources/main/minishell_main.c -o sources/main/minishell_main.o 
+gcc -Wall -Werror -Wextra -g -I./includes -c sources/main/readline_prompt.c -o sources/main/readline_prompt.o 
+gcc -Wall -Werror -Wextra -g -I./includes -c sources/signals/catch_signals.c -o sources/signals/catch_signals.o 
+gcc -Wall -Werror -Wextra -g -I./includes -c sources/environ/environ_vars_utils1.c -o sources/environ/environ_vars_utils1.o 
+gcc -Wall -Werror -Wextra -g -I./includes -c sources/environ/environ_vars_utils2.c -o sources/environ/environ_vars_utils2.o 
+gcc -Wall -Werror -Wextra -g -I./includes -c sources/parser/clear_commands_array.c -o sources/parser/clear_commands_array.o 
+gcc -Wall -Werror -Wextra -g -I./includes -c sources/parser/parse_and_add_commands.c -o sources/parser/parse_and_add_commands.o 
+gcc -Wall -Werror -Wextra -g -I./includes -c sources/parser/remove_redirects_spaces.c -o sources/parser/remove_redirects_spaces.o 
+gcc -Wall -Werror -Wextra -g -I./includes -c sources/parser/get_command_information.c -o sources/parser/get_command_information.o 
+gcc -Wall -Werror -Wextra -g -I./includes -c sources/parser/wildcard_find_all_utils.c -o sources/parser/wildcard_find_all_utils.o 
+gcc -Wall -Werror -Wextra -g -I./includes -c sources/parser/remove_quotes_change_path.c -o sources/parser/remove_quotes_change_path.o 
+gcc -Wall -Werror -Wextra -g -I./includes -c sources/parser/wildcard_find_all_arguments.c -o sources/parser/wildcard_find_all_arguments.o 
+gcc -Wall -Werror -Wextra -g -I./includes -c sources/parser/get_total_commands_validate_line.c -o sources/parser/get_total_commands_validate_line.o 
+make: Leaving directory `/Users/wurrigon/Desktop/finale'
+ 
+make: *** No rule to make target `sources/executor/executor.o', needed by `minishell'.
+make: *** No rule to make target `sources/executor/builtins.o', needed by `minishell'.
+make: *** No rule to make target `sources/executor/binary.o', needed by `minishell'.
+make: *** No rule to make target `sources/executor/bins_utils.o', needed by `minishell'.
+make: *** No rule to make target `sources/executor/pipes.o', needed by `minishell'.
+ 

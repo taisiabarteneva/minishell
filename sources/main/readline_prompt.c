@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 18:23:49 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/24 13:02:30 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 15:25:07 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	set_shell(t_envars **envs, t_shell **shell, char **envp)
 				out = dup(1);
 				if (is_built_in(commands[0]->args->content) && !commands[1])
 				{
-					handle_pipes_redirects(commands[0], *shell);
+					handle_pipes_redirects(commands[0], shell);
 					built_ins(&(commands[0]->envs), commands[0], *shell, envp);
 				}
 				else
@@ -85,9 +85,6 @@ void	set_shell(t_envars **envs, t_shell **shell, char **envp)
 				dup2(out, 1);
 			}
 		}
-		// (void)in;
-		// (void)out;
-		// (void)envp;
 		ft_commands_clear(&commands);
 		free(line);
 	}

@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 21:42:05 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/22 18:32:55 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 13:50:04 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void execute_echo(t_list *args, t_shell *shell)
 	}
 	while (curr)
 	{
-		if (curr->content && ((char *)curr->content)[0] && i++)
+		if (curr->content && (((char *)curr->content)[0]) && i++)
 				write(STDOUT_FILENO, " ", 1);
 		write(STDOUT_FILENO, curr->content, ft_strlen(curr->content));
 		curr = curr->next;

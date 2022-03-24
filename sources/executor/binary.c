@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 18:32:06 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/24 12:51:18 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 17:04:34 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,9 +121,10 @@ void launch_command(t_cmnds *command, char **envp, t_shell **shell)
 		exec_non_system_bin(command, &path, &cmdargs);
 	else
 		exec_system_bin(command, &path, &cmdargs);
-	(*shell)->exit_status = 127;
+	(*shell)->exit_status = 1;
 	if (path == NULL && !find_env_node(command->envs, "PATH"))
 	{
+			(*shell)->exit_status = 127;
 		write(STDERR_FILENO, "minishell: ", 11);		
 		write(STDERR_FILENO, cmdargs[0], ft_strlen(cmdargs[0]));
 		write(STDERR_FILENO, ": No such file or directory\n", 28);
@@ -131,6 +132,7 @@ void launch_command(t_cmnds *command, char **envp, t_shell **shell)
 	}
 	else if (path == NULL)
 	{
+		(*shell)->exit_status = 127;
 		write(STDERR_FILENO, "minishell: ", 11);		
 		write(STDERR_FILENO, cmdargs[0], ft_strlen(cmdargs[0]));
 		write(STDERR_FILENO, ": command not found\n", 20);
@@ -156,6 +158,7 @@ void launch_command(t_cmnds *command, char **envp, t_shell **shell)
 			exit((*shell)->exit_status);
 		}
 	}
+	
 	(*shell)->exit_status = EXIT_ERR;
 	free(cmdargs);
 	free(path);
@@ -167,23 +170,27 @@ void here_doc(char *del)
 	char 	*line;
 	int 	fd;
 
-	fd = open("tmp", O_CREAT | O_RDWR | O_TRUNC, 777);
+	
+	fd = open("/tmp/file",  O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	while (true)
 	{
 		line = get_next_line(0);
 		if (!line)
 			break ;
-		if (ft_strncmp(del, line, (ft_strlen(del))== 0))
-			break ;
-		write(fd, line, ft_strlen(line) + 1);
+		if (ft_strncmp(del, line, ft_strlen(del)) == 0
+			&& ft_strlen(del) == ft_strlen(line) - 1)
+			break;
+		write(fd, line, ft_strlen(line));
 		free(line);
 	}
 	close(fd);
-	fd = open("tmp", O_CREAT | O_RDWR | O_TRUNC, 777);
+	fd = open("/tmp/file", O_RDONLY, 0777);
 	dup2(fd, STDIN_FILENO);
+	// unlink("tmp");
+	// exit(0);
 }
 
-int open_files(t_redirs *elem, t_shell *shell, int fd)
+int open_files(t_redirs *elem, t_shell **shell, int fd)
 {	
 	(void)shell;
 	if (elem->mode == 0)
@@ -198,10 +205,11 @@ int open_files(t_redirs *elem, t_shell *shell, int fd)
 		fd = open(elem->filename, O_RDONLY, 0777);
 		if (fd == -1)
 		{
-			shell->exit_status = 1;
+			(*shell)->exit_status = 1;
 			write(2, "minishell: ", 11);
 			write(2, elem->filename, ft_strlen(elem->filename) + 1);
-			write(2, ": No such file or directory", 28);
+			write(2, ": No such file or directory\n", 28);
+			exit(1);
 		}
 		dup2(fd, STDIN_FILENO);
 	}
@@ -214,12 +222,14 @@ int open_files(t_redirs *elem, t_shell *shell, int fd)
 	}
 	if (elem->mode == 3)
 	{
+		(*shell)->exit_status = 0;
+		signal(SIGINT, (void *)ft_sig_heredoc);
 		here_doc(elem->filename);
 	}
 	return (fd);
 }
 
-int  handle_pipes_redirects(t_cmnds *command, t_shell *shell)
+int  handle_pipes_redirects(t_cmnds *command, t_shell **shell)
 {
 	int i;
 	int fd = 0;
@@ -257,8 +267,8 @@ void handle_first_command(t_cmnds *command, t_shell **shell)
 {
 	int fd_in;
 	
-	fd_in = handle_pipes_redirects(command, *shell);
 	dup2((*shell)->pipes[0][1], STDOUT_FILENO);
+	fd_in = handle_pipes_redirects(command, shell);
 	close((*shell)->pipes[0][0]);
 }
 
@@ -266,7 +276,7 @@ void handle_last_command(t_cmnds *command, t_shell **shell)
 {
 	int fd_out;
 
-	fd_out = handle_pipes_redirects(command, *shell);	
+	fd_out = handle_pipes_redirects(command, shell);
 	dup2((*shell)->pipes[(*shell)->process_count - 2][0], STDIN_FILENO);
 	close((*shell)->pipes[(*shell)->process_count - 2][1]);
 }
@@ -288,6 +298,12 @@ void get_command_position(t_cmnds *command, t_shell **shell, int cmd_pos)
 		handle_standard_command(command, shell, cmd_pos);
 }
 
+void	ft_fork(int sig)
+{
+	(void)sig;
+	write(1, "\n", 1);
+}
+
 void execute_bin(t_cmnds **commands, t_shell **shell, char **envp)
 {
 	pid_t	pid;
@@ -300,22 +316,27 @@ void execute_bin(t_cmnds **commands, t_shell **shell, char **envp)
 		pid = fork();
 		if (pid == 0)
 		{
+			signal(SIGINT, (void *)ft_sig_heredoc);
 			if ((*shell)->process_count > 1)
 			{
 				get_command_position(commands[counter], shell, counter);
 				close_all_pipes((*shell)->pipes);
 			}
-			handle_pipes_redirects(commands[counter], *shell);
-			launch_command(commands[counter], envp, shell);
+			else
+			{
+				handle_pipes_redirects(commands[counter], shell);
+			}
+				launch_command(commands[counter], envp, shell);
 		}
 		else if (pid == -1)
 		{
-			write(2, "minishell: fork: Resource temporarily unavailable\n", 50);
 			(*shell)->exit_status = 128;
+			write(2, "minishell: fork: Resource temporarily unavailable\n", 50);
 			exit(128);
 		}
 		counter++;
 	}
+	// unlink("tmp");
 	close_all_pipes(((*shell)->pipes));
 	wait_child_processes(shell, pid);
 	signal(SIGQUIT, SIG_IGN);

@@ -1,0 +1,543 @@
+make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+# GNU Make 3.81
+# Copyright (C) 2006  Free Software Foundation, Inc.
+# This is free software; see the source for copying conditions.
+# There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
+
+# This program built for i386-apple-darwin11.3.0
+ 
+make: *** No rule to make target `sources/executor/executor.o', needed by `minishell'.  Stop.
+ 
+
+# Make data base, printed on Thu Mar 24 17:00:44 2022
+
+# Variables
+
+# automatic
+<D = $(patsubst %/,%,$(dir $<))
+# automatic
+?F = $(notdir $?)
+# makefile (from `Makefile', line 29)
+HEADS = ./includes
+# makefile (from `Makefile', line 33)
+LNAME = libft/libft.a
+# environment
+VSCODE_LOG_NATIVE = false
+# automatic
+?D = $(patsubst %/,%,$(dir $?))
+# automatic
+@D = $(patsubst %/,%,$(dir $@))
+# automatic
+@F = $(notdir $@)
+# makefile
+CURDIR := /Users/wurrigon/Desktop/finale
+# makefile
+SHELL = /bin/sh
+# makefile (from `Makefile', line 43)
+RM = rm -f
+# environment
+VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
+# environment
+_ = /usr/bin/make
+# makefile (from `Makefile', line 1)
+MAKEFILE_LIST :=  Makefile
+# makefile (from `Makefile', line 39)
+GCC = gcc
+# environment
+VSCODE_VERBOSE_LOGGING = true
+# makefile (from `Makefile', line 27)
+OBJS = $(SRCS:.c=.o)
+# environment
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/zz/zyxvpxvq6csfxvn_n00020mc000h53/T/vscode-ipc-712ea9d0-101c-4a83-80fc-4b04b6c7b8ab.sock
+# environment
+VSCODE_CWD = /
+# environment
+Apple_PubSub_Socket_Render = /private/tmp/com.apple.launchd.Gwejk8H1aF/Render
+# environment
+PATH = /usr/bin:/bin:/usr/sbin:/sbin
+# environment
+VSCODE_LOG_STACK = false
+# environment
+ELECTRON_RUN_AS_NODE = 1
+# makefile (from `Makefile', line 35)
+RL_LIB = readline/libreadline.a
+# default
+.FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
+# environment
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.cAceu65jKb/Listeners
+# automatic
+%F = $(notdir $%)
+# environment
+DISPLAY = /private/tmp/com.apple.launchd.UQHauUwS12/org.xquartz:0
+# environment
+VSCODE_PIPE_LOGGING = true
+# environment
+PWD = /Users/wurrigon/Desktop/finale
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = undefined
+# environment
+VSCODE_AMD_ENTRYPOINT = vs/workbench/services/extensions/node/extensionHostProcess
+# environment
+HOME = /Users/wurrigon
+# default
+MAKEFILEPATH := /Applications/Xcode.app/Contents/Developer/Makefiles
+# environment
+VSCODE_CODE_CACHE_PATH = /Users/wurrigon/Library/Application Support/Code/CachedData/f80445acd5a3dadef24aa209168452a3d97cc326
+# environment
+LOGNAME = wurrigon
+# environment
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+# environment
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# automatic
+^D = $(patsubst %/,%,$(dir $^))
+# environment
+XPC_FLAGS = 0x0
+# default
+MAKE = $(MAKE_COMMAND)
+# default
+MAKECMDGOALS := all
+# makefile (from `Makefile', line 1)
+SRCS = ./sources/builtins/cd.c ./sources/builtins/pwd.c ./sources/builtins/echo.c ./sources/builtins/env.c ./sources/builtins/exit.c ./sources/builtins/unset.c ./sources/builtins/export.c ./sources/executor/executor.c ./sources/executor/builtins.c ./sources/executor/binary.c ./sources/executor/bins_utils.c ./sources/executor/pipes.c ./sources/main/minishell_main.c ./sources/main/readline_prompt.c ./sources/signals/catch_signals.c ./sources/environ/environ_vars_utils1.c ./sources/environ/environ_vars_utils2.c ./sources/parser/clear_commands_array.c ./sources/parser/parse_and_add_commands.c ./sources/parser/remove_redirects_spaces.c ./sources/parser/get_command_information.c ./sources/parser/wildcard_find_all_utils.c ./sources/parser/remove_quotes_change_path.c ./sources/parser/wildcard_find_all_arguments.c ./sources/parser/get_total_commands_validate_line.c 
+# environment
+SHLVL = 1
+# default
+MAKE_VERSION := 3.81
+# environment
+USER = wurrigon
+# makefile
+.DEFAULT_GOAL := minishell
+# makefile (from `Makefile', line 31)
+NAME = minishell
+# automatic
+%D = $(patsubst %/,%,$(dir $%))
+# default
+MAKE_COMMAND := /Applications/Xcode.app/Contents/Developer/usr/bin/make
+# default
+.VARIABLES := 
+# environment
+TMPDIR = /var/folders/zz/zyxvpxvq6csfxvn_n00020mc000h53/T/
+# automatic
+*F = $(notdir $*)
+# environment
+VSCODE_IPC_HOOK = /Users/wurrigon/Library/Application Support/Code/1.64.2-main.sock
+# makefile
+MAKEFLAGS = Rrqp
+# environment
+MFLAGS = -Rrqp
+# automatic
+*D = $(patsubst %/,%,$(dir $*))
+# environment
+XPC_SERVICE_NAME = com.apple.xpc.launchd.oneshot.0x10000005.Electron
+# automatic
++D = $(patsubst %/,%,$(dir $+))
+# automatic
++F = $(notdir $+)
+# environment
+__CF_USER_TEXT_ENCODING = 0x40A3:0x0:0x0
+# environment
+COMMAND_MODE = unix2003
+# default
+MAKEFILES := 
+# automatic
+<F = $(notdir $<)
+# environment
+LC_ALL = C
+# environment
+SECURITYSESSIONID = 186af
+# automatic
+^F = $(notdir $^)
+# default
+SUFFIXES := 
+# makefile (from `Makefile', line 41)
+FLAGS = -Wall -Werror -Wextra -g
+# makefile (from `Makefile', line 37)
+HS_LIB = readline/libhistory.a
+# default
+.INCLUDE_DIRS = /usr/local/include
+# environment
+MAKELEVEL := 0
+# environment
+LANG = C
+# environment
+VSCODE_PID = 3279
+# variable set hash-table stats:
+# Load=74/1024=7%, Rehash=0, Collisions=4/102=4%
+
+# Pattern-specific Variable Values
+
+# No pattern-specific variable values.
+
+# Directories
+
+# . (device 16777227, inode 1323487): 12 files, no impossibilities.
+# includes (device 16777227, inode 1323549): 3 files, no impossibilities so far.
+# sources/builtins (device 16777227, inode 1323612): 15 files, no impossibilities so far.
+# sources/executor (device 0, inode 0): No files, 1 impossibilities.
+
+# 30 files, 1 impossibilities in 4 directories.
+
+# Implicit Rules
+
+%.o: %.c ./includes/minishell.h
+#  commands to execute (from `Makefile', line 46):
+	$(GCC) $(FLAGS) -I$(HEADS) -c $< -o $@ 
+	
+
+# 1 implicit rules, 0 (0.0%) terminal.
+
+# Files
+
+sources/builtins/pwd.o: sources/builtins/pwd.c includes/minishell.h
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: `sources/builtins/pwd'
+#  Last modified 2022-03-24 15:24:59
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+#  commands to execute (from `Makefile', line 46):
+	$(GCC) $(FLAGS) -I$(HEADS) -c $< -o $@ 
+	
+
+# Not a target:
+sources/parser/wildcard_find_all_utils.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+sources/builtins/cd.o: sources/builtins/cd.c includes/minishell.h
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: `sources/builtins/cd'
+#  Last modified 2022-03-24 15:24:58
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+#  commands to execute (from `Makefile', line 46):
+	$(GCC) $(FLAGS) -I$(HEADS) -c $< -o $@ 
+	
+
+# Not a target:
+sources/signals/catch_signals.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+sources/executor/executor.o:
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has not been updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+sources/parser/remove_quotes_change_path.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+sources/parser/parse_and_add_commands.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+sources/executor/bins_utils.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+all: minishell
+#  Command-line target.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has not been updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+sources/builtins/echo.o: sources/builtins/echo.c includes/minishell.h
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: `sources/builtins/echo'
+#  Last modified 2022-03-24 15:24:59
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+#  commands to execute (from `Makefile', line 46):
+	$(GCC) $(FLAGS) -I$(HEADS) -c $< -o $@ 
+	
+
+# Not a target:
+sources/parser/remove_redirects_spaces.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+sources/builtins/export.o: sources/builtins/export.c includes/minishell.h
+ 
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: `sources/builtins/export'
+#  Last modified 2022-03-24 15:24:59
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+#  commands to execute (from `Makefile', line 46):
+	$(GCC) $(FLAGS) -I$(HEADS) -c $< -o $@ 
+	
+
+# Not a target:
+sources/executor/binary.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+sources/parser/get_command_information.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+.SUFFIXES:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+Makefile:
+#  Implicit rule search has been done.
+#  Last modified 2022-03-24 15:30:13
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+sources/builtins/pwd.c:
+#  Implicit rule search has been done.
+#  Last modified 2022-03-24 13:28:50
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+sources/builtins/cd.c:
+#  Implicit rule search has been done.
+#  Last modified 2022-03-24 13:28:50
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+minishell: sources/builtins/cd.o sources/builtins/pwd.o sources/builtins/echo.o sources/builtins/env.o sources/builtins/exit.o sources/builtins/unset.o sources/builtins/export.o sources/executor/executor.o sources/executor/builtins.o sources/executor/binary.o sources/executor/bins_utils.o sources/executor/pipes.o sources/main/minishell_main.o sources/main/readline_prompt.o sources/signals/catch_signals.o sources/environ/environ_vars_utils1.o sources/environ/environ_vars_utils2.o sources/parser/clear_commands_array.o sources/parser/parse_and_add_commands.o sources/parser/remove_redirects_spaces.o sources/parser/get_command_information.o sources/parser/wildcard_find_all_utils.o sources/parser/remove_quotes_change_path.o sources/parser/wildcard_find_all_arguments.o sources/parser/get_total_commands_validate_line.o libft/libft.h
+#  Implicit rule search has not been done.
+#  Last modified 2022-03-24 15:34:29
+#  File has not been updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+#  commands to execute (from `Makefile', line 49):
+	$(MAKE) -C libft bonus
+	$(GCC) $(FLAGS) $(OBJS) $(LNAME) $(RL_LIB) $(HS_LIB) -ltermcap -lreadline -o $(NAME)
+	
+
+# Not a target:
+sources/parser/wildcard_find_all_arguments.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+sources/builtins/env.o: sources/builtins/env.c includes/minishell.h
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: `sources/builtins/env'
+#  Last modified 2022-03-24 15:24:59
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+#  commands to execute (from `Makefile', line 46):
+	$(GCC) $(FLAGS) -I$(HEADS) -c $< -o $@ 
+	
+
+# Not a target:
+sources/builtins/echo.c:
+#  Implicit rule search has been done.
+#  Last modified 2022-03-24 13:50:04
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+sources/builtins/exit.o: sources/builtins/exit.c includes/minishell.h
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: `sources/builtins/exit'
+#  Last modified 2022-03-24 15:24:59
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+#  commands to execute (from `Makefile', line 46):
+	$(GCC) $(FLAGS) -I$(HEADS) -c $< -o $@ 
+	
+
+fclean: clean
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 59):
+	$(RM) $(LNAME)
+	$(RM) $(NAME)
+	
+
+# Not a target:
+sources/parser/get_total_commands_validate_line.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+sources/builtins/export.c:
+#  Implicit rule search has been done.
+#  Last modified 2022-03-24 13:28:50
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+sources/main/minishell_main.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+.DEFAULT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+sources/builtins/unset.o: sources/builtins/unset.c includes/minishell.h
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: `sources/builtins/unset'
+#  Last modified 2022-03-24 15:24:59
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+#  commands to execute (from `Makefile', line 46):
+	$(GCC) $(FLAGS) -I$(HEADS) -c $< -o $@ 
+	
+
+# Not a target:
+sources/environ/environ_vars_utils1.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+re: fclean all
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+clean:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 55):
+	$(MAKE) -C libft clean
+	$(RM) $(OBJS)
+	
+
+# Not a target:
+sources/executor/builtins.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+sources/builtins/env.c:
+#  Implicit rule search has been done.
+#  Last modified 2022-03-24 13:28:50
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+sources/main/readline_prompt.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+sources/builtins/exit.c:
+#  Implicit rule search has been done.
+#  Last modified 2022-03-24 13:28:50
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+sources/parser/clear_commands_array.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+sources/environ/environ_vars_utils2.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+sources/executor/pipes.o:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+libft/libft.h:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+includes/minishell.h:
+#  Implicit rule search has been done.
+#  Last modified 2022-03-24 15:24:58
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+sources/builtins/unset.c:
+#  Implicit rule search has been done.
+#  Last modified 2022-03-24 13:28:50
+#  File has been updated.
+#  Successfully updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# files hash-table stats:
+# Load=42/1024=4%, Rehash=0, Collisions=7/122=6%
+# VPATH Search Paths
+
+# No `vpath' search paths.
+
+# No general (`VPATH' variable) search path.
+
+# # of strings in strcache: 1
+# # of strcache buffers: 1
+# strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
+# strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
+
+# Finished Make data base on Thu Mar 24 17:00:44 2022
+
+ 
