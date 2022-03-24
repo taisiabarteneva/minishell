@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 12:18:03 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/24 21:05:06 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 21:20:26 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,13 +145,24 @@ void		execute_cd(t_envars **list, t_list *args, t_shell **shell);
 void		handle_non_existing_path(t_list *args, t_shell **shell);
 void		handle_empty_input(t_envars *list, t_shell **shell);
 
+// ECHO
+void		execute_echo(t_list *args, t_shell **shell);
 
+// ENV
+void		execute_env(t_envars *list, t_shell **shell);
+
+// EXPORT
 void		execute_export(t_envars **list, t_list *args, t_shell **shell);
+char 		**get_sorted_keys(char **keys, int size_of_list);
+int			is_valid_env_key(char *token);
+int			is_equal_sign(char *token);
+void 		check_if_key_exists(t_envars **list, char *arg);
+int			get_list_size(t_envars *list);
+
+
 void		execute_unset(t_envars **list, t_list *args, t_shell **shell);
 void		execute_exit(t_shell **shell, t_list *args);
-void		execute_echo(t_list *args, t_shell **shell);
 void		execute_pwd(t_shell **shell, t_list *args, t_envars *list);
-void		execute_env(t_envars *list, t_shell **shell, t_list *args);
 
 // Executor.
 

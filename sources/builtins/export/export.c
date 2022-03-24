@@ -6,51 +6,11 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 21:41:59 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/24 21:00:25 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 21:17:35 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-
-int get_list_size(t_envars *list)
-{
-	t_envars	*tmp;
-	int			size_of_list;
-
-	tmp = list;
-	size_of_list = 0;
-	while (tmp != NULL)
-	{
-		size_of_list++;
-		tmp = tmp->next;
-	}
-	return (size_of_list);
-}
-
-char **get_sorted_keys(char **keys, int size_of_list)
-{
-	int 		i;
-	int			j;
-	char 		*tmp;
-
-	i = 0;
-	while (i < size_of_list)
-	{
-		j = 0;
-		while (j < size_of_list - i - 1)
-		{
-			if (ft_strncmp(keys[j], keys[j + 1], ft_strlen(keys[j]) + 1) > 0)
-			{
-				tmp = keys[j];
-				keys[j] = keys[j + 1];
-				keys[j + 1] = tmp;
-			}
-			j++;
-		}
-		i++;
-	}
-	return (keys);
-}
+#include "../../../includes/minishell.h"
 
 char **handle_export_without_args(t_envars *list)
 {
@@ -60,13 +20,13 @@ char **handle_export_without_args(t_envars *list)
 	
 	size = get_list_size(list);
 	tmp = (char **)malloc(sizeof(char *) * (size + 1));
-	i = 0;
 	if (!tmp)
 		fatal_error(MLC_ERROR);
+	i = 0;
 	while (list)
 	{
-		tmp[i] = ft_strjoin(list->key, "=", 0, 0);			// check leaks
-		tmp[i] = ft_strjoin(tmp[i], list->value, 0, 0); 	// check leaks
+		tmp[i] = ft_strjoin(list->key, "=", 0, 0);
+		tmp[i] = ft_strjoin(tmp[i], list->value, 0, 0); 
 		if (tmp[i] == NULL)
 			fatal_error(MLC_ERROR);
 		list = list->next;
@@ -75,37 +35,6 @@ char **handle_export_without_args(t_envars *list)
 	tmp[i] = NULL;
 	tmp = get_sorted_keys(tmp, size);
 	return (tmp);
-}
-
-int is_valid_env_key(char *token)
-{
-	int i;
-
-	i = 0;
-	if (!ft_isalpha(token[i]) && token[i] != '_')
-		return (0);
-	i++;
-	while (token[i] != '\0')
-	{
-		if (!ft_isascii(token[i]))
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-int is_equal_sign(char *token)
-{
-	int i;
-
-	i = 0;
-	while (token[i] != '\0')
-	{
-		if (token[i] == '=')
-			return (1);
-		i++;
-	}
-	return (0);
 }
 
 void display_sorted_list(char **sorted_keys)
@@ -137,16 +66,27 @@ void add_env_key_value_pair(t_envars **list, char *arg)
 	free(key_value);		
 }
 
-void check_if_key_exists(t_envars **list, char *arg)
+void handle_export_with_arguments(t_list *curr, t_shell **shell, t_envars **list)
 {
-	char	**key_value;
-	char	*exists;
-
-	key_value = ft_split(arg, '=');
-	exists = find_env_node(*list, key_value[0]);
-	if (exists)
-		ft_envar_del_one(list, arg);
-	free(key_value);
+	while (curr)
+	{
+		if (!is_valid_env_key(curr->content))
+		{
+			(*shell)->exit_status = EXIT_ERR;
+			write(STDERR_FILENO, "minishell: export: `", 20);
+			write(STDERR_FILENO, curr->content, ft_strlen(curr->content));
+			write(STDERR_FILENO, "': not a valid identifier\n", 27);
+		}
+		else if (!is_equal_sign(curr->content))
+			(*shell)->exit_status = 0;
+		else
+		{	
+			(*shell)->exit_status = 0;
+			check_if_key_exists(list, curr->content);
+			add_env_key_value_pair(list, curr->content);
+		}
+		curr = curr->next;
+	}
 }
 
 void execute_export(t_envars **list, t_list *args, t_shell **shell)
@@ -165,25 +105,5 @@ void execute_export(t_envars **list, t_list *args, t_shell **shell)
 		display_sorted_list(sorted_keys);
 	}
 	else
-	{
-		while (curr)
-		{
-			if (!is_valid_env_key(curr->content))
-			{
-				(*shell)->exit_status = EXIT_ERR;
-				write(STDERR_FILENO, "minishell: export: `", 20);
-				write(STDERR_FILENO, curr->content, ft_strlen(curr->content));
-				write(STDERR_FILENO, "': not a valid identifier\n", 27);
-			}
-			else if (!is_equal_sign(curr->content))
-				(*shell)->exit_status = 0;
-			else
-			{	
-				(*shell)->exit_status = 0;
-				check_if_key_exists(list, curr->content);
-				add_env_key_value_pair(list, curr->content);
-			}
-			curr = curr->next;
-		}
-	}
+		handle_export_with_arguments(curr, shell, list);
 }

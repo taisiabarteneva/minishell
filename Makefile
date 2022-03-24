@@ -1,11 +1,12 @@
 SRCS	=	./sources/builtins/cd/cd.c \
 			./sources/builtins/cd/cd_utils.c \
+			./sources/builtins/echo/echo.c \
+			./sources/builtins/env/env.c \
+			./sources/builtins/export/export.c \
+			./sources/builtins/export/export_utils.c \
 			./sources/builtins/pwd.c \
-			./sources/builtins/echo.c \
-			./sources/builtins/env.c \
 			./sources/builtins/exit.c \
 			./sources/builtins/unset.c \
-			./sources/builtins/export.c \
 			./sources/executor/executor.c \
 			./sources/executor/builtins.c \
 			./sources/executor/binary.c \
