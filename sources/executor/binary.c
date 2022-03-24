@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 18:32:06 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/24 19:38:33 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 20:11:51 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,7 +173,10 @@ void here_doc(char *del, t_shell **shell, int in)
 	(*shell)->exit_status = 0;
 	fd = open("/tmp/file",  O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (fd == -1)
+	{
+		
 		fatal_error("open\n");
+	}
 	while (true)
 	{
 		line = get_next_line(in);
@@ -195,11 +198,15 @@ void here_doc(char *del, t_shell **shell, int in)
 
 int open_files(t_redirs *elem, t_shell **shell, int fd, int in, t_redirs *next)
 {	
+	(void)next;
 	if (elem->mode == 0)
 	{
 		fd = open(elem->filename, O_CREAT | O_WRONLY | O_TRUNC, 0777);
 		if (fd == -1)
+		{
+			(*shell)->exit_status = 2;			
 			fatal_error("open\n");
+		}
 		dup2(fd, STDOUT_FILENO);
 	}
 	if (elem->mode == 1)
@@ -211,7 +218,7 @@ int open_files(t_redirs *elem, t_shell **shell, int fd, int in, t_redirs *next)
 			write(2, "minishell: ", 11);
 			write(2, elem->filename, ft_strlen(elem->filename) + 1);
 			write(2, ": No such file or directory\n", 28);
-			if (next)
+			// if (!next)
 				exit(1);
 		}
 		dup2(fd, STDIN_FILENO);
