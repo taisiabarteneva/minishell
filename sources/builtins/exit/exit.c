@@ -6,11 +6,11 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 21:41:52 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/24 21:00:02 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 21:23:35 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../../../includes/minishell.h"
 
 int	get_args_quantity(t_list *args)
 {
@@ -113,9 +113,7 @@ void execute_exit(t_shell **shell, t_list *args)
 			exit((*shell)->exit_status);
 		}
 		else if (is_numeric(args->next->content) == true)
-		{		
 			exit(get_lvl(args->next->content, 1));
-		}
 	}
 	exit((*shell)->exit_status);
 }

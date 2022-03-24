@@ -6,12 +6,12 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 21:42:20 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/24 20:58:53 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 21:21:23 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-#include "../../includes/minishell.h"
+#include "../../../includes/minishell.h"
 
 void execute_pwd(t_shell **shell, t_list *args, t_envars *list)
 {

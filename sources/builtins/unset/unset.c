@@ -6,11 +6,11 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 21:42:26 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/24 21:00:13 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 21:22:03 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../../../includes/minishell.h"
 
 bool is_valid_env_name(const char *str)
 {
