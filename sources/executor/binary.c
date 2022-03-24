@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 18:32:06 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/24 22:56:34 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 22:57:56 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	handle_empty_path(char *path, t_cmnds *command, char **cmdargs,
 	if (path == NULL && !find_env_node(command->envs, "PATH"))
 	{
 		(*shell)->exit_status = 127;
-		write(STDERR_FILENO, "minishell: ", 11);		
+		write(STDERR_FILENO, "minishell: ", 11);
 		write(STDERR_FILENO, cmdargs[0], ft_strlen(cmdargs[0]));
 		write(STDERR_FILENO, ": No such file or directory\n", 28);
 		exit((*shell)->exit_status);
@@ -26,7 +26,7 @@ void	handle_empty_path(char *path, t_cmnds *command, char **cmdargs,
 	else if (path == NULL)
 	{
 		(*shell)->exit_status = 127;
-		write(STDERR_FILENO, "minishell: ", 11);		
+		write(STDERR_FILENO, "minishell: ", 11);
 		write(STDERR_FILENO, cmdargs[0], ft_strlen(cmdargs[0]));
 		write(STDERR_FILENO, ": command not found\n", 20);
 		exit((*shell)->exit_status);
