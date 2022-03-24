@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 12:18:03 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/24 17:33:12 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 20:46:15 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,11 @@
 // Exit status
 
 # define EXIT_ERR	1
+
+// 
+
+# define SPACE 	8
+# define TAB	9	
 
 // General shell structure.
 
@@ -143,7 +148,7 @@ void		execute_env(t_envars *list, t_shell *shell, t_list *args);
 
 // Executor.
 
-void		execute_command(t_cmnds *command, t_shell **shell, char **envp);
+// void		execute_command(t_cmnds *command, t_shell **shell, char **envp);
 int			handle_pipes_redirects(t_cmnds *command, t_shell **shell, int in);
 void 		launch_command(t_cmnds *command, char **envp, t_shell **shell);
 
