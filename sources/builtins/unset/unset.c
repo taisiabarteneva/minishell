@@ -6,13 +6,13 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 21:42:26 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/24 21:22:03 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 22:05:56 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-bool is_valid_env_name(const char *str)
+bool	is_valid_env_name(const char *str)
 {
 	if (!ft_isalpha(*str) && *str != '_')
 		return (false);
@@ -26,7 +26,7 @@ bool is_valid_env_name(const char *str)
 	return (true);
 }
 
-void execute_unset(t_envars **list, t_list *args, t_shell **shell)
+void	execute_unset(t_envars **list, t_list *args, t_shell **shell)
 {
 	while (args)
 	{

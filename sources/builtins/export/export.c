@@ -6,18 +6,18 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 21:41:59 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/24 21:17:35 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 22:05:22 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-char **handle_export_without_args(t_envars *list)
+char	**handle_export_without_args(t_envars *list)
 {
-	int 	size;
+	int		size;
 	char	**tmp;
 	int		i;
-	
+
 	size = get_list_size(list);
 	tmp = (char **)malloc(sizeof(char *) * (size + 1));
 	if (!tmp)
@@ -26,7 +26,7 @@ char **handle_export_without_args(t_envars *list)
 	while (list)
 	{
 		tmp[i] = ft_strjoin(list->key, "=", 0, 0);
-		tmp[i] = ft_strjoin(tmp[i], list->value, 0, 0); 
+		tmp[i] = ft_strjoin(tmp[i], list->value, 0, 0);
 		if (tmp[i] == NULL)
 			fatal_error(MLC_ERROR);
 		list = list->next;
@@ -37,10 +37,10 @@ char **handle_export_without_args(t_envars *list)
 	return (tmp);
 }
 
-void display_sorted_list(char **sorted_keys)
+void	display_sorted_list(char **sorted_keys)
 {
-	int 	i;
-	
+	int	i;
+
 	i = 0;
 	while (sorted_keys[i] != NULL)
 	{
@@ -51,11 +51,11 @@ void display_sorted_list(char **sorted_keys)
 	}
 }
 
-void add_env_key_value_pair(t_envars **list, char *arg)
+void	add_env_key_value_pair(t_envars **list, char *arg)
 {
 	char		**key_value;
 	t_envars	*new_node;
-	
+
 	key_value = ft_split(arg, '=');
 	if (!key_value)
 		fatal_error(MLC_ERROR);
@@ -63,10 +63,11 @@ void add_env_key_value_pair(t_envars **list, char *arg)
 	if (!new_node)
 		fatal_error(MLC_ERROR);
 	ft_envar_add_back(list, new_node);
-	free(key_value);		
+	free(key_value);
 }
 
-void handle_export_with_arguments(t_list *curr, t_shell **shell, t_envars **list)
+void	handle_export_with_arguments(t_list *curr, t_shell **shell,
+		t_envars **list)
 {
 	while (curr)
 	{
@@ -89,10 +90,10 @@ void handle_export_with_arguments(t_list *curr, t_shell **shell, t_envars **list
 	}
 }
 
-void execute_export(t_envars **list, t_list *args, t_shell **shell)
+void	execute_export(t_envars **list, t_list *args, t_shell **shell)
 {
 	int		i;
-	char 	**sorted_keys;
+	char	**sorted_keys;
 	t_list	*curr;
 
 	i = 1;
@@ -100,7 +101,7 @@ void execute_export(t_envars **list, t_list *args, t_shell **shell)
 	curr = args->next;
 	if (!curr)
 	{
-		(*shell)->exit_status = 0;		
+		(*shell)->exit_status = 0;
 		sorted_keys = handle_export_without_args(*list);
 		display_sorted_list(sorted_keys);
 	}

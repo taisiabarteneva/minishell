@@ -7,7 +7,6 @@ SRCS	=	./sources/builtins/cd/cd.c \
 			./sources/builtins/export/export_utils.c \
 			./sources/builtins/exit/exit.c \
 			./sources/builtins/unset/unset.c \
-			./sources/executor/executor.c \
 			./sources/executor/builtins.c \
 			./sources/executor/binary.c \
 			./sources/executor/bins_utils.c \

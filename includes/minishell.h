@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 12:18:03 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/24 21:20:26 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 22:08:53 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,12 @@
 # define WAITPID_ERR	"minishell: waitpid error\n"
 # define WLC_ERROR		"minishell: no matches found: %s\n"
 # define PIPES_ERR		"minishell: pipes error\n"
-# define PARENT_DIR		"cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory\n"
+# define PARENT_DIR		"cd: error retrieving current directory: getcwd: \
+			cannot access parent directories: No such file or directory\n"
 
 // Exit status
 
 # define EXIT_ERR	1
-
-// 
-
-// # define SPACE 	8
-// # define TAB	9	
 
 // General shell structure.
 
@@ -111,14 +107,13 @@ void		ft_envar_del_one(t_envars **vars, char *key);
 t_envars	*ft_envar_new(char *key, char *value);
 void		ft_envars_clear(t_envars **vars);
 void		ft_print_envars(t_envars *vars);
-t_envars	*ft_init_envars(char **envp);
 int			get_args_quantity(t_list *args);
-
+t_envars	*ft_init_envars(char **envp);
 
 // Readline and prompt.
 
-void		rl_replace_line(const char *text, int clear_undo);
 void		set_shell(t_envars **envs, t_shell **shell, char **envp);
+void		rl_replace_line(const char *text, int clear_undo);
 void		add_line_to_history(char *line);
 char		*read_prompt_line(void);
 
@@ -134,11 +129,11 @@ void		catch_signals(void);
 void		set_signals(void);
 void		*sigint_handler(int sig_num);
 
-
 // Built-ins.
 
 int			is_built_in(char *command);
-void		built_ins(t_envars **list, t_cmnds *commands, t_shell **shell, char **envp);
+void		built_ins(t_envars **list, t_cmnds *commands, t_shell **shell,
+				char **envp);
 
 // CD
 void		execute_cd(t_envars **list, t_list *args, t_shell **shell);
@@ -153,13 +148,13 @@ void		execute_env(t_envars *list, t_shell **shell);
 
 // EXPORT
 void		execute_export(t_envars **list, t_list *args, t_shell **shell);
-char 		**get_sorted_keys(char **keys, int size_of_list);
+void		check_if_key_exists(t_envars **list, char *arg);
+char		**get_sorted_keys(char **keys, int size_of_list);
 int			is_valid_env_key(char *token);
 int			is_equal_sign(char *token);
-void 		check_if_key_exists(t_envars **list, char *arg);
 int			get_list_size(t_envars *list);
 
-
+// UNSET
 void		execute_unset(t_envars **list, t_list *args, t_shell **shell);
 void		execute_exit(t_shell **shell, t_list *args);
 void		execute_pwd(t_shell **shell, t_list *args, t_envars *list);
@@ -168,19 +163,20 @@ void		execute_pwd(t_shell **shell, t_list *args, t_envars *list);
 
 // void		execute_command(t_cmnds *command, t_shell **shell, char **envp);
 int			handle_pipes_redirects(t_cmnds *command, t_shell **shell, int in);
-void 		launch_command(t_cmnds *command, char **envp, t_shell **shell);
+void		launch_command(t_cmnds *command, char **envp, t_shell **shell);
 
 // Pipes
-int			**pipes_loop(int cmnds);
-void 		open_pipes(int **pipes, int cmnds);
+void		open_pipes(int **pipes, int cmnds);
 void		close_all_pipes(int **pipes);
+int			**pipes_loop(int cmnds);
 
 // Binary.
 
-void		execute_bin(t_cmnds **commands, t_shell **shell, char **envp, int in);
+void		execute_bin(t_cmnds **commands, t_shell **shell, char **envp,
+				int in);
 char		**get_command_arguments(t_list *args);
-void		get_command_position(t_cmnds *command, t_shell **shell, int cmd_pos, int in);
-
+void		get_command_position(t_cmnds *command, t_shell **shell, int cmd_pos,
+				int in);
 
 // Wildcards replacement
 

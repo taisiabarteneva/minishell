@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/22 14:12:14 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/24 19:57:04 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 22:09:48 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ void	close_all_pipes(int **pipes)
 	}
 }
 
-void open_pipes(int **pipes, int cmnds)
+void	open_pipes(int **pipes, int cmnds)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < cmnds - 1)
@@ -38,11 +38,11 @@ void open_pipes(int **pipes, int cmnds)
 	}
 }
 
-int **pipes_loop(int cmnds)
+int	**pipes_loop(int cmnds)
 {
 	int		i;
 	int		**pipes;
-	
+
 	i = 0;
 	pipes = (int **)malloc(sizeof(int *) * cmnds);
 	if (!pipes)

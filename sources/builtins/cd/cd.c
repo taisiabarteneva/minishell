@@ -6,13 +6,13 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 21:42:12 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/24 21:04:12 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 22:02:19 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-void change_old_pwd_environ(t_envars **list, char *old_path)
+void	change_old_pwd_environ(t_envars **list, char *old_path)
 {
 	t_envars	*old_pwd_node;
 
@@ -23,13 +23,12 @@ void change_old_pwd_environ(t_envars **list, char *old_path)
 	ft_envar_add_back(list, old_pwd_node);
 }
 
-void change_new_pwd_environ(t_envars **list, char *new_path)
+void	change_new_pwd_environ(t_envars **list, char *new_path)
 {
-	t_envars *new_pwd_node;
-	t_envars *tmp;
-	
-	tmp = *list;
+	t_envars	*new_pwd_node;
+	t_envars	*tmp;
 
+	tmp = *list;
 	new_pwd_node = ft_envar_new("PWD", ft_strdup(new_path));
 	if (!new_pwd_node)
 		fatal_error(MLC_ERROR);
@@ -37,11 +36,11 @@ void change_new_pwd_environ(t_envars **list, char *new_path)
 	ft_envar_add_back(list, new_pwd_node);
 }
 
-void handle_cd_arguments(t_list *args, t_shell **shell, t_envars *list)
+void	handle_cd_arguments(t_list *args, t_shell **shell, t_envars *list)
 {
-	int 	status;
-	char 	tmp_path[MAX_PATH];
-	
+	int		status;
+	char	tmp_path[MAX_PATH];
+
 	status = 0;
 	if (args->next && ft_strncmp(args->next->content, "-", 1) == 0)
 	{
@@ -65,7 +64,7 @@ void handle_cd_arguments(t_list *args, t_shell **shell, t_envars *list)
 		handle_non_existing_path(args, shell);
 }
 
-void execute_cd(t_envars **list, t_list *args, t_shell **shell)
+void	execute_cd(t_envars **list, t_list *args, t_shell **shell)
 {
 	int		status;
 	char	old_path[MAX_PATH];
@@ -76,7 +75,7 @@ void execute_cd(t_envars **list, t_list *args, t_shell **shell)
 	getcwd(old_path, MAX_PATH);
 	if (args->next == NULL)
 		handle_empty_input(*list, shell);
-	else 
+	else
 		handle_cd_arguments(args, shell, *list);
 	if (getcwd(new_path, MAX_PATH) == NULL)
 	{

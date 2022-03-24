@@ -6,13 +6,13 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/24 21:16:59 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/24 21:17:38 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 22:04:07 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-void check_if_key_exists(t_envars **list, char *arg)
+void	check_if_key_exists(t_envars **list, char *arg)
 {
 	char	**key_value;
 	char	*exists;
@@ -24,9 +24,9 @@ void check_if_key_exists(t_envars **list, char *arg)
 	free(key_value);
 }
 
-int is_valid_env_key(char *token)
+int	is_valid_env_key(char *token)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!ft_isalpha(token[i]) && token[i] != '_')
@@ -41,9 +41,9 @@ int is_valid_env_key(char *token)
 	return (1);
 }
 
-int is_equal_sign(char *token)
+int	is_equal_sign(char *token)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (token[i] != '\0')
@@ -55,7 +55,7 @@ int is_equal_sign(char *token)
 	return (0);
 }
 
-int get_list_size(t_envars *list)
+int	get_list_size(t_envars *list)
 {
 	t_envars	*tmp;
 	int			size_of_list;
@@ -70,11 +70,11 @@ int get_list_size(t_envars *list)
 	return (size_of_list);
 }
 
-char **get_sorted_keys(char **keys, int size_of_list)
+char	**get_sorted_keys(char **keys, int size_of_list)
 {
-	int 		i;
-	int			j;
-	char 		*tmp;
+	int		i;
+	int		j;
+	char	*tmp;
 
 	i = 0;
 	while (i < size_of_list)

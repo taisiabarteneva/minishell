@@ -6,13 +6,13 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 19:44:28 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/24 21:11:42 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 22:10:17 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int is_built_in(char *command)
+int	is_built_in(char *command)
 {
 	if (ft_strncmp(command, "pwd", 4) == 0)
 		return (1);
@@ -31,7 +31,8 @@ int is_built_in(char *command)
 	return (0);
 }
 
-void	built_ins(t_envars **list, t_cmnds *commands, t_shell **shell, char **envp)
+void	built_ins(t_envars **list, t_cmnds *commands, t_shell **shell,
+			char **envp)
 {
 	(void)envp;
 	if (!commands->args)

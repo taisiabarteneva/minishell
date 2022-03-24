@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/10 21:41:52 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/24 21:23:35 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 22:01:08 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,30 @@
 
 int	get_args_quantity(t_list *args)
 {
-	int 		i;
-	t_list		*tmp;
+	int		i;
+	t_list	*tmp;
 
 	i = 0;
 	tmp = args;
 	while (tmp)
 	{
 		i++;
-		tmp = tmp->next;	
+		tmp = tmp->next;
 	}
 	return (i);
 }
 
-bool is_numeric(const char *str) 
+bool	is_numeric(const char *str)
 {
 	if (*str == '-')
 		str++;
-    while (*str != '\0')
-    {
-        if (*str < '0' || *str > '9')
-            return (false);
-        str++;
-    }
-    return (true);
+	while (*str != '\0')
+	{
+		if (*str < '0' || *str > '9')
+			return (false);
+		str++;
+	}
+	return (true);
 }
 
 static int	result(const char *str, unsigned long long res, int negative)
@@ -92,7 +92,7 @@ static int	get_lvl(char *str, int negative)
 		return (255);
 }
 
-void execute_exit(t_shell **shell, t_list *args)
+void	execute_exit(t_shell **shell, t_list *args)
 {
 	write(STDERR_FILENO, "exit\n", 5);
 	if (args->next)
@@ -107,7 +107,8 @@ void execute_exit(t_shell **shell, t_list *args)
 		else if (is_numeric(args->next->content) == false)
 		{
 			write(STDERR_FILENO, "minishell: exit: ", 17);
-			write(STDERR_FILENO, args->next->content, ft_strlen(args->next->content));
+			write(STDERR_FILENO, args->next->content,
+				ft_strlen(args->next->content));
 			write(STDERR_FILENO, ": numeric argument required\n", 28);
 			(*shell)->exit_status = 255;
 			exit((*shell)->exit_status);
