@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 18:23:49 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/24 15:25:07 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 17:26:12 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,9 @@ void	set_shell(t_envars **envs, t_shell **shell, char **envp)
 {
 	char	*line;
 	t_cmnds	**commands;
-	int		in, out;
+	int in, out;
 
+	in = 0;
 	line = NULL;
 	commands = NULL;
 	rl_outstream = stderr;
@@ -76,11 +77,11 @@ void	set_shell(t_envars **envs, t_shell **shell, char **envp)
 				out = dup(1);
 				if (is_built_in(commands[0]->args->content) && !commands[1])
 				{
-					handle_pipes_redirects(commands[0], shell);
+					handle_pipes_redirects(commands[0], shell, in);
 					built_ins(&(commands[0]->envs), commands[0], *shell, envp);
 				}
 				else
-					execute_bin(commands, shell, envp);
+					execute_bin(commands, shell, envp, in);
 				dup2(in, 0);
 				dup2(out, 1);
 			}

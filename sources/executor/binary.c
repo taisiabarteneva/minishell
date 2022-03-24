@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 18:32:06 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/24 17:04:34 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 18:02:07 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ void	get_child_exit_status(int *status)
 		*status = WTERMSIG(*status);
 	else if (WIFSTOPPED(*status))
 		*status = WSTOPSIG(*status);				// возвращает истинное значение, если дочерний процесс был остановлен
-	else
-		*status = EXIT_ERR;
+	// else
+	// 	*status = EXIT_ERR;
 }
 
 void	ft_sig_heredoc(int sig)
@@ -121,10 +121,10 @@ void launch_command(t_cmnds *command, char **envp, t_shell **shell)
 		exec_non_system_bin(command, &path, &cmdargs);
 	else
 		exec_system_bin(command, &path, &cmdargs);
-	(*shell)->exit_status = 1;
+	// (*shell)->exit_status = 0;
 	if (path == NULL && !find_env_node(command->envs, "PATH"))
 	{
-			(*shell)->exit_status = 127;
+		(*shell)->exit_status = 127;
 		write(STDERR_FILENO, "minishell: ", 11);		
 		write(STDERR_FILENO, cmdargs[0], ft_strlen(cmdargs[0]));
 		write(STDERR_FILENO, ": No such file or directory\n", 28);
@@ -158,23 +158,25 @@ void launch_command(t_cmnds *command, char **envp, t_shell **shell)
 			exit((*shell)->exit_status);
 		}
 	}
-	
-	(*shell)->exit_status = EXIT_ERR;
+	// (*shell)->exit_status = EXIT_ERR;
 	free(cmdargs);
 	free(path);
 	exit((*shell)->exit_status);
 }
 
-void here_doc(char *del)
+void here_doc(char *del, t_shell **shell, int in)
 {
 	char 	*line;
 	int 	fd;
 
-	
+	(void)shell;
+	// (*shell)->exit_status = 0;
 	fd = open("/tmp/file",  O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (fd == -1)
+		fatal_error("open\n");
 	while (true)
 	{
-		line = get_next_line(0);
+		line = get_next_line(in);
 		if (!line)
 			break ;
 		if (ft_strncmp(del, line, ft_strlen(del)) == 0
@@ -185,14 +187,14 @@ void here_doc(char *del)
 	}
 	close(fd);
 	fd = open("/tmp/file", O_RDONLY, 0777);
+	if (fd == -1)
+		fatal_error("open\n");
 	dup2(fd, STDIN_FILENO);
 	// unlink("tmp");
-	// exit(0);
 }
 
-int open_files(t_redirs *elem, t_shell **shell, int fd)
+int open_files(t_redirs *elem, t_shell **shell, int fd, int in)
 {	
-	(void)shell;
 	if (elem->mode == 0)
 	{
 		fd = open(elem->filename, O_CREAT | O_WRONLY | O_TRUNC, 0777);
@@ -222,14 +224,14 @@ int open_files(t_redirs *elem, t_shell **shell, int fd)
 	}
 	if (elem->mode == 3)
 	{
-		(*shell)->exit_status = 0;
 		signal(SIGINT, (void *)ft_sig_heredoc);
-		here_doc(elem->filename);
+		here_doc(elem->filename, shell, in);
+		// (*shell)->exit_status = 0;
 	}
 	return (fd);
 }
 
-int  handle_pipes_redirects(t_cmnds *command, t_shell **shell)
+int  handle_pipes_redirects(t_cmnds *command, t_shell **shell, int in)
 {
 	int i;
 	int fd = 0;
@@ -237,7 +239,7 @@ int  handle_pipes_redirects(t_cmnds *command, t_shell **shell)
 	i = 0;
 	while (command->redirs && command->redirs[i])
 	{
-		fd = open_files(command->redirs[i], shell, fd);
+		fd = open_files(command->redirs[i], shell, fd, in);
 		i++;
 	}
 	return (fd);
@@ -257,26 +259,27 @@ void wait_child_processes(t_shell **shell, pid_t id)
 		if (id == process)
 		{
 			get_child_exit_status(&status);
+			dprintf(2, "[%d]\n", status);
 			(*shell)->exit_status = status;			
 		}
 		i++;
 	}
 }
 
-void handle_first_command(t_cmnds *command, t_shell **shell)
+void handle_first_command(t_cmnds *command, t_shell **shell, int in)
 {
 	int fd_in;
 	
 	dup2((*shell)->pipes[0][1], STDOUT_FILENO);
-	fd_in = handle_pipes_redirects(command, shell);
+	fd_in = handle_pipes_redirects(command, shell, in);
 	close((*shell)->pipes[0][0]);
 }
 
-void handle_last_command(t_cmnds *command, t_shell **shell)
+void handle_last_command(t_cmnds *command, t_shell **shell, int in)
 {
 	int fd_out;
 
-	fd_out = handle_pipes_redirects(command, shell);
+	fd_out = handle_pipes_redirects(command, shell, in);
 	dup2((*shell)->pipes[(*shell)->process_count - 2][0], STDIN_FILENO);
 	close((*shell)->pipes[(*shell)->process_count - 2][1]);
 }
@@ -288,12 +291,12 @@ void	handle_standard_command(t_cmnds *command, t_shell **shell, int cmd_pos)
 	dup2((*shell)->pipes[cmd_pos][1], STDOUT_FILENO);
 }
 
-void get_command_position(t_cmnds *command, t_shell **shell, int cmd_pos)
+void get_command_position(t_cmnds *command, t_shell **shell, int cmd_pos, int in)
 {
 	if (cmd_pos == 0)
-		handle_first_command(command, shell);
+		handle_first_command(command, shell, in);
 	else if (cmd_pos == (*shell)->process_count - 1)
-		handle_last_command(command, shell);
+		handle_last_command(command, shell, in);
 	else
 		handle_standard_command(command, shell, cmd_pos);
 }
@@ -304,7 +307,7 @@ void	ft_fork(int sig)
 	write(1, "\n", 1);
 }
 
-void execute_bin(t_cmnds **commands, t_shell **shell, char **envp)
+void execute_bin(t_cmnds **commands, t_shell **shell, char **envp, int in)
 {
 	pid_t	pid;
 	int		counter;
@@ -319,14 +322,12 @@ void execute_bin(t_cmnds **commands, t_shell **shell, char **envp)
 			signal(SIGINT, (void *)ft_sig_heredoc);
 			if ((*shell)->process_count > 1)
 			{
-				get_command_position(commands[counter], shell, counter);
+				get_command_position(commands[counter], shell, counter, in);
 				close_all_pipes((*shell)->pipes);
 			}
 			else
-			{
-				handle_pipes_redirects(commands[counter], shell);
-			}
-				launch_command(commands[counter], envp, shell);
+				handle_pipes_redirects(commands[counter], shell, in);
+			launch_command(commands[counter], envp, shell);
 		}
 		else if (pid == -1)
 		{
@@ -342,3 +343,22 @@ void execute_bin(t_cmnds **commands, t_shell **shell, char **envp)
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, (void *)sigint_handler);
 }
+
+// ✗  "cat << stop;1;stop;" 
+// Your exit status : 1
+// Expected exit status : 0
+
+
+// ✗  "cat << stop;1F;stopa;stop" 
+// Your exit status : 1
+// Expected exit status : 0
+
+
+// ✗  "cat <test.sh <<stop;1;stop" 
+// Your exit status : 1
+// Expected exit status : 0
+
+
+// ✗  "cat <<stop<ls;1;stop" 
+// Your exit status : 1
+// Expected exit status : 0

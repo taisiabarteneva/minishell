@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 12:18:03 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/24 15:24:58 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 17:33:12 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ typedef struct s_shell
 	int				fd_out;
 	int				process_count;
 	int				**pipes;
-	// char 			*here_doc;
 }				t_shell;
 
 // Environment variables list structure.
@@ -145,7 +144,7 @@ void		execute_env(t_envars *list, t_shell *shell, t_list *args);
 // Executor.
 
 void		execute_command(t_cmnds *command, t_shell **shell, char **envp);
-int			handle_pipes_redirects(t_cmnds *command, t_shell **shell);
+int			handle_pipes_redirects(t_cmnds *command, t_shell **shell, int in);
 void 		launch_command(t_cmnds *command, char **envp, t_shell **shell);
 
 // Pipes
@@ -155,9 +154,9 @@ void		close_all_pipes(int **pipes);
 
 // Binary.
 
-void		execute_bin(t_cmnds **commands, t_shell **shell, char **envp);
+void		execute_bin(t_cmnds **commands, t_shell **shell, char **envp, int in);
 char		**get_command_arguments(t_list *args);
-void		get_command_position(t_cmnds *command, t_shell **shell, int cmd_pos);
+void		get_command_position(t_cmnds *command, t_shell **shell, int cmd_pos, int in);
 
 
 // Wildcards replacement
