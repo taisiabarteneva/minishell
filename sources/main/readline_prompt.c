@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline_prompt.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 18:23:49 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/22 20:30:23 by ncarob           ###   ########.fr       */
+/*   Updated: 2022/03/24 13:02:30 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	add_line_to_history(char *line)
 {
-	if (line && *line)
+	if (line && *line && *line != ' ')
 		add_history(line);
 }
 
@@ -26,6 +26,19 @@ int get_num_of_commands(t_cmnds **commands)
 	while (commands && commands[i])
 		i++;
 	return (i);
+}
+
+bool	check_tabs_spaces(char *content)
+{
+	int i;
+	i = 0;
+	while (content[i])
+	{
+		if (content[i] != 8 && content[i] != 9)
+			return false;
+		i++;
+	}
+	return (true);
 }
 
 void	set_shell(t_envars **envs, t_shell **shell, char **envp)
@@ -50,7 +63,7 @@ void	set_shell(t_envars **envs, t_shell **shell, char **envp)
 		else
 			add_line_to_history(line);
 		commands = ft_parse_input(line, *envs, *shell);
-		if (commands)
+		if (commands && check_tabs_spaces((*commands)->args->content) == false)
 		{
 			(*shell)->process_count = get_num_of_commands(commands);
 			if ((*shell)->process_count > 1)

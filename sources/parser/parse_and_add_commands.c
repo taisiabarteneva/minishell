@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_and_add_commands.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 21:53:08 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/22 20:30:51 by ncarob           ###   ########.fr       */
+/*   Updated: 2022/03/24 13:04:01 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ t_cmnds	**ft_parse_input(char *s, t_envars *envs, t_shell *shell)
 	if (!num_of_commands)
 	{
 		ft_putstr_fd(CMD_ERROR, 2);
+		shell->exit_status = 2;
 		return (NULL);
 	}
 	commands = (t_cmnds **)malloc(sizeof(t_cmnds *) * (num_of_commands + 1));

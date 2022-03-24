@@ -6,7 +6,7 @@
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/16 18:32:06 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/23 18:42:26 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/24 12:51:18 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,12 @@ void	get_child_exit_status(int *status)
 		*status = WSTOPSIG(*status);				// возвращает истинное значение, если дочерний процесс был остановлен
 	else
 		*status = EXIT_ERR;
+}
+
+void	ft_sig_heredoc(int sig)
+{
+	(void)sig;
+	exit(EXIT_ERR);
 }
 
 char **parse_paths(t_envars *list)
@@ -98,6 +104,7 @@ void launch_command(t_cmnds *command, char **envp, t_shell **shell)
 {
 	char	*path;
 	char	**cmdargs;
+	int		exec_res;
 
 	(void)shell;
 	path = NULL;
@@ -127,18 +134,26 @@ void launch_command(t_cmnds *command, char **envp, t_shell **shell)
 		write(STDERR_FILENO, "minishell: ", 11);		
 		write(STDERR_FILENO, cmdargs[0], ft_strlen(cmdargs[0]));
 		write(STDERR_FILENO, ": command not found\n", 20);
-		dprintf(2, "%d\n", (*shell)->exit_status);
 		exit((*shell)->exit_status);
 	}
 	else 
 	{	
 		(*shell)->exit_status = 0;
-		if (execve(path, cmdargs, envp) == -1)
+		exec_res = execve(path, cmdargs, envp);
+		if (exec_res == -1)
 		{
+			(*shell)->exit_status = 127;
+			write(STDERR_FILENO, "minishell: ", 11);		
+			write(STDERR_FILENO, cmdargs[0], ft_strlen(cmdargs[0]));
+			write(STDERR_FILENO, ": command not found\n", 20);
+		}
+		if (exec_res == -1 && cmdargs && *cmdargs)
+		{
+			(*shell)->exit_status = 127;
 			write(STDERR_FILENO, "minishell: ", 11);		
 			write(STDERR_FILENO, cmdargs[0], ft_strlen(cmdargs[0] + 1));
 			write(STDERR_FILENO, ": No such file or directory\n", 28);
-			exit(1);
+			exit((*shell)->exit_status);
 		}
 	}
 	(*shell)->exit_status = EXIT_ERR;
@@ -149,19 +164,23 @@ void launch_command(t_cmnds *command, char **envp, t_shell **shell)
 
 void here_doc(char *del)
 {
-	char *line;
-	
+	char 	*line;
+	int 	fd;
+
+	fd = open("tmp", O_CREAT | O_RDWR | O_TRUNC, 777);
 	while (true)
 	{
 		line = get_next_line(0);
 		if (!line)
 			break ;
-		if (ft_strnstr(line, del, ft_strlen(del)) != NULL
-			&& ft_strlen(line) == ft_strlen(del) + 1)
+		if (ft_strncmp(del, line, (ft_strlen(del))== 0))
 			break ;
-		write(STDOUT_FILENO, line, ft_strlen(line) + 1);
+		write(fd, line, ft_strlen(line) + 1);
 		free(line);
 	}
+	close(fd);
+	fd = open("tmp", O_CREAT | O_RDWR | O_TRUNC, 777);
+	dup2(fd, STDIN_FILENO);
 }
 
 int open_files(t_redirs *elem, t_shell *shell, int fd)
@@ -193,10 +212,10 @@ int open_files(t_redirs *elem, t_shell *shell, int fd)
 			fatal_error("open\n");
 		dup2(fd, STDOUT_FILENO);
 	}
-	// if (elem->mode == 3)
-	// {
-	// 	here_doc(elem->filename);
-	// }
+	if (elem->mode == 3)
+	{
+		here_doc(elem->filename);
+	}
 	return (fd);
 }
 
