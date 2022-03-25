@@ -87,12 +87,12 @@ pid_t	watch_child_process(t_shell **shell, t_cmnds **commands, int in,
 	pid_t	pid;
 
 	counter = 0;
+	set_signals();
 	while (commands[counter])
 	{
 		pid = fork();
 		if (pid == 0)
 		{
-			signal(SIGQUIT, (void *)sigquit_handler);
 			if ((*shell)->process_count > 1)
 			{
 				get_command_position(commands[counter], shell, counter, in);
@@ -106,6 +106,7 @@ pid_t	watch_child_process(t_shell **shell, t_cmnds **commands, int in,
 			fork_error(shell);
 		counter++;
 	}
+	return_signals_parent_process();
 	return (pid);
 }
 
@@ -116,7 +117,6 @@ void	execute_bin(t_cmnds **commands, t_shell **shell, char **envp, int in)
 
 	counter = 0;
 	(*shell)->exit_status = 0;
-
 	pid = watch_child_process(shell, commands, in, envp);
 	close_all_pipes(((*shell)->pipes));
 	wait_child_processes(shell, pid);

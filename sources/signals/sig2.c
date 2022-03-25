@@ -18,3 +18,22 @@ void	sigquit_handler(int num)
 	write(2, "Quit: 3\n", 8);
 	exit(131);
 }
+
+void	*sig_fork(int num)
+{
+	(void)num;
+	write(1, "\n", 1);
+	exit(2);
+}
+
+void	set_signals(void)
+{
+	signal(SIGINT, (void *)sig_fork);
+	signal(SIGQUIT, (void *)sigquit_handler);
+}
+
+void	return_signals_parent_process(void)
+{
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+}
