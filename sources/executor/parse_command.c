@@ -73,7 +73,7 @@ void	exec_system_bin(t_cmnds *command, char **path, char ***cmd_args)
 
 void	exec_non_system_bin(t_cmnds *command, char **path, char ***cmdargs)
 {
-	*cmdargs = ft_split(command->args->content, ' ');
+	*cmdargs = get_command_arguments(command->args);
 	if (!*cmdargs)
 		fatal_error(MLC_ERROR);
 	*path = (*cmdargs)[0];

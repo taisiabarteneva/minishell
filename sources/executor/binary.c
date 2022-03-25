@@ -120,4 +120,6 @@ void	execute_bin(t_cmnds **commands, t_shell **shell, char **envp, int in)
 	pid = watch_child_process(shell, commands, in, envp);
 	close_all_pipes(((*shell)->pipes));
 	wait_child_processes(shell, pid);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, (void *)sigint_handler);
 }

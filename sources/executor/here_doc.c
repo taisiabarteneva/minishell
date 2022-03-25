@@ -24,6 +24,7 @@ void	here_doc(char *del, t_shell **shell, int in)
 	while (true)
 	{
 		line = get_next_line(in);
+		dprintf(2, "HEREEEEE\n");
 		if (!line)
 			break ;
 		if (ft_strncmp(del, line, ft_strlen(del)) == 0

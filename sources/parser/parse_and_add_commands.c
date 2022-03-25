@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_and_add_commands.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 21:53:08 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/24 20:17:47 by wurrigon         ###   ########.fr       */
+/*   Updated: 2022/03/25 18:44:10 by ncarob           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,13 @@
 static t_cmnds	*ft_command_new_part_two(t_cmnds **command)
 {
 	int		i;
-	t_list	*copy;
 
 	i = -1;
 	while ((*command)->redirs && (*command)->redirs[++i])
 		(*command)->redirs[i]->filename
 			= ft_remove_quotes((*command)->redirs[i]->filename, *command);
-	copy = (*command)->args;
-	while (copy)
-	{
-		copy->content = ft_remove_quotes((char *)copy->content, *command);
-		copy = copy->next;
-	}
+	// ft_print_command_info(*command);
+	ft_replace_wildcards(*command, (*command)->args);
 	return (*command);
 }
 
