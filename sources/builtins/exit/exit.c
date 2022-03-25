@@ -43,23 +43,18 @@ bool	is_numeric(const char *str)
 static int	result(const char *str, unsigned long long res, int negative)
 {
 	int					i;
-	unsigned long long	kostyl;
+	unsigned long long	long_num;
 
-	kostyl = 9223372036854775807;
-	kostyl++;
+	long_num = LLU;
+	long_num++;
 	i = 0;
 	while (!(*str >= '0' && *str <= '9'))
 		str++;
 	while (str[i] >= '0' && str[i] <= '9')
 		i++;
-	if ((res > 9223372036854775807 && negative == 1) \
-		|| (res > kostyl && negative == -1) || i > 19)
-	{
-		if (negative == 1)
-			return (255);
-		else if (negative == -1)
-			return (255);
-	}
+	if ((res > LLU && negative == 1) \
+		|| (res > long_num && negative == -1) || i > 19)
+		return (EXIT_BIG_NUM);
 	return (res * negative);
 }
 
@@ -80,7 +75,7 @@ static int	get_lvl(char *str, int negative)
 	else if (*str == '+')
 		str++;
 	if (*str < '0' || *str > '9')
-		return (255);
+		return (EXIT_NON_NUMERIC);
 	while (*str >= '0' && *str <= '9')
 	{
 		ret = ret * 10 + *str - '0';
@@ -89,7 +84,7 @@ static int	get_lvl(char *str, int negative)
 	if (*str == '\0')
 		return (result(tmp, ret, negative));
 	else
-		return (255);
+		return (EXIT_NON_NUMERIC);
 }
 
 void	execute_exit(t_shell **shell, t_list *args)
@@ -110,7 +105,7 @@ void	execute_exit(t_shell **shell, t_list *args)
 			write(STDERR_FILENO, args->next->content,
 				ft_strlen(args->next->content));
 			write(STDERR_FILENO, ": numeric argument required\n", 28);
-			(*shell)->exit_status = 255;
+			(*shell)->exit_status = EXIT_NON_NUMERIC;
 			exit((*shell)->exit_status);
 		}
 		else if (is_numeric(args->next->content) == true)

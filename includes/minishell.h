@@ -35,6 +35,8 @@
 
 # define MAX_PATH 1024
 
+# define LLU 9223372036854775807
+
 # define CMD_ERROR 		"minishell: parsing error\n"
 # define MLC_ERROR 		"minishell: memory allocation error\n"
 # define EXEC_ERROR 	"minishell: execve error\n"
@@ -48,8 +50,10 @@
 
 // Exit status
 
-# define EXIT_ERR		1
-# define EXIT_FORK_ERR 	128
+# define EXIT_ERR			1
+# define EXIT_FORK_ERR 		128
+# define EXIT_BIG_NUM		255
+# define EXIT_NON_NUMERIC	255
 
 // General shell structure.
 
