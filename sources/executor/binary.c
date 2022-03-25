@@ -65,7 +65,6 @@ void	launch_command(t_cmnds *command, char **envp, t_shell **shell)
 	cmdargs = get_command_arguments(command->args);
 	if (!cmdargs)
 		fatal_error(MLC_ERROR);
-	signal(SIGINT, (void *)c_fork);
 	if (is_built_in(command->args->content))
 	{
 		built_ins(&(command->envs), command, shell, envp);
@@ -93,6 +92,7 @@ pid_t	watch_child_process(t_shell **shell, t_cmnds **commands, int in,
 		pid = fork();
 		if (pid == 0)
 		{
+			signal(SIGQUIT, (void *)sigquit_handler);
 			if ((*shell)->process_count > 1)
 			{
 				get_command_position(commands[counter], shell, counter, in);
@@ -116,11 +116,8 @@ void	execute_bin(t_cmnds **commands, t_shell **shell, char **envp, int in)
 
 	counter = 0;
 	(*shell)->exit_status = 0;
+
 	pid = watch_child_process(shell, commands, in, envp);
 	close_all_pipes(((*shell)->pipes));
 	wait_child_processes(shell, pid);
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, (void *)sigint_handler);
 }
-
-// cat << stop;1;stop

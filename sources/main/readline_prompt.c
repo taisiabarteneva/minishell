@@ -78,10 +78,10 @@ void	set_shell(t_envars **envs, t_shell **shell, char **envp)
 	commands = NULL;
 	(*shell)->pipes = NULL;
 	rl_outstream = stderr;
-	catch_signals();
 	while (true)
 	{
 		tty_hide_input();
+		catch_signals();
 		line = readline("minishell> ");
 		if (!line)
 		{

@@ -136,6 +136,8 @@ void		set_signals(void);
 void		*sigint_handler(int sig_num);
 void		sig_heredoc(int sig);
 void		c_fork(int signum);
+void		sigquit_handler(int num);
+
 
 // Built-ins.
 

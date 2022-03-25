@@ -19,6 +19,7 @@ SRCS	=	./sources/builtins/cd/cd.c \
 			./sources/main/minishell_main.c \
 			./sources/main/readline_prompt.c \
 			./sources/signals/catch_signals.c \
+			./sources/signals/sig2.c \
 			./sources/environ/environ_vars_utils1.c \
 			./sources/environ/environ_vars_utils2.c \
 			./sources/parser/clear_commands_array.c \
@@ -44,7 +45,7 @@ HS_LIB	=	readline/libhistory.a
 
 GCC		=	gcc
 
-FLAGS	=	-Wall -Werror -Wextra #-g -fsanitize=address
+FLAGS	=	-Wall -Werror -Wextra # -g -fsanitize=address
 
 RM		=	rm -f
 
