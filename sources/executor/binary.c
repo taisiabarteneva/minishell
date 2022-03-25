@@ -122,3 +122,5 @@ void	execute_bin(t_cmnds **commands, t_shell **shell, char **envp, int in)
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, (void *)sigint_handler);
 }
+
+// cat << stop;1;stop
