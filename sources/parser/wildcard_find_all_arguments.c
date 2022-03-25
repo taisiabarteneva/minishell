@@ -12,6 +12,31 @@
 
 #include "../../includes/minishell.h"
 
+static int	ft_check_wildcard_argument_part_two(char **pieces, int *i,
+	char **curr, char **next)
+{
+	while (pieces[*i] && pieces[*i][0] && pieces[*i + 1])
+	{
+		*next = ft_strchr(*curr, pieces[*i][0]);
+		if (!*next || ft_strlen(*next) < ft_strlen(pieces[*i]))
+			return (0);
+		*curr = *next;
+		if (!ft_strncmp(*curr, pieces[*i], ft_strlen(pieces[*i])))
+			(*i)++;
+	}
+	if (pieces[*i] && pieces[*i][0])
+	{
+		*next = ft_strrchr(*curr, pieces[*i][0]);
+		if (!*next || *next - *curr < 0
+			|| ft_strlen(*next) != ft_strlen(pieces[*i]))
+			return (0);
+		*curr = *next;
+		if (ft_strncmp(*curr, pieces[*i], ft_strlen(*curr)))
+			return (0);
+	}
+	return (1);
+}
+
 static int	ft_check_wildcard_argument(char **pieces, char *new_arg)
 {
 	char	*curr;
@@ -28,24 +53,8 @@ static int	ft_check_wildcard_argument(char **pieces, char *new_arg)
 	else if (pieces[i][0] && !ft_strncmp(curr, pieces[i], ft_strlen(pieces[i])))
 		curr = &new_arg[ft_strlen(pieces[i])];
 	i++;
-	while (pieces[i] && pieces[i][0] && pieces[i + 1])
-	{
-		next = ft_strchr(curr, pieces[i][0]);
-		if (!next || ft_strlen(next) < ft_strlen(pieces[i]))
-			return (0);
-		curr = next;
-		if (!ft_strncmp(curr, pieces[i], ft_strlen(pieces[i])))
-			i++;
-	}
-	if (pieces[i] && pieces[i][0])
-	{
-		next = ft_strrchr(curr, pieces[i][0]);
-		if (!next || next - curr < 0 || ft_strlen(next) != ft_strlen(pieces[i]))
-			return (0);
-		curr = next;
-		if (ft_strncmp(curr, pieces[i], ft_strlen(curr)))
-			return (0);
-	}
+	if (!ft_check_wildcard_argument_part_two(pieces, &i, &curr, &next))
+		return (0);
 	return (1);
 }
 
@@ -75,30 +84,6 @@ static t_list	*ft_get_new_argumnets(char **pieces)
 		}
 	}
 	return (NULL);
-}
-
-static int	ft_check_for_dollarsign(char *str)
-{
-	int	inside_s_quote;
-	int	inside_d_quote;
-	int	wildcards;
-	int	i;
-
-	i = -1;
-	wildcards = 0;
-	inside_s_quote = 0;
-	inside_d_quote = 0;
-	while (str[++i])
-	{
-		ft_check_quotes(str[i], &inside_s_quote, &inside_d_quote);
-		if (!inside_s_quote && str[i] == '$')
-			return (1);
-		if (!inside_s_quote && !inside_d_quote && str[i] == '*')
-			wildcards++;
-	}
-	if (!wildcards)
-		return (1);
-	return (0);
 }
 
 static char	**ft_init_and_get_pieces(char *str, t_cmnds *command)

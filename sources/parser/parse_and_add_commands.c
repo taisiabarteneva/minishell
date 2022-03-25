@@ -12,28 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-// static void	ft_print_command_info(t_cmnds *command)
-// {
-// 	t_list	*args;
-// 	int		i;
-
-// 	i = -1;
-// 	if (!command)
-// 		return ;
-// 	args = command->args;
-// 	printf("COMMAND REDIRECTS:\n");
-// 	while (command->redirs && command->redirs[++i])
-// 		printf("%d: %s with mode %d\n", i,
-// 			command->redirs[i]->filename, command->redirs[i]->mode);
-// 	printf("COMMAND ARGUMETS:\n");
-// 	i = 0;
-// 	while (args)
-// 	{
-// 		printf("%d: %s-\n", i++, (char *)args->content);
-// 		args = args->next;
-// 	}
-// }
-
 static t_cmnds	*ft_command_new_part_two(t_cmnds **command)
 {
 	int		i;
@@ -42,7 +20,6 @@ static t_cmnds	*ft_command_new_part_two(t_cmnds **command)
 	while ((*command)->redirs && (*command)->redirs[++i])
 		(*command)->redirs[i]->filename
 			= ft_remove_quotes((*command)->redirs[i]->filename, *command);
-	// ft_print_command_info(*command);
 	ft_replace_wildcards(*command, (*command)->args);
 	return (*command);
 }

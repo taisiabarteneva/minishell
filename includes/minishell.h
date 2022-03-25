@@ -33,9 +33,9 @@
 # include "../readline/chardefs.h"
 # include "../readline/rltypedefs.h"
 
-# define MAX_PATH 1024
+# define MAX_PATH 	1024
 
-# define LLU 9223372036854775807
+# define LLU 		9223372036854775807
 
 # define CMD_ERROR 		"minishell: parsing error\n"
 # define MLC_ERROR 		"minishell: memory allocation error\n"
@@ -54,7 +54,6 @@
 # define EXIT_FORK_ERR 		128
 # define EXIT_BIG_NUM		255
 # define EXIT_NON_NUMERIC	255
-
 // General shell structure.
 
 typedef struct s_shell
@@ -200,11 +199,12 @@ void		get_command_position(t_cmnds *command, t_shell **shell, int cmd_pos,
 // Wildcards replacement
 
 void		ft_lst_insert_lst(t_list **lst1, t_list *curr, t_list *lst2);
-void		ft_free_command_redirects(t_cmnds *command);
 int			ft_replace_wildcards(t_cmnds *command, t_list *args_copy);
 void		ft_get_wildcard_pieces(char *str, char **pieces);
 void		ft_lst_del_value(t_list **lst, char *value);
+void		ft_free_command_redirects(t_cmnds *command);
 char		**ft_init_wildcard_pieces(char *str);
+int			ft_check_for_dollarsign(char *str);
 int			ft_array_clear(char ***array);
 
 #endif

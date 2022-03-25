@@ -42,7 +42,8 @@ void	handle_cd_arguments(t_list *args, t_shell **shell, t_envars *list)
 	char	tmp_path[MAX_PATH];
 
 	status = 0;
-	if (args->next && ft_strncmp(args->next->content, "-", 1) == 0)
+	if (args->next && !ft_strncmp(args->next->content, "-", 1)
+		&& ft_strlen(args->next->content) == 1)
 	{
 		if (find_env_node(list, "OLD_PWD") == NULL)
 		{

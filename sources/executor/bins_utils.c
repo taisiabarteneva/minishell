@@ -40,6 +40,6 @@ char	**get_command_arguments(t_list *args)
 void	fork_error(t_shell **shell)
 {
 	(*shell)->exit_status = EXIT_FORK_ERR;
-	write(2, FORK_ERROR, ft_strlen(FORK_ERROR) + 1);
+	write(STDERR_FILENO, FORK_ERROR, ft_strlen(FORK_ERROR) + 1);
 	exit((*shell)->exit_status);
 }

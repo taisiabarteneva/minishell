@@ -45,6 +45,7 @@ void	my_exec(t_shell **shell, char *path, char **cmdargs, char **envp)
 		write(STDERR_FILENO, "minishell: ", 11);
 		write(STDERR_FILENO, cmdargs[0], ft_strlen(cmdargs[0]));
 		write(STDERR_FILENO, ": command not found\n", 20);
+		exit((*shell)->exit_status);
 	}
 	if (exec_res == -1 && cmdargs && *cmdargs)
 	{
@@ -120,6 +121,4 @@ void	execute_bin(t_cmnds **commands, t_shell **shell, char **envp, int in)
 	pid = watch_child_process(shell, commands, in, envp);
 	close_all_pipes(((*shell)->pipes));
 	wait_child_processes(shell, pid);
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, (void *)sigint_handler);
 }

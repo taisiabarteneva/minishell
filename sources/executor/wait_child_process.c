@@ -17,7 +17,7 @@ void	get_child_exit_status(int *status)
 	if (WIFEXITED(*status))
 		*status = WEXITSTATUS(*status);
 	else if (WIFSIGNALED(*status))
-		*status = WTERMSIG(*status) + 128;
+		*status = WTERMSIG(*status);
 	else if (WIFSTOPPED(*status))
 		*status = WSTOPSIG(*status);
 }

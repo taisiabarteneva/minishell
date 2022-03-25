@@ -48,7 +48,7 @@ void	execute_command(t_cmnds **commands, t_shell **shell, char **envp,
 	int	in;
 	int	out;
 
-	if (commands && check_tabs_spaces((*commands)->args->content) == false)
+	if (commands && check_tabs_spaces(line) == false)
 	{
 		(*shell)->process_count = get_num_of_commands(commands);
 		if ((*shell)->process_count > 1)
@@ -78,10 +78,10 @@ void	set_shell(t_envars **envs, t_shell **shell, char **envp)
 	commands = NULL;
 	(*shell)->pipes = NULL;
 	rl_outstream = stderr;
-	catch_signals();
-	tty_hide_input();
 	while (true)
 	{
+		tty_hide_input();
+		catch_signals();
 		line = readline("minishell> ");
 		if (!line)
 		{

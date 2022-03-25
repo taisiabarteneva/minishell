@@ -12,6 +12,17 @@
 
 #include "../../../includes/minishell.h"
 
+int	ft_is_n(char *potencial_flag)
+{
+	int	i;
+
+	i = -1;
+	while (potencial_flag[++i])
+		if (potencial_flag[i] != 'n')
+			return (1);
+	return (0);
+}
+
 int	echo_side(t_list *curr)
 {
 	int	i;
@@ -20,7 +31,7 @@ int	echo_side(t_list *curr)
 	flag = 0;
 	i = 0;
 	while (curr && ft_strncmp(curr->content, "-n", ft_strlen("-n")) == 0
-		&& ft_strlen("-n") == ft_strlen(curr->content))
+		&& !ft_is_n(&(((char *)(curr->content))[1])))
 	{
 		flag = 1;
 		curr = curr->next;

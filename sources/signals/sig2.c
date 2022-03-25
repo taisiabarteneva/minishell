@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   catch_signals.c                                    :+:      :+:    :+:   */
+/*   binary.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/07 19:44:17 by wurrigon          #+#    #+#             */
-/*   Updated: 2022/03/24 22:47:51 by wurrigon         ###   ########.fr       */
+/*   Created: 2022/03/16 18:32:06 by wurrigon          #+#    #+#             */
+/*   Updated: 2022/03/24 22:57:56 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../includes/minishell.h"
 
 void	sigquit_handler(int num)
 {
@@ -22,7 +22,6 @@ void	sigquit_handler(int num)
 void	*sig_fork(int num)
 {
 	(void)num;
-	write(1, "\n", 1);
 	exit(2);
 }
 
