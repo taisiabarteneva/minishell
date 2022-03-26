@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_total_commands_validate_line.c                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 14:27:27 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/26 14:49:18 by ncarob           ###   ########.fr       */
+/*   Updated: 2022/03/24 20:16:56 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,31 +68,6 @@ int	ft_check_line_part_one(char *str)
 	return (num_of_commands);
 }
 
-int	ft_check_line_part_three(char *str)
-{
-	int		inside_quotes[2];
-	int		i;
-	int		j;
-
-	i = -1;
-	ft_memset(inside_quotes, 0, sizeof(int) * 2);
-	while (str && str[++i])
-	{
-		ft_check_quotes(str[i], &inside_quotes[0], &inside_quotes[1]);
-		if (!inside_quotes[0] && !inside_quotes[1] && ft_strchr("|", str[i]))
-		{
-			while (str[++i] && str[i] == ' ')
-				;
-			j = i;
-			while (str[i] && !ft_strchr("|", str[i]))
-				i++;
-			if (!(i - j))
-				return (0);
-		}
-	}
-	return (1);
-}
-
 int	ft_check_line_part_two(char *str)
 {
 	int		inside_quotes[2];
@@ -104,7 +79,7 @@ int	ft_check_line_part_two(char *str)
 	while (str && str[++i])
 	{
 		ft_check_quotes(str[i], &inside_quotes[0], &inside_quotes[1]);
-		if (!inside_quotes[0] && !inside_quotes[1] && ft_strchr("<>", str[i]))
+		if (!inside_quotes[0] && !inside_quotes[1] && ft_strchr("<>|", str[i]))
 		{
 			if (str[i + 1] && ((str[i] == '>' && str[i + 1] == '>')
 					|| (str[i] == '<' && str[i + 1] == '<')))

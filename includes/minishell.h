@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 12:18:03 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/26 15:16:49 by ncarob           ###   ########.fr       */
+/*   Updated: 2022/03/24 22:47:29 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,8 @@ void		ft_get_command_arguments(char *line, t_cmnds *command);
 void		ft_get_command_redirects(char *line, t_cmnds *command);
 char		*ft_remove_quotes(char *str, t_cmnds *command);
 void		ft_commands_clear(t_cmnds ***commands);
-int			ft_check_line_part_three(char *str);
-int			ft_check_line_part_two(char *str);
 int			ft_check_line_part_one(char *str);
+int			ft_check_line_part_two(char *str);
 char		*ft_remove_redirects(char *str);
 char		*ft_remove_spaces(char *str);
 

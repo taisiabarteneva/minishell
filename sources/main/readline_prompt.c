@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline_prompt.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 18:23:49 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/26 15:20:11 by ncarob           ###   ########.fr       */
+/*   Updated: 2022/03/24 22:48:35 by wurrigon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,7 @@ void	execute_command(t_cmnds **commands, t_shell **shell, char **envp,
 		{
 			in = dup(STDIN_FILENO);
 			out = dup(STDOUT_FILENO);
-			if (commands[0]->args && is_built_in(commands[0]->args->content)
-				&& !commands[1])
+			if (is_built_in(commands[0]->args->content) && !commands[1])
 			{
 				handle_redirects(commands[0], shell, in);
 				built_ins(&(commands[0]->envs), commands[0], shell, envp);
