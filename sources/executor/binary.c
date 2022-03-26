@@ -88,7 +88,7 @@ pid_t	watch_child_process(t_shell **shell, t_cmnds **commands, int in,
 	pid_t	pid;
 
 	counter = 0;
-	set_signals();
+	set_signals(commands);
 	while (commands[counter])
 	{
 		pid = fork();

@@ -15,8 +15,8 @@
 void	sigquit_handler(int num)
 {
 	(void)num;
-	write(2, "Quit: 3\n", 8);
-	exit(131);
+	write(1, "Quit: 3\n", 8);
+	exit(3);
 }
 
 void	*sig_fork(int num)
@@ -25,10 +25,12 @@ void	*sig_fork(int num)
 	exit(2);
 }
 
-void	set_signals(void)
+void	set_signals(t_cmnds **commands)
 {
+	if (ft_strncmp(commands[0]->args->content, "cat", ft_strlen("cat")) == 0)
+		signal(SIGQUIT, (void *)sigquit_handler);
 	signal(SIGINT, (void *)sig_fork);
-	signal(SIGQUIT, (void *)sigquit_handler);
+	signal(SIGQUIT, sigquit_handler);
 }
 
 void	return_signals_parent_process(void)

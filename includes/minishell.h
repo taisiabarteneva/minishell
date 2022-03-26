@@ -137,7 +137,7 @@ void		c_fork(int signum);
 void		sigquit_handler(int num);
 void		*sig_fork(int num);
 void		return_signals_parent_process(void);
-void		set_signals(void);
+void		set_signals(t_cmnds **commands);
 
 // Built-ins.
 
