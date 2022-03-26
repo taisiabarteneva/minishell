@@ -6,11 +6,38 @@
 /*   By: ncarob <ncarob@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 21:53:08 by ncarob            #+#    #+#             */
-/*   Updated: 2022/03/25 18:44:10 by ncarob           ###   ########.fr       */
+/*   Updated: 2022/03/26 15:22:42 by ncarob           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+static int	ft_check_create_files(t_redirs **arr)
+{
+	int	fd;
+	int	i;
+
+	i = -1;
+	while (arr[++i])
+	{
+		if (arr[i]->mode == 0)
+			fd = open(arr[i]->filename, O_CREAT | O_WRONLY | O_TRUNC, 0777);
+		else if (arr[i]->mode == 1)
+			fd = open(arr[i]->filename, O_RDONLY, 0777);
+		else if (arr[i]->mode == 2)
+			fd = open(arr[i]->filename, O_CREAT | O_WRONLY | O_APPEND, 0777);
+		if ((arr[i]->mode == 0 || arr[i]->mode == 2) && fd == -1)
+			fatal_error("minishell: couldn't open file\n");
+		else if (arr[i]->mode == 1 && fd == -1)
+		{
+			printf("minishell: %s: No such file or directory\n",
+				arr[i]->filename);
+			return (1);
+		}
+		close(fd);
+	}
+	return (0);
+}
 
 static t_cmnds	*ft_command_new_part_two(t_cmnds **command)
 {
@@ -21,6 +48,14 @@ static t_cmnds	*ft_command_new_part_two(t_cmnds **command)
 		(*command)->redirs[i]->filename
 			= ft_remove_quotes((*command)->redirs[i]->filename, *command);
 	ft_replace_wildcards(*command, (*command)->args);
+	if (ft_check_create_files((*command)->redirs))
+	{
+		(*command)->shell->exit_status = 1;
+		ft_free_command_redirects(*command);
+		ft_lstclear(&(*command)->args);
+		free(*command);
+		*command = NULL;
+	}
 	return (*command);
 }
 
@@ -43,7 +78,10 @@ static t_cmnds	*ft_command_new(char *str, t_envars *envs, t_shell *shell)
 	ft_get_command_redirects(str, command);
 	str = ft_remove_redirects(str);
 	str = ft_remove_spaces(str);
-	ft_get_command_arguments(str, command);
+	if (str && str[0] && str[1])
+		ft_get_command_arguments(str, command);
+	else
+		command->args = NULL;
 	command = ft_command_new_part_two(&command);
 	free(str);
 	return (command);
@@ -81,7 +119,8 @@ t_cmnds	**ft_parse_input(char *s, t_envars *envs, t_shell *shell)
 	int		num_of_commands;
 	t_cmnds	**commands;
 
-	num_of_commands = ft_check_line_part_one(s) * ft_check_line_part_two(s);
+	num_of_commands = ft_check_line_part_one(s)
+		* ft_check_line_part_two(s) * ft_check_line_part_three(s);
 	if (!num_of_commands)
 	{
 		ft_putstr_fd(CMD_ERROR, 2);
