@@ -46,7 +46,7 @@ HS_LIB	=	readline/libhistory.a
 
 GCC		=	gcc
 
-FLAGS	=	-Wall -Werror -Wextra #-g -fsanitize=address
+FLAGS	=	-Wall -Werror -Wextra # -fsanitize=address
 
 RM		=	rm -f
 
