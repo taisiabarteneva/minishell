@@ -31,6 +31,5 @@ $ make
 
 ## Example
 
-
-https://user-images.githubusercontent.com/95509213/188963179-d2b65c84-9175-4fc3-b1e0-fed7eba9e3d6.mov
+![188963179-d2b65c84-9175-4fc3-b1e0-fed7eba9e3d6](https://user-images.githubusercontent.com/95509213/189460555-c1f2c57a-23f5-4f70-a623-ab311fac8173.gif)
 
